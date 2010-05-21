@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet", "DropNet\DropNet.csproj", "{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.Tests", "DropNet.Tests\DropNet.Tests.csproj", "{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{14888705-4E12-43CF-B4E3-6B8C0CD88413}"
+	ProjectSection(SolutionItems) = preProject
+		DropNet.vsmdi = DropNet.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = DropNet.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
