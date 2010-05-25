@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DropNet.Tests
 {
@@ -61,9 +62,6 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File()
         {
-            //
-            // TODO: Add test logic here
-            //
             _client.Login(TestVarables.Email, TestVarables.Password);
             var fileInfo = _client.GetFile("/Getting Started.rtf");
 
@@ -71,21 +69,27 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
+        public void Can_Upload_File()
+        {
+            _client.Login(TestVarables.Email, TestVarables.Password);
+            var localFile = new FileInfo("C:\\Temp\\Test.txt");
+            var uploaded = _client.UploadFile("/", localFile);
+
+            Assert.IsTrue(uploaded);
+        }
+
+        [TestMethod]
         public void Can_Delete_File()
         {
-            //
-            // TODO: Add test logic here
-            //
             _client.Login(TestVarables.Email, TestVarables.Password);
-            _client.DeleteFile("/Test.txt");
+            var deleted = _client.DeleteFile("/Test.txt");
+
+            Assert.IsTrue(deleted);
         }
 
         [TestMethod]
         public void Can_Get_MetaData()
         {
-            //
-            // TODO: Add test logic here
-            //
             _client.Login(TestVarables.Email, TestVarables.Password);
             var metaData = _client.GetMetaData("/Public");
 

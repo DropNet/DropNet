@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using DropNet.Code.Responses;
-using DropNet.Exceptions;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -28,7 +27,7 @@ namespace DropNet
             return response.Data;
         }
 
-        //TODO - Fix "Forbidden" messages
+        //TODO - Make class for this to return (instead of just a Stream)
         public Stream GetFile(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
@@ -49,7 +48,36 @@ namespace DropNet
             return stream;
         }
 
-        public void DeleteFile(string path)
+        public bool UploadFile(string path, FileInfo localFile)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //Get the file stream
+            byte[] bytes = null;
+            FileStream fs = new FileStream(localFile.FullName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            long numBytes = localFile.Length;
+            bytes = br.ReadBytes((int)numBytes);
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = "http://api-content.dropbox.com";
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
+
+            var request = new RestRequest(Method.POST);
+            request.Resource = "{version}/files/dropbox{path}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            //Need to add the "file" parameter with the file name
+            request.AddParameter("file", localFile.Name);
+
+            request.AddFile(new FileParameter { Data = bytes, FileName = localFile.Name, ParameterName = "file" });
+
+            var response = _restClient.Execute(request);
+
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public bool DeleteFile(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -66,10 +94,7 @@ namespace DropNet
 
             var response = _restClient.Execute(request);
 
-            if (response.ResponseStatus == ResponseStatus.Error)
-            {
-                throw new DropboxException(string.Format("{0}: {1}", response.StatusDescription, response.Content));
-            }
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
     }
