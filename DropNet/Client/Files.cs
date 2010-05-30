@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using DropNet.Code.Responses;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -27,8 +26,8 @@ namespace DropNet
             return response.Data;
         }
 
-        //TODO - Make class for this to return (instead of just a Stream)
-        public Stream GetFile(string path)
+        //TODO - Make class for this to return (instead of just a byte[])
+        public byte[] GetFile(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -41,11 +40,9 @@ namespace DropNet
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
 
-            var response = _restClient.Execute(request);
-            byte[] byteArray = Encoding.ASCII.GetBytes(response.Content);
-            MemoryStream stream = new MemoryStream(byteArray);
+            var responseData = _restClient.DownloadData(request);
 
-            return stream;
+            return responseData;
         }
 
         public bool UploadFile(string path, FileInfo localFile)

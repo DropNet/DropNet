@@ -69,6 +69,20 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
+        public void Can_Get_File_And_Save()
+        {
+            _client.Login(TestVarables.Email, TestVarables.Password);
+            var fileInfo = _client.GetFile("/Temp/ScreenShot11.Png");
+
+            var writeStream = new FileStream("C:\\Temp\\ScreenShot11.Png", FileMode.Create, FileAccess.Write);
+
+            writeStream.Write(fileInfo, 0, fileInfo.Length);
+            writeStream.Close();
+
+            Assert.IsNotNull(fileInfo);
+        }
+
+        [TestMethod]
         public void Can_Upload_File()
         {
             _client.Login(TestVarables.Email, TestVarables.Password);
