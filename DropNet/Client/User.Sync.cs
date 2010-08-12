@@ -1,4 +1,7 @@
-﻿using DropboxNet.Models;
+﻿#if WINDOWS_PHONE
+//Exclude
+#else
+using DropboxNet.Models;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -44,3 +47,4 @@ namespace DropNet
 
     }
 }
+#endif

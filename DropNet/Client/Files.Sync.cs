@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿#if WINDOWS_PHONE
+//Exclude
+#else
+using System.IO;
 using DropNet.Code.Responses;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -74,7 +77,12 @@ namespace DropNet
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        public bool DeleteFile(string path)
+        /// <summary>
+        /// Deletes the file or folder from dropbox with the given path
+        /// </summary>
+        /// <param name="path">The Path of the file or folder to delete.</param>
+        /// <returns></returns>
+        public bool Delete(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -96,3 +104,4 @@ namespace DropNet
 
     }
 }
+#endif

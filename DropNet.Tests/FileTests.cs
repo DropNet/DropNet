@@ -96,7 +96,7 @@ namespace DropNet.Tests
         public void Can_Delete_File()
         {
             _client.Login(TestVarables.Email, TestVarables.Password);
-            var deleted = _client.DeleteFile("/Test.txt");
+            var deleted = _client.Delete("/Test.txt");
 
             Assert.IsTrue(deleted);
         }
