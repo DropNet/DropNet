@@ -16,7 +16,7 @@ namespace DropNet.Tests
             //
             // TODO: Add constructor logic here
             //
-            _client = new DropNetClient(TestVarables.ApiKey, TestVarables.ApiSecret);
+            _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
         }
 
         private TestContext testContextInstance;
@@ -62,7 +62,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File()
         {
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var fileInfo = _client.GetFile("/Getting Started.rtf");
 
             Assert.IsNotNull(fileInfo);
@@ -71,7 +71,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File_And_Save()
         {
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var fileInfo = _client.GetFile("/Temp/ScreenShot11.Png");
 
             var writeStream = new FileStream("C:\\Temp\\ScreenShot11.Png", FileMode.Create, FileAccess.Write);
@@ -85,7 +85,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File()
         {
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var localFile = new FileInfo("C:\\Temp\\Test.txt");
             var uploaded = _client.UploadFile("/", localFile);
 
@@ -95,7 +95,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Delete_File()
         {
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var deleted = _client.Delete("/Test.txt");
 
             Assert.IsTrue(deleted);
@@ -104,7 +104,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData()
         {
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var metaData = _client.GetMetaData("/Public");
 
             Assert.IsNotNull(metaData);

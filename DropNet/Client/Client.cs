@@ -33,7 +33,7 @@ namespace DropNet
             _apiKey = apiKey;
             _appsecret = appSecret;
 
-            _restClient = new RestClient("https://api.getdropbox.com");
+            _restClient = new RestClient(DropNet.Resource.SecureLoginBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
             //probly not needed...

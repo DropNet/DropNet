@@ -15,7 +15,7 @@ namespace DropNet.Tests
             //
             // TODO: Add constructor logic here
             //
-            _client = new DropNetClient(TestVarables.ApiKey, TestVarables.ApiSecret);
+            _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
         }
 
         private TestContext testContextInstance;
@@ -64,7 +64,7 @@ namespace DropNet.Tests
             //
             // TODO: Add test logic here
             //
-            var userLogin = _client.Login(TestVarables.Email, TestVarables.Password);
+            var userLogin = _client.Login(TestVariables.Email, TestVariables.Password);
 
             Assert.IsNotNull(userLogin);
             Assert.IsNotNull(userLogin.Token);
@@ -77,7 +77,7 @@ namespace DropNet.Tests
             //
             // TODO: Add test logic here
             //
-            _client.Login(TestVarables.Email, TestVarables.Password);
+            _client.Login(TestVariables.Email, TestVariables.Password);
             var accountInfo = _client.Account_Info();
 
             Assert.IsNotNull(accountInfo);
