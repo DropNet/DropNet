@@ -61,7 +61,7 @@ namespace DropNet.Authenticators
                 }
             }
             request.Parameters.Sort(new QueryParameterComparer());
-            request.AddParameter("oauth_signature", this.GenerateSignature(request));
+            request.AddParameter("oauth_signature", UrlEncode(this.GenerateSignature(request)));
         }
 
         private Uri BuildUri(RestRequest request)

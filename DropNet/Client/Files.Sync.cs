@@ -18,10 +18,8 @@ namespace DropNet
         /// <returns></returns>
         public MetaData GetMetaData(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
-
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);
@@ -45,7 +43,7 @@ namespace DropNet
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api-content.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);
@@ -85,10 +83,8 @@ namespace DropNet
         /// <returns>True on success</returns>
         public bool UploadFile(string path, string filename, byte[] fileData)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
-
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api-content.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.POST);
@@ -115,7 +111,7 @@ namespace DropNet
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);
@@ -142,7 +138,7 @@ namespace DropNet
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);
@@ -170,7 +166,7 @@ namespace DropNet
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);

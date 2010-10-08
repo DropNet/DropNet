@@ -4,6 +4,7 @@
 using DropNet.Models;
 using RestSharp;
 using DropNet.Authenticators;
+using System.Net;
 
 namespace DropNet
 {
@@ -12,7 +13,7 @@ namespace DropNet
 
         public UserLogin Login(string email, string password)
         {
-            _restClient.BaseUrl = "https://api.getdropbox.com";
+            _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
 
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/token";
@@ -22,7 +23,6 @@ namespace DropNet
 
             request.AddParameter("email", email);
             request.AddParameter("password", password);
-
             var response = _restClient.Execute<UserLogin>(request);
 
             _userLogin = response.Data;
@@ -33,7 +33,7 @@ namespace DropNet
         public AccountInfo Account_Info()
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = "http://api.dropbox.com";
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = new RestRequest(Method.GET);
