@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DropNet.Code.Responses
+namespace DropNet.Models
 {
     public class MetaData
     {
         public string Hash { get; set; }
         public bool Thumb_Exists { get; set; }
-        public int Bytes { get; set; }
+        public long Bytes { get; set; }
         public DateTime Modified { get; set; }
         public string Path { get; set; }
         public bool Is_Dir { get; set; }

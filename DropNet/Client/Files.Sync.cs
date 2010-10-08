@@ -2,14 +2,23 @@
 //Exclude
 #else
 using System.IO;
-using DropNet.Code.Responses;
+using DropNet.Models;
+using DropNet.Authenticators;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace DropNet
 {
     public partial class DropNetClient
     {
+
+        /// <summary>
+        /// Gets MetaData for the root folder.
+        /// </summary>
+        /// <returns></returns>
+        public MetaData GetMetaData()
+        {
+            return GetMetaData(string.Empty);
+        }
 
         /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
@@ -18,8 +27,6 @@ namespace DropNet
         /// <returns></returns>
         public MetaData GetMetaData(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
-
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
@@ -85,8 +92,6 @@ namespace DropNet
         /// <returns>True on success</returns>
         public bool UploadFile(string path, string filename, byte[] fileData)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
-
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = Resource.ApiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
@@ -98,7 +103,7 @@ namespace DropNet
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename);
 
-            request.AddFile(new FileParameter { Data = fileData, FileName = filename, ParameterName = "file" });
+            request.AddFile(fileData, filename, "file");
 
             var response = _restClient.Execute(request);
 

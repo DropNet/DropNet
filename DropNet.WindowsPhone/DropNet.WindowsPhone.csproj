@@ -52,9 +52,12 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\dropnet\Client\Client.cs">
-      <Link>Client\Client.cs</Link>
-    </Compile>
+      <Compile Include="..\dropnet\Client\Client.cs">
+          <Link>Client\Client.cs</Link>
+      </Compile>
+      <Compile Include="..\dropnet\Authenticators\OAuthAuthenticator.cs">
+          <Link>Authenticators\OAuthAuthenticator.cs</Link>
+      </Compile>
     <Compile Include="..\dropnet\Client\Files.Async.cs">
       <Link>Client\Files.Async.cs</Link>
     </Compile>

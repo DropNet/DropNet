@@ -81,8 +81,8 @@ namespace DropNet.Tests
             var accountInfo = _client.Account_Info();
 
             Assert.IsNotNull(accountInfo);
-            Assert.IsNotNull(accountInfo.Display_Name);
-            Assert.IsNotNull(accountInfo.Uid);
+            Assert.IsNotNull(accountInfo.display_name);
+            Assert.IsNotNull(accountInfo.uid);
         }
 
     }

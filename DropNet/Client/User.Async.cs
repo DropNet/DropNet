@@ -1,6 +1,6 @@
-﻿using DropboxNet.Models;
+﻿using DropNet.Models;
 using RestSharp;
-using RestSharp.Authenticators;
+using DropNet.Authenticators;
 using System;
 
 namespace DropNet

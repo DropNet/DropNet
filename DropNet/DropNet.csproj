@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authenticators\OAuthAuthenticator.cs" />
     <Compile Include="Client\Client.cs" />
     <Compile Include="Client\User.Async.cs" />
     <Compile Include="Client\Files.Async.cs" />

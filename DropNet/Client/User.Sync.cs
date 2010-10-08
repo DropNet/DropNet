@@ -1,9 +1,9 @@
 ﻿#if WINDOWS_PHONE
 //Exclude
 #else
-using DropboxNet.Models;
+using DropNet.Models;
 using RestSharp;
-using RestSharp.Authenticators;
+using DropNet.Authenticators;
 using System.Net;
 
 namespace DropNet
@@ -22,8 +22,9 @@ namespace DropNet
             request.AddParameter("oauth_consumer_key", _apiKey);
 
             request.AddParameter("email", email);
+
             request.AddParameter("password", password);
-            
+
             var response = _restClient.Execute<UserLogin>(request);
 
             _userLogin = response.Data;
