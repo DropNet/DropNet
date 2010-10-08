@@ -115,7 +115,7 @@ namespace DropNet.Tests
         public void Can_Get_MetaData_Root()
         {
             _client.Login(TestVariables.Email, TestVariables.Password);
-            var metaData = _client.GetMetaData("");
+            var metaData = _client.GetMetaData();
 
             Assert.IsNotNull(metaData);
             Assert.IsNotNull(metaData.Contents);

@@ -12,6 +12,15 @@ namespace DropNet
     {
 
         /// <summary>
+        /// Gets MetaData for the root folder.
+        /// </summary>
+        /// <returns></returns>
+        public MetaData GetMetaData()
+        {
+            return GetMetaData(string.Empty);
+        }
+
+        /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
         /// </summary>
         /// <param name="path">The path of the file or folder</param>
