@@ -23,7 +23,7 @@ namespace DropNet
 
             request.AddParameter("email", email);
             request.AddParameter("password", password);
-            request.Credentials = new NetworkCredential("pereir_m", @"sujh\-bJ");
+            
             var response = _restClient.Execute<UserLogin>(request);
 
             _userLogin = response.Data;
