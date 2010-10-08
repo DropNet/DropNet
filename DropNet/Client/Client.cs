@@ -1,6 +1,7 @@
 ﻿using DropNet.Models;
 using RestSharp;
 using RestSharp.Deserializers;
+using DropNet.Helpers;
 
 namespace DropNet
 {
@@ -14,7 +15,7 @@ namespace DropNet
         private string _appsecret;
 
         private RestClient _restClient;
-
+        private RequestHelper _requestHelper;
         /// <summary>
         /// The number of requests that have been made by the current Client instance
         /// </summary>
@@ -39,6 +40,7 @@ namespace DropNet
             //probly not needed...
             RequestCount = 0;
             DataCount = 0;
+            _requestHelper = new RequestHelper(_version);
         }
 
         //TODO - Create Execute and ExecuteAsync Methods to pass through all the RestSharp calls.

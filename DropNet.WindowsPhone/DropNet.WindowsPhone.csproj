@@ -83,6 +83,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>..\dropnet\Resource.resx</DependentUpon>
 	</Compile>
+	<Compile Include="..\dropnet\Helpers\RequestHelper.cs">
+	<Link>Helpers\RequestHelper.cs</Link>
+	</Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\dropnet\Resource.resx" >

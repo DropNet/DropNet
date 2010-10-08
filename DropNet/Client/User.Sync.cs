@@ -5,6 +5,7 @@ using DropNet.Models;
 using RestSharp;
 using DropNet.Authenticators;
 using System.Net;
+using DropNet.Helpers;
 
 namespace DropNet
 {
@@ -15,15 +16,7 @@ namespace DropNet
         {
             _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
 
-            var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/token";
-            request.AddParameter("version", _version, ParameterType.UrlSegment);
-
-            request.AddParameter("oauth_consumer_key", _apiKey);
-
-            request.AddParameter("email", email);
-
-            request.AddParameter("password", password);
+            var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
 
             var response = _restClient.Execute<UserLogin>(request);
 
@@ -38,9 +31,7 @@ namespace DropNet
             _restClient.BaseUrl = Resource.ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
-            var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/account/info";
-            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            var request = _requestHelper.CreateAccountInfoRequest();
 
             var response = _restClient.Execute<AccountInfo>(request);
 
