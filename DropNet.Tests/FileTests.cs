@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Ploeh.AutoFixture;
 
 namespace DropNet.Tests
 {
@@ -10,13 +12,14 @@ namespace DropNet.Tests
     public class FileTests
     {
         DropNetClient _client;
-
+        Fixture fixture;
         public FileTests()
         {
             //
             // TODO: Add constructor logic here
             //
             _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
+            fixture = new Fixture();
         }
 
         private TestContext testContextInstance;
@@ -86,8 +89,16 @@ namespace DropNet.Tests
         public void Can_Upload_File()
         {
             _client.Login(TestVariables.Email, TestVariables.Password);
-            var localFile = new FileInfo("C:\\Temp\\Test.txt");
-            var uploaded = _client.UploadFile("/", localFile);
+
+            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
+            var localContent = fixture.CreateAnonymous<string>();
+
+            File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
+            Assert.IsTrue(File.Exists(localFile.FullName));
+            byte[] content = _client.GetFileContentFromFS(localFile);
+            File.Delete(localFile.FullName);
+
+            var uploaded = _client.UploadFile("/", localFile.Name, content);
 
             Assert.IsTrue(uploaded);
         }

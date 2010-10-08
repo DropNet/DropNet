@@ -66,12 +66,11 @@ namespace DropNet
         }
 
         /// <summary>
-        /// Uploads a File to Dropbox from the local file system to the specified folder
+        /// Retrieve the content of a file in the local file system
         /// </summary>
-        /// <param name="path">The path of the folder to upload to</param>
         /// <param name="localFile">The local file to upload</param>
         /// <returns>True on success</returns>
-        public bool UploadFile(string path, FileInfo localFile)
+        public byte[] GetFileContentFromFS(FileInfo localFile)
         {
             //Get the file stream
             byte[] bytes = null;
@@ -80,7 +79,7 @@ namespace DropNet
             long numBytes = localFile.Length;
             bytes = br.ReadBytes((int)numBytes);
 
-            return UploadFile(path, localFile.Name, bytes);
+            return bytes;
         }
 
         /// <summary>
