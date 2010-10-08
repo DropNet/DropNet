@@ -9,5 +9,5 @@ Example usage:
 	//call the functions you want from the client
 	dropNetclient.Login("test@example.com", "password");
 
-	var rootDetails = dropNetclient.GetMetaData("/");
+	var rootDetails = dropNetclient.GetMetaData("");
 	//rootDetails.Contents is a list of the files/folders in the root
