@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DropboxNet.Models
+namespace DropNet.Models
 {
     public class AccountInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DropNet.Code.Responses
+namespace DropNet.Models
 {
     public class MetaData
     {

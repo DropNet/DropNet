@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using DropNet.Code.Responses;
+using DropNet.Models;
+using DropNet.Authenticators;
 using RestSharp;
-using RestSharp.Authenticators;
 using System;
 
 namespace DropNet
@@ -100,7 +100,7 @@ namespace DropNet
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename);
 
-            request.AddFile(new FileParameter { Data = fileData, FileName = filename, ParameterName = "file" });
+            request.AddFile(fileData, filename, "file");
 
             _restClient.ExecuteAsync(request, callback);
         }
