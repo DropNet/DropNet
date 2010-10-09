@@ -115,6 +115,7 @@ namespace DropNet.Tests
             RestRequest actual = _target.CreateCopyFileRequest(fromPath, toPath);
 
             Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
             Assert.IsNotNull(actual.Resource);
             Assert.IsNotNull(actual.Parameters);
             Assert.IsTrue(actual.Parameters.Count == 4);
@@ -134,12 +135,17 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateDeleteFileRequestTest()
         {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateDeleteFileRequest(path);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string path = fixture.CreateAnonymous<string>();
+            RestRequest actual = _target.CreateDeleteFileRequest(path);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 3);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));
         }
 
         /// <summary>
@@ -148,12 +154,18 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateGetFileRequestTest()
         {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateGetFileRequest(path);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string path = fixture.CreateAnonymous<string>();
+            RestRequest actual = _target.CreateGetFileRequest(path);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 2);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "path").Type == ParameterType.UrlSegment);
         }
 
         /// <summary>
@@ -162,14 +174,21 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateLoginRequestTest()
         {
-            string apiKey = string.Empty; // TODO: Initialize to an appropriate value
-            string email = string.Empty; // TODO: Initialize to an appropriate value
-            string password = string.Empty; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateLoginRequest(apiKey, email, password);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string apiKey = fixture.CreateAnonymous<string>();
+            string email = fixture.CreateAnonymous<string>();
+            string password = fixture.CreateAnonymous<string>();
+            RestRequest actual = _target.CreateLoginRequest(apiKey, email, password);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 4);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "oauth_consumer_key").Value, apiKey));
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "email").Value, email));
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "password").Value, password));
         }
 
         /// <summary>
@@ -178,12 +197,18 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateMetadataRequestTest()
         {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateMetadataRequest(path);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string path = fixture.CreateAnonymous<string>();
+            RestRequest actual = _target.CreateMetadataRequest(path);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 2);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "path").Type == ParameterType.UrlSegment);
         }
 
         /// <summary>
@@ -192,13 +217,23 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateMoveFileRequestTest()
         {
-            string fromPath = string.Empty; // TODO: Initialize to an appropriate value
-            string toPath = string.Empty; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateMoveFileRequest(fromPath, toPath);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string fromPath = fixture.CreateAnonymous<string>();
+            string toPath = fixture.CreateAnonymous<string>();
+            RestRequest actual = _target.CreateMoveFileRequest(fromPath, toPath);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.GET);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 4);
+            Assert.IsTrue(actual.Parameters.Exists(x => x.Name == "version"));
+            Assert.IsTrue(actual.Parameters.Exists(x => x.Name == "from_path"));
+            Assert.IsTrue(actual.Parameters.Exists(x => x.Name == "to_path"));
+            Assert.IsTrue(actual.Parameters.Exists(x => x.Name == "root"));
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "from_path").Value, fromPath));
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "to_path").Value, toPath));
         }
 
         /// <summary>
@@ -207,14 +242,24 @@ namespace DropNet.Tests
         [TestMethod()]
         public void CreateUploadFileRequestTest()
         {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            string filename = string.Empty; // TODO: Initialize to an appropriate value
-            byte[] fileData = null; // TODO: Initialize to an appropriate value
-            RestRequest expected = null; // TODO: Initialize to an appropriate value
-            RestRequest actual;
-            actual = _target.CreateUploadFileRequest(path, filename, fileData);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string path = fixture.CreateAnonymous<string>();
+            string filename = fixture.CreateAnonymous<string>();
+            byte[] fileData = System.Text.Encoding.UTF8.GetBytes(fixture.CreateAnonymous<string>());
+            
+            RestRequest actual = _target.CreateUploadFileRequest(path, filename, fileData);
+
+            Assert.IsNotNull(actual);
+            Assert.IsTrue(actual.Method == Method.POST);
+            Assert.IsNotNull(actual.Resource);
+            Assert.IsNotNull(actual.Parameters);
+            Assert.IsTrue(actual.Parameters.Count == 3);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));
+            Assert.IsTrue(actual.Parameters.Find(x => x.Name == "path").Type == ParameterType.UrlSegment);
+            Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "file").Value, filename));
+            Assert.IsTrue(actual.Files.Count == 1);
+            Assert.IsTrue(actual.Files.Find(x => x.FileName == filename).Data.ToString() == fileData.ToString());
         }
     }
 }

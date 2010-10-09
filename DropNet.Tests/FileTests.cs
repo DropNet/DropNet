@@ -96,11 +96,11 @@ namespace DropNet.Tests
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
-            File.Delete(localFile.FullName);
 
             var uploaded = _client.UploadFile("/", localFile.Name, content);
 
             Assert.IsTrue(uploaded);
+            File.Delete(localFile.FullName);
         }
 
         [TestMethod]
