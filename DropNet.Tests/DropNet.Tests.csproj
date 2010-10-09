@@ -37,11 +37,15 @@
     <Reference Include="Moq">
       <HintPath>..\Lib\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\Lib\Ploeh.AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="RestSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Lib\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -60,7 +64,7 @@
   <ItemGroup>
     <Compile Include="FileTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestHelperTest.cs" />
+    <Compile Include="Helpers\RequestHelperTest.cs" />
     <Compile Include="UserTests.cs" />
     <Compile Include="TestVariables.cs" />
   </ItemGroup>
@@ -70,9 +74,7 @@
       <Name>DropNet</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
