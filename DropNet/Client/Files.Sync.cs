@@ -72,6 +72,7 @@ namespace DropNet
             BinaryReader br = new BinaryReader(fs);
             long numBytes = localFile.Length;
             bytes = br.ReadBytes((int)numBytes);
+            fs.Close();
 
             return bytes;
         }
@@ -103,7 +104,7 @@ namespace DropNet
         /// </summary>
         /// <param name="path">The Path of the file or folder to delete.</param>
         /// <returns></returns>
-        public bool Delete(string path)
+        public MetaData Delete(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -113,9 +114,9 @@ namespace DropNet
 
             var request = _requestHelper.CreateDeleteFileRequest(path);
 
-            var response = _restClient.Execute(request);
+            var response = _restClient.Execute<MetaData>(request);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            return response.Data;
         }
 
         /// <summary>

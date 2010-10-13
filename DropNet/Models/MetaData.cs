@@ -11,6 +11,7 @@ namespace DropNet.Models
         public DateTime Modified { get; set; }
         public string Path { get; set; }
         public bool Is_Dir { get; set; }
+        public bool Is_Deleted { get; set; }
         public string Size { get; set; }
         public string Root { get; set; }
         public string Icon { get; set; }

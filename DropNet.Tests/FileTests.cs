@@ -109,7 +109,7 @@ namespace DropNet.Tests
             _client.Login(TestVariables.Email, TestVariables.Password);
             var deleted = _client.Delete("/Test.txt");
 
-            Assert.IsTrue(deleted);
+            Assert.IsNotNull(deleted);
         }
 
         [TestMethod]
