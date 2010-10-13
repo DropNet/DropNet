@@ -34,6 +34,21 @@ namespace DropNet
             _apiKey = apiKey;
             _appsecret = appSecret;
 
+            LoadClient();
+        }
+
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
+        {
+            _apiKey = apiKey;
+            _appsecret = appSecret;
+
+            _userLogin = new UserLogin { Token = userToken, Secret = userSecret };
+
+            LoadClient();
+        }
+
+        private void LoadClient()
+        {
             _restClient = new RestClient(DropNet.Resource.SecureLoginBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
