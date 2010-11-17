@@ -48,7 +48,7 @@ namespace DropNet
             _restClient.ExecuteAsync(request, callback);
         }
 
-#if WINDOWS_PHONE
+#if WINDOWS_PHONE || MONOTOUCH
         //Exclude for now...
 #else
 

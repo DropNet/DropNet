@@ -18,7 +18,7 @@ namespace DropNet
             {
                 _userLogin = restResponse.Data;
                 callback(restResponse);
-            });
+			});
 
         }
 
@@ -32,6 +32,5 @@ namespace DropNet
 
             _restClient.ExecuteAsync<AccountInfo>(request, callback);
         }
-
     }
 }

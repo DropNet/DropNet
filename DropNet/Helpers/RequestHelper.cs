@@ -35,7 +35,7 @@ namespace DropNet.Helpers
 
             return request;
         }
-        #if WINDOWS_PHONE
+        #if WINDOWS_PHONE || MONOTOUCH
                 //Exclude for now...
         #else
         public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData)
