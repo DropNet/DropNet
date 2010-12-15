@@ -25,6 +25,33 @@ namespace DropNet
             return _userLogin;
         }
 
+        public AccountCreationResult CreateAccount(string email, string firstName, string lastName, string password)
+        {
+            _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
+
+            var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
+
+            var response = _restClient.Execute(request);
+
+            var result = new AccountCreationResult();
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                result.success = true;
+            }
+            else
+            {
+                result.success = false;
+
+                if (response.Content.Contains("This e-mail is already taken"))
+                    result.errorType = AccountCreationResult.ErrorTypes.EmailInUse;
+                else
+                    result.errorType = AccountCreationResult.ErrorTypes.Unknown;
+            }
+
+            return result;
+        }
+
         public AccountInfo Account_Info()
         {
             //This has to be here as Dropbox change their base URL between calls

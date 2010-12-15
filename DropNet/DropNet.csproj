@@ -75,6 +75,7 @@
     <Compile Include="Client\User.Sync.cs" />
     <Compile Include="Exceptions\DropboxException.cs" />
     <Compile Include="Helpers\RequestHelper.cs" />
+    <Compile Include="Models\AccountCreationResult.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\MetaData.cs" />
     <Compile Include="Models\UserLogin.cs" />
