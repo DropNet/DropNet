@@ -104,6 +104,28 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
+        public void Can_Upload_File_Async()
+        {
+            _client.Login(TestVariables.Email, TestVariables.Password);
+
+            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
+            var localContent = fixture.CreateAnonymous<string>();
+
+            File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
+            Assert.IsTrue(File.Exists(localFile.FullName));
+            byte[] content = _client.GetFileContentFromFS(localFile);
+
+            _client.UploadFileAsync("/", localFile.Name, content, Can_Upload_File_Async_Callback);
+
+            //TODO - Delete
+        }
+
+        private void Can_Upload_File_Async_Callback(RestSharp.RestResponse response)
+        {
+            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+        }
+
+        [TestMethod]
         public void Can_Delete_File()
         {
             _client.Login(TestVariables.Email, TestVariables.Password);

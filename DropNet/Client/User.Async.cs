@@ -11,6 +11,7 @@ namespace DropNet
         public void LoginAsync(string email, string password, Action<RestResponse<UserLogin>> callback)
         {
             _restClient.BaseUrl = DropNet.Resource.SecureLoginBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, null, null);
 
             var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
 
