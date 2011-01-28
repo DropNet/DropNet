@@ -35,9 +35,7 @@ namespace DropNet.Helpers
 
             return request;
         }
-        #if WINDOWS_PHONE || MONOTOUCH
-                //Exclude for now...
-        #else
+        
         public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData)
         {
             var request = new RestRequest(Method.POST);
@@ -51,7 +49,7 @@ namespace DropNet.Helpers
 
             return request;
         }
-        #endif
+        
         public RestRequest CreateDeleteFileRequest(string path)
         {
             var request = new RestRequest(Method.GET);

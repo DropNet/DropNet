@@ -70,6 +70,7 @@ namespace DropNet
 
             UploadFileAsync(path, localFile.Name, bytes, callback);
         }
+#endif
 
         /// <summary>
         /// Uploads a File to Dropbox given the raw data.
@@ -91,7 +92,7 @@ namespace DropNet
 
             _restClient.ExecuteAsync(request, callback);
         }
-#endif
+
 
         /// <summary>
         /// Deletes the file or folder from dropbox with the given path
