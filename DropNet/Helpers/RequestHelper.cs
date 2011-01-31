@@ -111,5 +111,18 @@ namespace DropNet.Helpers
 
             return request;
         }
+
+        public RestRequest CreateCreateFolderRequest(string path)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/fileops/create_folder";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+
+            request.AddParameter("path", path);
+            request.AddParameter("root", "dropbox");
+
+            return request;
+        }
+
     }
 }

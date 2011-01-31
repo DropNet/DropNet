@@ -154,5 +154,14 @@ namespace DropNet.Tests
             Assert.IsNotNull(metaData.Contents);
         }
 
+        [TestMethod]
+        public void Can_Create_Folder()
+        {
+            _client.Login(TestVariables.Email, TestVariables.Password);
+            var metaData = _client.CreateFolder("TestFolder1");
+
+            Assert.IsNotNull(metaData);
+        }
+
     }
 }

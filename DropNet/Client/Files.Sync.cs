@@ -163,6 +163,26 @@ namespace DropNet
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
+        /// <summary>
+        /// Creates a folder on Dropbox
+        /// </summary>
+        /// <param name="path">The path to the folder to create</param>
+        /// <returns>MetaData of the newly created folder</returns>
+        public MetaData CreateFolder(string path)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
+
+            var request = _requestHelper.CreateCreateFolderRequest(path);
+
+            var response = _restClient.Execute<MetaData>(request);
+
+            return response.Data;
+        }
+
     }
 }
 #endif
