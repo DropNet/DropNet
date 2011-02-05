@@ -84,7 +84,7 @@ namespace DropNet
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
         /// <returns>True on success</returns>
-        public bool UploadFile(string path, string filename, byte[] fileData)
+        public Result UploadFile(string path, string filename, byte[] fileData)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -96,7 +96,7 @@ namespace DropNet
 
             var response = _restClient.Execute(request);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            return new Result(response);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace DropNet
         /// <param name="fromPath">The path to the file or folder to copy</param>
         /// <param name="toPath">The path to where the file or folder is getting copied</param>
         /// <returns>True on success</returns>
-        public bool Copy(string fromPath, string toPath)
+        public Result Copy(string fromPath, string toPath)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -138,7 +138,7 @@ namespace DropNet
 
             var response = _restClient.Execute(request);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            return new Result(response);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace DropNet
         /// <param name="fromPath">The path to the file or folder to move</param>
         /// <param name="toPath">The path to where the file or folder is getting moved</param>
         /// <returns>True on success</returns>
-        public bool Move(string fromPath, string toPath)
+        public Result Move(string fromPath, string toPath)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -160,7 +160,7 @@ namespace DropNet
 
             var response = _restClient.Execute(request);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            return new Result(response);
         }
 
         /// <summary>
