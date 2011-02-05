@@ -22,7 +22,7 @@ namespace DropNet.Models
             get
             {
                 //cast to datetime and return
-                return DateTime.Parse(Modified).Date;
+                return DateTime.Parse(Modified); //RFC1123 format date codes are returned by API
             }
         }
 
