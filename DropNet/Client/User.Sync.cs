@@ -26,6 +26,15 @@ namespace DropNet
             return _userLogin;
         }
 
+        public RestResponse CreateAccount(string email, string firstName, string lastName, string password)
+        {
+            _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
+
+            var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
+
+            return _restClient.Execute(request);
+        }
+
         public AccountInfo Account_Info()
         {
             //This has to be here as Dropbox change their base URL between calls

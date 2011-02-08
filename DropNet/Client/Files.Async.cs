@@ -89,7 +89,6 @@ namespace DropNet
             _restClient.ExecuteAsync(request, callback);
         }
 
-
         /// <summary>
         /// Deletes the file or folder from dropbox with the given path
         /// </summary>
