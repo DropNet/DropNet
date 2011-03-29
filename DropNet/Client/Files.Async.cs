@@ -16,7 +16,7 @@ namespace DropNet
         /// <param name="callback">The callback Action to perform on completion</param>
         public void GetMetaDataAsync(string path, Action<RestResponse<MetaData>> callback)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (path!="" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = Resource.ApiBaseUrl;
@@ -26,6 +26,30 @@ namespace DropNet
 
             _restClient.ExecuteAsync<MetaData>(request, callback);
         }
+
+		/// <summary>
+		/// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
+		/// Optional 'hash' param returns HTTP code 304	(Directory contents have not changed) if contents have not changed since the
+		/// hash was retrieved on a previous call.
+		/// </summary>
+		/// <param name="path">The path of the file or folder</param>
+        /// <param name="hash">hash - Optional. Listing return values include a hash representing the state of the directory's contents. If you provide this argument to the metadata call, you give the service an opportunity to respond with a "304 Not Modified" status code instead of a full (potentially very large) directory listing. This argument is ignored if the specified path is associated with a file or if list=false.</param>
+        /// <param name="callback">The callback Action to perform on completion</param>
+        public void GetMetaDataAsync(string path, string hash, Action<RestResponse<MetaData>> callback)
+        {
+            if (path != "" && !path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
+
+            var request = _requestHelper.CreateMetadataRequest(path);
+
+            request.AddParameter("hash", hash);
+
+            _restClient.ExecuteAsync<MetaData>(request, callback);
+        }
+
 
         //TODO - Make class for this to return (instead of just a byte[])
         /// <summary>
@@ -78,7 +102,7 @@ namespace DropNet
         /// <param name="callback">The callback Action to perform on completion</param>
         public void UploadFileAsync(string path, string filename, byte[] fileData, Action<RestResponse> callback)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = Resource.ApiContentBaseUrl;
@@ -96,7 +120,7 @@ namespace DropNet
         /// <param name="callback">The callback Action to perform on completion</param>
         public void DeleteAsync(string path, Action<RestResponse> callback)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = Resource.ApiBaseUrl;
