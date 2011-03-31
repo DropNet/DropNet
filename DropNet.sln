@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.WindowsPhone", "Dro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.Tests", "DropNet.Tests\DropNet.Tests.csproj", "{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{61EE82C6-B07F-4F79-81FD-E028D60D4977}"
+	ProjectSection(SolutionItems) = preProject
+		dropnet.nuspec = dropnet.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = DropNet.vsmdi

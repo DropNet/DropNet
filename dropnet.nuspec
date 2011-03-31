@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+	<metadata>
+		<id>DropNet</id>
+		<version>1.0</version>
+		<authors>Damian Karzon, Github Contributors</authors>
+		<owners>Damian Karzon</owners>
+		<description>.NET Client for the Dropbox API</description>
+		<language>en-US</language>
+		<projectUrl>https://github.com/dkarzon/DropNet</projectUrl>
+		<licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
+		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
+		<tags>DROPBOX API .NET</tags>
+	</metadata>
+</package>
