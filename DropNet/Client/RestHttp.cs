@@ -82,12 +82,12 @@ namespace DropNet.Client
 		/// </summary>
 		public bool FollowRedirects { get; set; }
 #endif
-#if FRAMEWORK
+
 		/// <summary>
 		/// Maximum number of automatic redirects to follow if FollowRedirects is true
 		/// </summary>
 		public int? MaxRedirects { get; set; }
-#endif
+
 		/// <summary>
 		/// HTTP headers to be sent with request
 		/// </summary>
@@ -113,12 +113,10 @@ namespace DropNet.Client
 		/// </summary>
 		public Uri Url { get; set; }
 
-#if FRAMEWORK
 		/// <summary>
 		/// Proxy info to be sent with request
 		/// </summary>
 		public IWebProxy Proxy { get; set; }
-#endif
 
 		/// <summary>
 		/// Default constructor

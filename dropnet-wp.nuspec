@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
 	<metadata>
-		<id>DropNet</id>
+		<id>DropNet-WP</id>
 		<version>1.1</version>
 		<authors>Damian Karzon, Github Contributors</authors>
 		<owners>Damian Karzon</owners>
-		<description>.NET Client for the Dropbox API</description>
+		<description>Windows Phone 7 client library for the Dropbox API</description>
 		<language>en-US</language>
 		<projectUrl>https://github.com/dkarzon/DropNet</projectUrl>
 		<licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
-		<tags>DROPBOX API .NET</tags>
+		<tags>DROPBOX API .NET WP7</tags>
 	</metadata>
 	<files>
-		<file src="DropNet\bin\Release\*.dll" target="lib" />
+		<file src="DropNet.WindowsPhone\bin\Release\*.dll" target="lib" />
 	</files>
 </package>
