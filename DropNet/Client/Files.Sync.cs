@@ -1,10 +1,9 @@
-﻿#if WINDOWS_PHONE
-//Exclude
-#else
+﻿#if !WINDOWS_PHONE
+
 using System.IO;
 using DropNet.Models;
-using DropNet.Authenticators;
 using RestSharp;
+using DropNet.Authenticators;
 
 namespace DropNet
 {

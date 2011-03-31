@@ -42,7 +42,7 @@ namespace DropNet.Authenticators
             this._tokenSecret = tokenSecret;
         }
 
-        public void Authenticate(RestRequest request)
+        public void Authenticate(RestClient client, RestRequest request)
         {
             request.AddParameter("oauth_version", "1.0");
             request.AddParameter("oauth_nonce", this.GenerateNonce());
@@ -168,6 +168,7 @@ namespace DropNet.Authenticators
                 return ((x.Name == y.Name) ? string.Compare(x.Value.ToString(), y.Value.ToString()) : string.Compare(x.Name, y.Name));
             }
         }
+
     }
 
 

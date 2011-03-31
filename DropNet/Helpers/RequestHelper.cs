@@ -45,7 +45,7 @@ namespace DropNet.Helpers
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename);
 
-            request.AddFile(fileData, filename, "file");
+            request.AddFile("file", fileData, filename);
 
             return request;
         }

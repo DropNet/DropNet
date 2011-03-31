@@ -79,7 +79,7 @@ namespace DropNet {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://api.getdropbox.com.
+        ///   Looks up a localized string similar to https://api.dropbox.com.
         /// </summary>
         internal static string SecureLoginBaseUrl {
             get {

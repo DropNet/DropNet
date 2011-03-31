@@ -52,6 +52,7 @@ namespace DropNet
             _restClient = new RestClient(DropNet.Resource.SecureLoginBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
+            
             //probly not needed...
             RequestCount = 0;
             DataCount = 0;

@@ -1,11 +1,10 @@
-﻿#if WINDOWS_PHONE
-//Exclude
-#else
+﻿#if !WINDOWS_PHONE
+
 using DropNet.Models;
 using RestSharp;
-using DropNet.Authenticators;
 using System.Net;
 using DropNet.Helpers;
+using DropNet.Authenticators;
 
 namespace DropNet
 {
@@ -15,7 +14,7 @@ namespace DropNet
         public UserLogin Login(string email, string password)
         {
             _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, null, null);
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
             var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
 

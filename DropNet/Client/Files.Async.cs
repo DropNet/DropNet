@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using DropNet.Models;
-using DropNet.Authenticators;
 using RestSharp;
 using System;
+using DropNet.Authenticators;
 
 namespace DropNet
 {

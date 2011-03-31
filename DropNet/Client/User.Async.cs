@@ -1,7 +1,7 @@
 ﻿using DropNet.Models;
 using RestSharp;
-using DropNet.Authenticators;
 using System;
+using DropNet.Authenticators;
 
 namespace DropNet
 {
@@ -11,7 +11,7 @@ namespace DropNet
         public void LoginAsync(string email, string password, Action<RestResponse<UserLogin>> callback)
         {
             _restClient.BaseUrl = DropNet.Resource.SecureLoginBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, null, null);
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
             var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
 

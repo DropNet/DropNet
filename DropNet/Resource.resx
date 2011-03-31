@@ -124,6 +124,6 @@
     <value>http://api-content.dropbox.com</value>
   </data>
   <data name="SecureLoginBaseUrl" xml:space="preserve">
-    <value>https://api.getdropbox.com</value>
+    <value>https://api.dropbox.com</value>
   </data>
 </root>
