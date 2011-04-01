@@ -13,7 +13,7 @@ namespace DropNet
 
         public UserLogin Login(string email, string password)
         {
-            _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
             var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
@@ -27,7 +27,7 @@ namespace DropNet
 
         public RestResponse CreateAccount(string email, string firstName, string lastName, string password)
         {
-            _restClient.BaseUrl = Resource.SecureLoginBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
 
             var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
 
@@ -37,7 +37,7 @@ namespace DropNet
         public AccountInfo Account_Info()
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateAccountInfoRequest();

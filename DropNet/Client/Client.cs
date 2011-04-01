@@ -7,6 +7,8 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
+        private const string _apiBaseUrl = "http://api.dropbox.com";
+        private const string _apiContentBaseUrl = "http://api-content.dropbox.com";
         private const string _version = "0";
 
         private UserLogin _userLogin;
@@ -49,7 +51,7 @@ namespace DropNet
 
         private void LoadClient()
         {
-            _restClient = new RestClient(DropNet.Resource.SecureLoginBaseUrl);
+            _restClient = new RestClient(_apiBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
             

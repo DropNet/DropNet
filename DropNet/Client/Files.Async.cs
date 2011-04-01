@@ -19,7 +19,7 @@ namespace DropNet
             if (path!="" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateMetadataRequest(path);
@@ -40,7 +40,7 @@ namespace DropNet
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateMetadataRequest(path);
@@ -62,7 +62,7 @@ namespace DropNet
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiContentBaseUrl;
+            _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateGetFileRequest(path);
@@ -105,7 +105,7 @@ namespace DropNet
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiContentBaseUrl;
+            _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData);
@@ -123,7 +123,7 @@ namespace DropNet
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateDeleteFileRequest(path);
@@ -143,7 +143,7 @@ namespace DropNet
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath);
@@ -163,7 +163,7 @@ namespace DropNet
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath);
@@ -181,7 +181,7 @@ namespace DropNet
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = Resource.ApiBaseUrl;
+            _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateCreateFolderRequest(path);
