@@ -44,7 +44,7 @@ namespace DropNet.Helpers
             request.AddParameter("path", path, ParameterType.UrlSegment);
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename);
-
+			
             request.AddFile("file", fileData, filename);
 
             return request;
