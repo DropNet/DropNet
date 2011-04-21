@@ -12,7 +12,7 @@
     <AssemblyName>DropNet.MonoTouch</AssemblyName>
     <MtouchSdkVersion>3.2</MtouchSdkVersion>
     <MtouchMinimumOS>3.0</MtouchMinimumOS>
-    <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -123,6 +123,24 @@
       <Link>OAuthAuthenticator.cs</Link>
     </Compile>
     <Compile Include="Resource.Designer.cs" />
+<<<<<<< HEAD
+=======
+    <Compile Include="..\DropNet\Client\User.Sync.cs">
+      <Link>User.Sync.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\Files.Sync.cs">
+      <Link>Files.Sync.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\RestHttp.Async.cs">
+      <Link>RestHttp.Async.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\RestHttp.cs">
+      <Link>RestHttp.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\RestHttp.Sync.cs">
+      <Link>RestHttp.Sync.cs</Link>
+    </Compile>
+>>>>>>> nicwise-master
     <Compile Include="..\DropNet\Models\DropNetResult.cs">
       <Link>DropNetResult.cs</Link>
     </Compile>
@@ -130,4 +148,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resource.resx" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties InternalTargetFrameworkVersion="IPhone" />
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>
