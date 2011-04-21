@@ -123,6 +123,9 @@
       <Link>OAuthAuthenticator.cs</Link>
     </Compile>
     <Compile Include="Resource.Designer.cs" />
+    <Compile Include="..\DropNet\Models\DropNetResult.cs">
+      <Link>DropNetResult.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource.resx" />
