@@ -76,9 +76,9 @@ namespace DropNet.Tests
         public void Can_Get_File_And_Save()
         {
             _client.Login(TestVariables.Email, TestVariables.Password);
-            var fileInfo = _client.GetFile("/Temp/ScreenShot11.Png");
+            var fileInfo = _client.GetFile("/Getting Started.rtf");
 
-            var writeStream = new FileStream("C:\\Temp\\ScreenShot11.Png", FileMode.Create, FileAccess.Write);
+            var writeStream = new FileStream("C:\\Temp\\Getting Started.rtf", FileMode.Create, FileAccess.Write);
 
             writeStream.Write(fileInfo, 0, fileInfo.Length);
             writeStream.Close();

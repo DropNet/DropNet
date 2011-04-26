@@ -57,7 +57,7 @@ namespace DropNet
         /// </summary>
         /// <param name="path">The path of the file to download</param>
         /// <param name="callback">The callback Action to perform on completion</param>
-        public void GetFile(string path, Action<RestResponse> callback)
+        public void GetFileAsync(string path, Action<RestResponse> callback)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 

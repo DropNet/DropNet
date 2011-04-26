@@ -48,7 +48,7 @@ namespace DropNet
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, _userLogin.Token, _userLogin.Secret);
 
             var request = _requestHelper.CreateGetFileRequest(path);
