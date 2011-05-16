@@ -2,6 +2,9 @@
 using RestSharp;
 using RestSharp.Deserializers;
 using DropNet.Helpers;
+using System;
+using DropNet.Exceptions;
+using System.Net;
 
 namespace DropNet
 {
@@ -11,7 +14,7 @@ namespace DropNet
         private const string _apiContentBaseUrl = "http://api-content.dropbox.com";
         private const string _version = "0";
 
-        private UserLogin _userLogin;
+        public UserLogin UserLogin { get; private set; }
 
         private string _apiKey;
         private string _appsecret;
@@ -44,7 +47,7 @@ namespace DropNet
             _apiKey = apiKey;
             _appsecret = appSecret;
 
-            _userLogin = new UserLogin { Token = userToken, Secret = userSecret };
+            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
 
             LoadClient();
         }
@@ -54,15 +57,81 @@ namespace DropNet
             _restClient = new RestClient(_apiBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
-            
-            //probly not needed...
+
+            _requestHelper = new RequestHelper(_version);
+
+            //probably not needed...
             RequestCount = 0;
             DataCount = 0;
-            _requestHelper = new RequestHelper(_version);
         }
 
-        //TODO - Create Execute and ExecuteAsync Methods to pass through all the RestSharp calls.
-        // Maybe even a failure 1?
+#if !WINDOWS_PHONE
+        private T Execute<T>(RestRequest request) where T : new()
+        {
+            var response = _restClient.Execute<T>(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
+            }
+
+            return response.Data;
+        }
+#endif
+
+        private void ExecuteAsync(RestRequest request, Action<RestResponse> success, Action<DropboxException> failure)
+        {
+#if WINDOWS_PHONE
+            //check for network connection
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                //do nothing
+                failure(new DropboxException
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadGateway
+                });
+                return;
+            }
+#endif
+            _restClient.ExecuteAsync(request, (response) =>
+            {
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    failure(new DropboxException(response));
+                }
+                else
+                {
+                    success(response);
+                }
+            });
+        }
+
+        private void ExecuteAsync<T>(RestRequest request, Action<T> success, Action<DropboxException> failure) where T : new()
+        {
+#if WINDOWS_PHONE
+            //check for network connection
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                //do nothing
+                failure(new DropboxException
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadGateway
+                });
+                return;
+            }
+#endif
+            _restClient.ExecuteAsync<T>(request, (response) =>
+            {
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    failure(new DropboxException(response));
+                }
+                else
+                {
+                    success(response.Data);
+                }
+            });
+        }
 
     }
 }
