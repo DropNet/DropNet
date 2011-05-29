@@ -14,7 +14,7 @@ namespace DropNet
         private const string _apiContentBaseUrl = "http://api-content.dropbox.com";
         private const string _version = "0";
 
-        public UserLogin UserLogin { get; private set; }
+        public UserLogin UserLogin { get; set; }
 
         private string _apiKey;
         private string _appsecret;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using RestSharp;
 using System.Security.Cryptography;
+using DropNet.Extensions;
 
 namespace DropNet.Authenticators
 {
@@ -53,13 +54,6 @@ namespace DropNet.Authenticators
             {
                 request.AddParameter("oauth_token", this._token);
             }
-            foreach (Parameter parameter in request.Parameters)
-            {
-                if ((parameter.Type == ParameterType.GetOrPost) && (parameter.Value is string))
-                {
-                    //parameter.Value = this.UrlEncode(parameter.Value.ToString());
-                }
-            }
             request.Parameters.Sort(new QueryParameterComparer());
             request.AddParameter("oauth_signature", this.GenerateSignature(request));
         }
@@ -72,7 +66,7 @@ namespace DropNet.Authenticators
                 return (p.Type == ParameterType.UrlSegment);
             }).Aggregate<Parameter, string>(resource, delegate(string current, Parameter p)
             {
-                return current.Replace("{" + p.Name + "}", p.Value.ToString());
+                return current.Replace("{" + p.Name + "}", p.Value.ToString().UrlEncode());
             });
             return new Uri(string.Format("{0}/{1}", this._baseUrl, resource));
         }
@@ -108,11 +102,11 @@ namespace DropNet.Authenticators
             string str2 = NormalizeRequestParameters(request.Parameters);
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat("{0}&", request.Method.ToString().ToUpper());
-            builder.AppendFormat("{0}&", UrlEncode(str));
-            builder.AppendFormat("{0}", UrlEncode(str2));
+            builder.AppendFormat("{0}&", str.UrlEncode());
+            builder.AppendFormat("{0}", str2.UrlEncode());
             string data = builder.ToString();
             HMACSHA1 hashAlgorithm = new HMACSHA1();
-            hashAlgorithm.Key = Encoding.UTF8.GetBytes(string.Format("{0}&{1}", UrlEncode(this._consumerSecret), string.IsNullOrEmpty(this._tokenSecret) ? string.Empty : UrlEncode(this._tokenSecret)));
+            hashAlgorithm.Key = Encoding.UTF8.GetBytes(string.Format("{0}&{1}", this._consumerSecret.UrlEncode(), string.IsNullOrEmpty(this._tokenSecret) ? string.Empty : this._tokenSecret.UrlEncode()));
             return ComputeHash(hashAlgorithm, data);
         }
 
@@ -133,27 +127,10 @@ namespace DropNet.Authenticators
             for (int i = 0; i < list.Count; i++)
             {
                 parameter = parameters[i];
-                builder.AppendFormat("{0}={1}", parameter.Name, UrlEncode(parameter.Value.ToString()));
+                builder.AppendFormat("{0}={1}", parameter.Name, parameter.Value.ToString().UrlEncode());
                 if (i < (list.Count - 1))
                 {
                     builder.Append("&");
-                }
-            }
-            return builder.ToString();
-        }
-
-        public static string UrlEncode(string value)
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (char ch in value)
-            {
-                if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~".IndexOf(ch) != -1)
-                {
-                    builder.Append(ch);
-                }
-                else
-                {
-                    builder.Append('%' + string.Format("{0:X2}", (int)ch));
                 }
             }
             return builder.ToString();
