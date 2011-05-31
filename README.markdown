@@ -1,6 +1,6 @@
 .NET Client library for the Dropbox API
 
-<a href="http://dkdevelopment.net/">http://dkdevelopment.net/</a> //TODO - Update
+<a href="http://dkdevelopment.net/what-im-doing/dropnet/">http://dkdevelopment.net/what-im-doing/dropnet/</a>
 
 Example usage:
 
