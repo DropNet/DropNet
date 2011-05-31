@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RestSharp;
+using DropNet.Extensions;
 
 namespace DropNet.Helpers
 {
+    /// <summary>
+    /// Helper class for creating DropNet RestSharp Requests
+    /// </summary>
     public class RequestHelper
-    {
-       
+    {       
         private string _version;
 
         public RequestHelper(string version)
@@ -139,6 +142,7 @@ namespace DropNet.Helpers
 
             return request;
         }
+
 
     }
 }
