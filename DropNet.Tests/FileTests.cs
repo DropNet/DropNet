@@ -110,12 +110,28 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
+        public void Can_Upload_File_With_Special_Char()
+        {
+            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
+            var localContent = fixture.CreateAnonymous<string>();
+
+            File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
+            Assert.IsTrue(File.Exists(localFile.FullName));
+            byte[] content = _client.GetFileContentFromFS(localFile);
+
+            var uploaded = _client.UploadFile("/", "testfile's.txt", content);
+
+            Assert.IsTrue(uploaded);
+            File.Delete(localFile.FullName);
+        }
+
+        [TestMethod]
         public void Can_Upload_Large_File()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>());
             var localContent = fixture.CreateAnonymous<string>();
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 18; i++)
             {
                 localContent += localContent;
             }

@@ -106,6 +106,17 @@ namespace DropNet.Helpers
             return request;
         }
 
+        public RestRequest CreateWebAuthRequest()
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/oauth/request_token";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+
+            //request.AddParameter("oauth_consumer_key", apiKey);
+
+            return request;
+        }
+
         public RestRequest CreateNewAccountRequest(string apiKey, string email, string firstName, string lastName, string password)
         {
             var request = new RestRequest(Method.POST);

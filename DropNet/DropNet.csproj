@@ -79,6 +79,9 @@
     <Compile Include="Client\Files.Async.cs" />
     <Compile Include="Client\Files.Sync.cs" />
     <Compile Include="Client\User.Sync.cs" />
+    <Compile Include="Client\Web.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Exceptions\DropboxException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\RequestHelper.cs" />

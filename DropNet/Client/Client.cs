@@ -10,10 +10,13 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        private const string _apiBaseUrl = "http://api.dropbox.com";
-        private const string _apiContentBaseUrl = "http://api-content.dropbox.com";
+        private const string _apiBaseUrl = "https://api.dropbox.com";
+        private const string _apiContentBaseUrl = "https://api-content.dropbox.com";
         private const string _version = "0";
 
+        /// <summary>
+        /// Contains the Users Token and Secret
+        /// </summary>
         public UserLogin UserLogin { get; set; }
 
         private string _apiKey;
@@ -34,6 +37,7 @@ namespace DropNet
         /// Default Constructor for the DropboxClient
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         public DropNetClient(string apiKey, string appSecret)
         {
             _apiKey = apiKey;
@@ -42,6 +46,13 @@ namespace DropNet
             LoadClient();
         }
 
+        /// <summary>
+        /// Creates an instance of the DropNetClient given an API Key/Secret and a User Token/Secret
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="userToken">The User authentication token</param>
+        /// <param name="userSecret">The Users matching secret</param>
         public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
         {
             _apiKey = apiKey;
@@ -68,6 +79,8 @@ namespace DropNet
 #if !WINDOWS_PHONE
         private T Execute<T>(RestRequest request) where T : new()
         {
+            RequestCount++;
+
             var response = _restClient.Execute<T>(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -93,6 +106,8 @@ namespace DropNet
                 return;
             }
 #endif
+            RequestCount++;
+
             _restClient.ExecuteAsync(request, (response) =>
             {
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -120,6 +135,8 @@ namespace DropNet
                 return;
             }
 #endif
+            RequestCount++;
+
             _restClient.ExecuteAsync<T>(request, (response) =>
             {
                 if (response.StatusCode != HttpStatusCode.OK)

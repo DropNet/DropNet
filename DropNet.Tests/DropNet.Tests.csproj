@@ -68,6 +68,9 @@
     <Compile Include="Helpers\RequestHelperTest.cs" />
     <Compile Include="UserTests.cs" />
     <Compile Include="TestVariables.cs" />
+    <Compile Include="WebAuthTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DropNet\DropNet.csproj">
@@ -75,7 +78,6 @@
       <Name>DropNet</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
