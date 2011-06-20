@@ -114,7 +114,31 @@ namespace DropNet
             ExecuteAsync(request, success, failure);
         }
 
-        /// <summary>
+		/// <summary>
+		/// Uploads a File to Dropbox given the raw data.
+		/// </summary>
+		/// <param name="path">The path of the folder to upload to</param>
+		/// <param name="filename">The Name of the file to upload to dropbox</param>
+		/// <param name="fileStream">The file data</param>
+		/// <param name="success">The callback Action to perform on completion</param>
+		/// <param name="failure">The callback Action to perform on exception</param>
+		public void UploadFileAsync (string path, string filename, Stream fileStream, Action<RestResponse> success, Action<DropboxException> failure)
+		{
+			if (path != "" && !path.StartsWith ("/")) path = "/" + path;
+
+			// NOTE philchuang: I don't like this, as the member variable _restClient, which is shared between calls, is modified - meaning that there will be race condition issues
+			// there should be multiple RestClient instances for each unique base URL
+
+			//This has to be here as Dropbox change their base URL between calls
+			_restClient.BaseUrl = _apiContentBaseUrl;
+			_restClient.Authenticator = new OAuthAuthenticator (_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+			var request = _requestHelper.CreateUploadFileRequest (path, filename, fileStream);
+
+			ExecuteAsync (request, success, failure);
+		}
+
+		/// <summary>
         /// Deletes the file or folder from dropbox with the given path
         /// </summary>
         /// <param name="path">The Path of the file or folder to delete.</param>
