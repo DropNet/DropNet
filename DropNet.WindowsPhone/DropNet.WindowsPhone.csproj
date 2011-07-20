@@ -83,13 +83,15 @@
     <Compile Include="..\dropnet\Models\UserLogin.cs">
       <Link>Models\UserLogin.cs</Link>
     </Compile>
+      <Compile Include="..\dropnet\Models\SharesResponse.cs">
+          <Link>Models\SharesResponse.cs</Link>
+      </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\dropnet\Helpers\RequestHelper.cs">
       <Link>Helpers\RequestHelper.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Compile Include="..\dropnet\Extensions\StringExtensions.cs">
       <Link>Extensions\StringExtensions.cs</Link>
     </Compile>

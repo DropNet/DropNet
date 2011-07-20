@@ -30,6 +30,16 @@ namespace DropNet.Helpers
             return request;
         }
 
+        public RestRequest CreateSharesRequest(string path)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/shares/dropbox{path}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+
+            return request;
+        }
+
         public RestRequest CreateGetFileRequest(string path)
         {
             var request = new RestRequest(Method.GET);

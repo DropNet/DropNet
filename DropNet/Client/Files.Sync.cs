@@ -173,6 +173,19 @@ namespace DropNet
             return Execute<MetaData>(request);
         }
 
+        public SharesResponse Shares(string path)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateSharesRequest(path);
+
+            return Execute<SharesResponse>(request);
+        }
+
     }
 }
 #endif

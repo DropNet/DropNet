@@ -262,5 +262,22 @@ namespace DropNet.Tests
             Assert.IsNotNull(metaData);
         }
 
+        [TestMethod]
+        public void Can_Shares()
+        {
+            _client.Shares("/Android intro.pdf");
+        }
+
+        [TestMethod]
+        public void Can_Shares_Async()
+        {
+            _client.SharesAsync("/Android intro.pdf", (response) =>
+            {
+            },
+            (error) =>
+            {
+            });
+        }
+
     }
 }

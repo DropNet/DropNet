@@ -162,7 +162,7 @@ namespace DropNet
         /// <param name="fromPath">The path to the file or folder to copy</param>
         /// <param name="toPath">The path to where the file or folder is getting copied</param>
         /// <param name="callback">The callback Action to perform on completion</param>
-        public void Copy(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
+        public void CopyAsync(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -182,7 +182,7 @@ namespace DropNet
         /// <param name="fromPath">The path to the file or folder to move</param>
         /// <param name="toPath">The path to where the file or folder is getting moved</param>
         /// <param name="callback">The callback Action to perform on completion</param>
-        public void Move(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
+        public void MoveAsync(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -201,7 +201,7 @@ namespace DropNet
         /// </summary>
         /// <param name="path">The path to the folder to create</param>
         /// <param name="callback">The callback Action to perform on completion</param>
-        public void CreateFolder(string path, Action<MetaData> success, Action<DropboxException> failure)
+        public void CreateFolderAsync(string path, Action<MetaData> success, Action<DropboxException> failure)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -212,6 +212,19 @@ namespace DropNet
             var request = _requestHelper.CreateCreateFolderRequest(path);
 
             ExecuteAsync<MetaData>(request, success, failure);
+        }
+
+        public void SharesAsync(string path, Action<SharesResponse> success, Action<DropboxException> failure)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateSharesRequest(path);
+
+            ExecuteAsync<SharesResponse>(request, success, failure);
         }
 
     }
