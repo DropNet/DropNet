@@ -12,7 +12,7 @@ namespace DropNet
     public partial class DropNetClient
     {
         /// <summary>
-        /// Gets the Authentication Token/Secret for use with the Web API
+        /// Gets the Authentication Token/Secret for use with the Web API (Must be called before PostWebAuth)
         /// </summary>
         /// <param name="callbackUrl"></param>
         /// <returns></returns>
@@ -28,16 +28,55 @@ namespace DropNet
             {
                 throw new DropboxException(response);
             }
+            //TODO, something better with the response here?
             var webAuthString = response.Content;
 
             var callbackEncode = callbackUrl.UrlEncode();
 
-            return "https://www.dropbox.com/0/oauth/authorize?" + webAuthString + "&oauth_callback=" + callbackEncode;
+            string url = "https://www.dropbox.com/0/oauth/authorize?" + webAuthString;
+            if (callbackUrl != null)
+            {
+                url += "&oauth_callback=" + callbackUrl.UrlEncode();
+            }
+            return url;
         }
 
-        public void DoWebAuth()
+        public UserLogin PostWebAuth(string token)
         {
-            //something does here...?
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, token, "");
+
+            var request = _requestHelper.CreateAccessToken();
+
+            var response = _restClient.Execute(request);
+
+            int idx, end;
+            String KeySecret = "oauth_token_secret=";
+            String KeyToken = "oauth_token=";
+
+            UserLogin = new UserLogin();
+
+            // Get secret
+            idx = response.Content.LastIndexOf(KeySecret);
+            if (idx == -1)
+                return null;
+            idx += KeySecret.Length;
+            end = response.Content.IndexOf('&', idx);
+            if (end == -1)
+                end = response.Content.Length;
+            UserLogin.Secret = response.Content.Substring(idx, end - idx);
+
+            // Get token
+            idx = response.Content.LastIndexOf(KeyToken);
+            if (idx == -1)
+                return null;
+            idx += KeyToken.Length;
+            end = response.Content.IndexOf('&', idx);
+            if (end == -1)
+                end = response.Content.Length;
+            UserLogin.Token = response.Content.Substring(idx, end - idx);
+
+            return UserLogin;
         }
     }
 }

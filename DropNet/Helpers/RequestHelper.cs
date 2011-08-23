@@ -50,7 +50,7 @@ namespace DropNet.Helpers
             return request;
         }
 
-		public RestRequest CreateUploadFileRequest (string path, string filename, byte[] fileData)
+		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData)
 		{
 			var request = new RestRequest (Method.POST);
 			request.Resource = "{version}/files/dropbox{path}";
@@ -64,9 +64,11 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-		public RestRequest CreateUploadFileRequest (string path, string filename, Stream fileStream)
+		public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream)
 		{
 			var request = new RestRequest (Method.POST);
+            //Don't want these to timeout (Maybe use something better here?)
+            request.Timeout = int.MaxValue;
 			request.Resource = "{version}/files/dropbox{path}";
 			request.AddParameter ("version", _version, ParameterType.UrlSegment);
 			request.AddParameter ("path", path, ParameterType.UrlSegment);
@@ -78,7 +80,7 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-		public RestRequest CreateDeleteFileRequest (string path)
+		public RestRequest CreateDeleteFileRequest(string path)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/fileops/delete";
@@ -137,8 +139,14 @@ namespace DropNet.Helpers
             request.Resource = "{version}/oauth/request_token";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
 
-            //request.AddParameter("oauth_consumer_key", apiKey);
+            return request;
+        }
 
+        public RestRequest CreateAccessToken()
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/oauth/access_token";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
             return request;
         }
 
@@ -175,6 +183,17 @@ namespace DropNet.Helpers
 
             request.AddParameter("path", path);
             request.AddParameter("root", "dropbox");
+
+            return request;
+        }
+
+        public RestRequest CreateThumbnailRequest(string path)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/thumbnails/dropbox{path}";
+
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
 
             return request;
         }

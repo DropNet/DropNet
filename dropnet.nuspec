@@ -2,19 +2,22 @@
 <package>
 	<metadata>
 		<id>DropNet</id>
-		<version>1.5.5</version>
+		<version>1.5.6</version>
 		<authors>Damian Karzon, Github Contributors</authors>
 		<owners>Damian Karzon</owners>
 		<description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone 7)</description>
-		<language>en-US</language>
-		<projectUrl>https://github.com/dkarzon/DropNet</projectUrl>
+		<language>en-AU</language>
+		<projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
 		<licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
 		<tags>DROPBOX API .NET WP7</tags>
+        <dependencies>
+            <dependency id="RestSharp" />
+        </dependencies>
 	</metadata>
 	<files>
-		<file src="DropNet\bin\Release\*.dll" target="lib\net35" />
-		<file src="DropNet.WindowsPhone\bin\Release\*.dll" target="lib\sl3-wp" />
-		<file src="DropNet.WindowsPhone\bin\Release\*.dll" target="lib\sl4-WindowsPhone71" />
+		<file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
+		<file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl3-wp" />
+		<file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-WindowsPhone71" />
 	</files>
 </package>

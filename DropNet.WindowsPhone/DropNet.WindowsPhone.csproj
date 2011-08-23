@@ -42,11 +42,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json.WindowsPhone, Version=4.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\Lib\Newtonsoft.Json.WindowsPhone.dll</HintPath>
+    <Reference Include="Newtonsoft.Json.WindowsPhone, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.0.2\lib\sl3-wp\Newtonsoft.Json.WindowsPhone.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp.WindowsPhone">
-      <HintPath>..\Lib\RestSharp.WindowsPhone.dll</HintPath>
+    <Reference Include="RestSharp.WindowsPhone, Version=101.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.101.3\lib\sl3-wp\RestSharp.WindowsPhone.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -83,9 +85,9 @@
     <Compile Include="..\dropnet\Models\UserLogin.cs">
       <Link>Models\UserLogin.cs</Link>
     </Compile>
-      <Compile Include="..\dropnet\Models\SharesResponse.cs">
-          <Link>Models\SharesResponse.cs</Link>
-      </Compile>
+    <Compile Include="..\dropnet\Models\SharesResponse.cs">
+      <Link>Models\SharesResponse.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\dropnet\Helpers\RequestHelper.cs">
       <Link>Helpers\RequestHelper.cs</Link>
@@ -95,6 +97,9 @@
     <Compile Include="..\dropnet\Extensions\StringExtensions.cs">
       <Link>Extensions\StringExtensions.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />

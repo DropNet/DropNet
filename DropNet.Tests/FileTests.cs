@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Ploeh.AutoFixture;
 using DropNet.Exceptions;
+using System;
 
 namespace DropNet.Tests
 {
@@ -132,7 +133,7 @@ namespace DropNet.Tests
             var localFile = new FileInfo(fixture.CreateAnonymous<string>());
             var localContent = fixture.CreateAnonymous<string>();
 
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 17; i++)
             {
                 localContent += localContent;
             }
@@ -145,87 +146,6 @@ namespace DropNet.Tests
 
             Assert.IsTrue(uploaded);
             File.Delete(localFile.FullName);
-        }
-
-        [TestMethod]
-        public void Can_Upload_File_Async()
-        {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
-
-            File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
-            Assert.IsTrue(File.Exists(localFile.FullName));
-            byte[] content = _client.GetFileContentFromFS(localFile);
-
-            _client.UploadFileAsync("/", localFile.Name, content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
-
-            //TODO - Delete
-        }
-
-		[TestMethod]
-		public void Can_Upload_File_Async_Streaming ()
-		{
-			var localFile = new FileInfo (fixture.CreateAnonymous<string> ());
-			var localContent = fixture.CreateAnonymous<string> ();
-
-			File.WriteAllText (localFile.FullName, localContent, System.Text.Encoding.UTF8);
-			Assert.IsTrue (File.Exists (localFile.FullName));
-			byte[] content = _client.GetFileContentFromFS (localFile);
-
-			var waitForUploadFinished = new ManualResetEvent (false);
-			using (var fileStream = localFile.OpenRead ())
-			{
-				_client.UploadFileAsync ("/", localFile.Name, fileStream, 
-					response => {
-						Can_Upload_File_Async_Success (response);
-						waitForUploadFinished.Set ();
-					}, 
-					response => {
-						Can_Upload_File_Async_Failure (response);
-						waitForUploadFinished.Set ();
-					});
-				waitForUploadFinished.WaitOne ();
-			}
-
-			//TODO - Delete
-		}
-
-		private void Can_Upload_File_Async_Success (RestSharp.RestResponse response)
-        {
-            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
-        }
-        private void Can_Upload_File_Async_Failure(DropboxException error)
-        {
-            Assert.IsTrue(false);
-        }
-
-        [TestMethod]
-        public void Can_Upload_Large_File_Async()
-        {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
-
-            for (int i = 0; i < 16; i++)
-            {
-                localContent += localContent;
-            }
-
-            File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
-            Assert.IsTrue(File.Exists(localFile.FullName));
-            byte[] content = _client.GetFileContentFromFS(localFile);
-
-            _client.UploadFileAsync("/", localFile.Name, content, Can_Upload_Large_File_Async_Success, Can_Upload_Large_File_Async_Failure);
-
-            //TODO - Delete
-        }
-
-        private void Can_Upload_Large_File_Async_Success(RestSharp.RestResponse response)
-        {
-            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
-        }
-        private void Can_Upload_Large_File_Async_Failure(DropboxException error)
-        {
-            Assert.IsTrue(false);
         }
 
         [TestMethod]
@@ -257,7 +177,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Create_Folder()
         {
-            var metaData = _client.CreateFolder("TestFolder1");
+            var metaData = _client.CreateFolder(string.Format("TestFolder1{0:yyyyMMddhhmmss}", DateTime.Now));
 
             Assert.IsNotNull(metaData);
         }
@@ -269,14 +189,13 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Shares_Async()
+        public void Can_Get_Thumbnail()
         {
-            _client.SharesAsync("/Android intro.pdf", (response) =>
-            {
-            },
-            (error) =>
-            {
-            });
+            var rawBytes = _client.Thumbnails("/Temp/Test.png");
+
+            Assert.IsNotNull(rawBytes);
+
+            File.WriteAllBytes(@"C:\Temp\Test.png", rawBytes);
         }
 
     }

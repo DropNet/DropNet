@@ -15,7 +15,7 @@ namespace DropNet.Tests
 
             var client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
 
-            client.WebAuthUrl("test");
+            var url = client.WebAuthUrl("http://example.com");
 
         }
     }

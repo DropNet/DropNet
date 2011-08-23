@@ -214,6 +214,12 @@ namespace DropNet
             ExecuteAsync<MetaData>(request, success, failure);
         }
 
+        /// <summary>
+        /// Gets a temporary public share link of the given file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
         public void SharesAsync(string path, Action<SharesResponse> success, Action<DropboxException> failure)
         {
             if (!path.StartsWith("/")) path = "/" + path;
@@ -225,6 +231,30 @@ namespace DropNet
             var request = _requestHelper.CreateSharesRequest(path);
 
             ExecuteAsync<SharesResponse>(request, success, failure);
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of an image given its path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void ThumbnailsAsync(string path, Action<byte[]> success, Action<DropboxException> failure)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiContentBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateThumbnailRequest(path);
+
+            ExecuteAsync(request,
+                (response) =>
+                {
+                    success(response.RawBytes);
+                },
+                failure);
         }
 
     }
