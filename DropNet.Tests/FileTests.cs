@@ -83,6 +83,16 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
+        public void Can_Get_File_Foreign_Language()
+        {
+            var rawBytes = _client.GetFile("/привет.txt");
+
+            Assert.IsNotNull(rawBytes);
+
+            File.WriteAllBytes(@"C:\Temp\привет.txt", rawBytes);
+        }
+
+        [TestMethod]
         public void Can_Get_File_And_Save()
         {
             var fileInfo = _client.GetFile("/Getting Started.rtf");

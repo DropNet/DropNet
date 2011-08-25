@@ -55,6 +55,11 @@ namespace DropNet
 
             var response = _restClient.Execute(request);
 
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new DropboxException(response);
+            }
+
             return response.RawBytes;
         }
 
