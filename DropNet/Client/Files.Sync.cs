@@ -96,11 +96,11 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData);
+            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             var response = _restClient.Execute(request);
 
-            //TODO - Return something better here
+            //TODO - Return something better here?
             return new DropNetResult(response);
         }
 

@@ -246,7 +246,7 @@ namespace DropNet.Tests
             string filename = fixture.CreateAnonymous<string>();
             byte[] fileData = System.Text.Encoding.UTF8.GetBytes(fixture.CreateAnonymous<string>());
             
-            RestRequest actual = _target.CreateUploadFileRequest(path, filename, fileData);
+            RestRequest actual = _target.CreateUploadFileRequest(path, filename, fileData, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.POST);

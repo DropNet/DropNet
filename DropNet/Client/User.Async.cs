@@ -9,21 +9,6 @@ namespace DropNet
     public partial class DropNetClient
     {
 
-        public void LoginAsync(string email, string password, Action<UserLogin> success, Action<DropboxException> failure)
-        {
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
-
-            var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
-
-            ExecuteAsync<UserLogin>(request, (response) =>
-            {
-                UserLogin = response;
-                success(response);
-			}, failure);
-
-        }
-
         public void Account_InfoAsync(Action<AccountInfo> success, Action<DropboxException> failure)
         {
             //This has to be here as Dropbox change their base URL between calls

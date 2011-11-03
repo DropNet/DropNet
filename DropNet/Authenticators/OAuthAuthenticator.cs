@@ -43,22 +43,40 @@ namespace DropNet.Authenticators
             this._tokenSecret = tokenSecret;
         }
 
-        public void Authenticate(RestClient client, RestRequest request)
+        public void Authenticate(IRestClient client, IRestRequest request)
         {
-            request.AddParameter("oauth_version", "1.0");
-            request.AddParameter("oauth_nonce", this.GenerateNonce());
-            request.AddParameter("oauth_timestamp", this.GenerateTimeStamp());
-            request.AddParameter("oauth_signature_method", "HMAC-SHA1");
-            request.AddParameter("oauth_consumer_key", this._consumerKey);
-            if (!string.IsNullOrEmpty(this._token))
-            {
-                request.AddParameter("oauth_token", this._token);
-            }
-            request.Parameters.Sort(new QueryParameterComparer());
-            request.AddParameter("oauth_signature", this.GenerateSignature(request));
+			if (request.Method == Method.PUT)
+			{
+				//Do the parameters as URL segments for PUT
+				request.AddParameter("oauth_version", "1.0", ParameterType.UrlSegment);
+				request.AddParameter("oauth_nonce", this.GenerateNonce(), ParameterType.UrlSegment);
+				request.AddParameter("oauth_timestamp", this.GenerateTimeStamp(), ParameterType.UrlSegment);
+				request.AddParameter("oauth_signature_method", "HMAC-SHA1", ParameterType.UrlSegment);
+				request.AddParameter("oauth_consumer_key", this._consumerKey, ParameterType.UrlSegment);
+				if (!string.IsNullOrEmpty(this._token))
+				{
+					request.AddParameter("oauth_token", this._token, ParameterType.UrlSegment);
+				}
+				request.Parameters.Sort(new QueryParameterComparer());
+				request.AddParameter("oauth_signature", this.GenerateSignature(request), ParameterType.UrlSegment);
+			}
+			else
+			{
+				request.AddParameter("oauth_version", "1.0");
+				request.AddParameter("oauth_nonce", this.GenerateNonce());
+				request.AddParameter("oauth_timestamp", this.GenerateTimeStamp());
+				request.AddParameter("oauth_signature_method", "HMAC-SHA1");
+				request.AddParameter("oauth_consumer_key", this._consumerKey);
+				if (!string.IsNullOrEmpty(this._token))
+				{
+					request.AddParameter("oauth_token", this._token);
+				}
+				request.Parameters.Sort(new QueryParameterComparer());
+				request.AddParameter("oauth_signature", this.GenerateSignature(request));
+			}
         }
 
-        private Uri BuildUri(RestRequest request)
+        private Uri BuildUri(IRestRequest request)
         {
             string resource = request.Resource;
             resource = request.Parameters.Where<Parameter>(delegate(Parameter p)
@@ -90,7 +108,7 @@ namespace DropNet.Authenticators
             return Random.Next(0x1e208, 0x98967f).ToString();
         }
 
-        private string GenerateSignature(RestRequest request)
+        private string GenerateSignature(IRestRequest request)
         {
             Uri uri = this.BuildUri(request);
             string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
@@ -147,7 +165,5 @@ namespace DropNet.Authenticators
         }
 
     }
-
-
 
 }

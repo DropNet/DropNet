@@ -5,24 +5,57 @@ using RestSharp;
 using System.Net;
 using DropNet.Helpers;
 using DropNet.Authenticators;
+using DropNet.Exceptions;
 
 namespace DropNet
 {
     public partial class DropNetClient
     {
+        /// <summary>
+        /// Shorthand method to get a token from Dropbox and build the Url to authorize it.
+        /// </summary>
+        /// <returns></returns>
+        public string GetTokenAndBuildUrl(string callback = null)
+        {
+            GetToken();
+            return BuildAutorizeUrl(callback);
+        }
 
-        public UserLogin Login(string email, string password)
+        /// <summary>
+        /// Gets a token from the almightly dropbox.com (Token cant be used until authorized!)
+        /// </summary>
+        /// <returns></returns>
+        public UserLogin GetToken()
         {
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
-            var request = _requestHelper.CreateLoginRequest(_apiKey, email, password);
+            var request = _requestHelper.CreateTokenRequest();
 
-            var userlogin = Execute<UserLogin>(request);
+            var response = Execute(request);
 
-            UserLogin = userlogin;
+            var userLogin = GetUserLoginFromParams(response.Content);
 
-            return UserLogin;
+            this.UserLogin = userLogin;
+
+            return userLogin;
+        }
+
+        public UserLogin GetAccessToken()
+        {
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateAccessTokenRequest();
+
+            var response = Execute(request);
+
+            var userLogin = GetUserLoginFromParams(response.Content);
+
+            //This is the new Access token we have
+            this.UserLogin = userLogin;
+
+            return userLogin;
         }
 
         public RestResponse CreateAccount(string email, string firstName, string lastName, string password)

@@ -50,32 +50,48 @@ namespace DropNet.Helpers
             return request;
         }
 
-		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData)
+		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData, string root)
 		{
-			var request = new RestRequest (Method.POST);
-			request.Resource = "{version}/files/dropbox{path}";
-			request.AddParameter ("version", _version, ParameterType.UrlSegment);
-			request.AddParameter ("path", path, ParameterType.UrlSegment);
+			var request = new RestRequest(Method.POST);
+			request.Resource = "{version}/files/{root}{path}";
+			request.AddParameter("version", _version, ParameterType.UrlSegment);
+			request.AddParameter("path", path, ParameterType.UrlSegment);
+			request.AddParameter("root", root, ParameterType.UrlSegment);
 			//Need to add the "file" parameter with the file name
 			request.AddParameter ("file", filename);
 
-			request.AddFile ("file", fileData, filename);
+			request.AddFile("file", fileData, filename);
+
+			return request;
+		}
+
+		public RestRequest CreateUploadFilePutRequest(string path, string filename, byte[] fileData, string root)
+		{
+			var request = new RestRequest(Method.PUT);
+			request.Resource = "{version}/files_put/{root}{path}";
+			request.AddParameter("version", _version, ParameterType.UrlSegment);
+			request.AddParameter("path", path, ParameterType.UrlSegment);
+			request.AddParameter("root", root, ParameterType.UrlSegment);
+			//Need to add the "file" parameter with the file name
+			//request.AddParameter ("file", filename);
+
+			request.AddFile("file", fileData, filename);
 
 			return request;
 		}
 
 		public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream)
 		{
-			var request = new RestRequest (Method.POST);
+			var request = new RestRequest(Method.POST);
             //Don't want these to timeout (Maybe use something better here?)
             request.Timeout = int.MaxValue;
 			request.Resource = "{version}/files/dropbox{path}";
-			request.AddParameter ("version", _version, ParameterType.UrlSegment);
-			request.AddParameter ("path", path, ParameterType.UrlSegment);
+			request.AddParameter("version", _version, ParameterType.UrlSegment);
+			request.AddParameter("path", path, ParameterType.UrlSegment);
 			//Need to add the "file" parameter with the file name
-			request.AddParameter ("file", filename);
+			request.AddParameter("file", filename);
 
-			request.AddFile ("file", s => StreamUtils.CopyStream (fileStream, s), filename);
+			request.AddFile("file", s => StreamUtils.CopyStream (fileStream, s), filename);
 
 			return request;
 		}
@@ -133,10 +149,19 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateWebAuthRequest()
+        public RestRequest CreateTokenRequest()
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/oauth/request_token";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+
+            return request;
+        }
+
+        public RestRequest CreateAccessTokenRequest()
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/oauth/access_token";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
 
             return request;
