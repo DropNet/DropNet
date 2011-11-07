@@ -58,7 +58,7 @@ namespace DropNet.Helpers
 			request.AddParameter("path", path, ParameterType.UrlSegment);
 			request.AddParameter("root", root, ParameterType.UrlSegment);
 			//Need to add the "file" parameter with the file name
-			request.AddParameter ("file", filename);
+			request.AddParameter("file", filename);
 
 			request.AddFile("file", fileData, filename);
 
@@ -68,12 +68,15 @@ namespace DropNet.Helpers
 		public RestRequest CreateUploadFilePutRequest(string path, string filename, byte[] fileData, string root)
 		{
 			var request = new RestRequest(Method.PUT);
-			request.Resource = "{version}/files_put/{root}{path}";
+            //Need to put the OAuth Parmeters in the Resource to get around them being put in the body
+            request.Resource = "{version}/files_put/{root}{path}?file={file}&oauth_consumer_key={oauth_consumer_key}&oauth_nonce={oauth_nonce}";
+            request.Resource += "&oauth_token={oauth_token}&oauth_timestamp={oauth_timestamp}";
+            request.Resource += "&oauth_signature={oauth_signature}&oauth_signature_method={oauth_signature_method}&oauth_version={oauth_version}";
 			request.AddParameter("version", _version, ParameterType.UrlSegment);
 			request.AddParameter("path", path, ParameterType.UrlSegment);
 			request.AddParameter("root", root, ParameterType.UrlSegment);
-			//Need to add the "file" parameter with the file name
-			//request.AddParameter ("file", filename);
+            //Need to add the "file" parameter with the file name
+            request.AddParameter("file", filename, ParameterType.UrlSegment);
 
 			request.AddFile("file", fileData, filename);
 

@@ -252,14 +252,13 @@ namespace DropNet.Tests
             Assert.IsTrue(actual.Method == Method.POST);
             Assert.IsNotNull(actual.Resource);
             Assert.IsNotNull(actual.Parameters);
-            Assert.IsTrue(actual.Parameters.Count == 3);
+            Assert.IsTrue(actual.Parameters.Count == 4);
             Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
             Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
             Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));
             Assert.IsTrue(actual.Parameters.Find(x => x.Name == "path").Type == ParameterType.UrlSegment);
             Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "file").Value, filename));
             Assert.IsTrue(actual.Files.Count == 1);
-            //Assert.IsTrue(actual.Files.Find(x => x.FileName == filename).Data.ToString() == fileData.ToString());
         }
     }
 }

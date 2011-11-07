@@ -43,20 +43,20 @@ namespace DropNet.Authenticators
             this._tokenSecret = tokenSecret;
         }
 
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void Authenticate(RestClient client, RestRequest request)
         {
 			if (request.Method == Method.PUT)
 			{
-				//Do the parameters as URL segments for PUT
-				request.AddParameter("oauth_version", "1.0", ParameterType.UrlSegment);
-				request.AddParameter("oauth_nonce", this.GenerateNonce(), ParameterType.UrlSegment);
+                //Do the parameters as URL segments for PUT
+                request.AddParameter("oauth_consumer_key", this._consumerKey, ParameterType.UrlSegment);
+                request.AddParameter("oauth_nonce", this.GenerateNonce(), ParameterType.UrlSegment);
+                if (!string.IsNullOrEmpty(this._token))
+                {
+                    request.AddParameter("oauth_token", this._token, ParameterType.UrlSegment);
+                }
 				request.AddParameter("oauth_timestamp", this.GenerateTimeStamp(), ParameterType.UrlSegment);
-				request.AddParameter("oauth_signature_method", "HMAC-SHA1", ParameterType.UrlSegment);
-				request.AddParameter("oauth_consumer_key", this._consumerKey, ParameterType.UrlSegment);
-				if (!string.IsNullOrEmpty(this._token))
-				{
-					request.AddParameter("oauth_token", this._token, ParameterType.UrlSegment);
-				}
+                request.AddParameter("oauth_signature_method", "HMAC-SHA1", ParameterType.UrlSegment);
+                request.AddParameter("oauth_version", "1.0", ParameterType.UrlSegment);
 				request.Parameters.Sort(new QueryParameterComparer());
 				request.AddParameter("oauth_signature", this.GenerateSignature(request), ParameterType.UrlSegment);
 			}
@@ -76,7 +76,7 @@ namespace DropNet.Authenticators
 			}
         }
 
-        private Uri BuildUri(IRestRequest request)
+        private Uri BuildUri(RestRequest request)
         {
             string resource = request.Resource;
             resource = request.Parameters.Where<Parameter>(delegate(Parameter p)
@@ -108,7 +108,7 @@ namespace DropNet.Authenticators
             return Random.Next(0x1e208, 0x98967f).ToString();
         }
 
-        private string GenerateSignature(IRestRequest request)
+        private string GenerateSignature(RestRequest request)
         {
             Uri uri = this.BuildUri(request);
             string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
@@ -137,14 +137,17 @@ namespace DropNet.Authenticators
         private static string NormalizeRequestParameters(IList<Parameter> parameters)
         {
             StringBuilder builder = new StringBuilder();
-            List<Parameter> list = parameters.Where<Parameter>(delegate(Parameter param)
+            List<Parameter> list = parameters.Where(p =>
             {
-                return (param.Type == ParameterType.GetOrPost);
-            }).ToList<Parameter>();
+                //Hackity hack, don't come back...
+                return (p.Type == ParameterType.GetOrPost || p.Name == "file" || p.Name.StartsWith("oauth_"));
+            }).ToList();
+
             Parameter parameter = null;
+            
             for (int i = 0; i < list.Count; i++)
             {
-                parameter = parameters[i];
+                parameter = list[i];
                 builder.AppendFormat("{0}={1}", parameter.Name, parameter.Value.ToString().UrlEncode());
                 if (i < (list.Count - 1))
                 {

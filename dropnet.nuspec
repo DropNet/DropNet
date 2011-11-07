@@ -12,7 +12,7 @@
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
 		<tags>DROPBOX API .NET WP7</tags>
         <dependencies>
-            <dependency id="RestSharp" />
+            <dependency id="RestSharp" version="101.3" />
         </dependencies>
 	</metadata>
 	<files>

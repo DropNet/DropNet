@@ -82,6 +82,30 @@ namespace DropNet
         }
 
         /// <summary>
+        /// NOTE: DOES NOT WORK, Use UploadFile
+        /// Uploads a File to Dropbox given the raw data. 
+        /// </summary>
+        /// <param name="path">The path of the folder to upload to</param>
+        /// <param name="filename">The Name of the file to upload to dropbox</param>
+        /// <param name="fileData">The file data</param>
+        /// <returns>True on success</returns>
+        public DropNetResult UploadFilePUT(string path, string filename, byte[] fileData)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiContentBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
+
+            var response = _restClient.Execute(request);
+
+            //TODO - Return something better here?
+            return new DropNetResult(response);
+        }
+
+        /// <summary>
         /// Uploads a File to Dropbox given the raw data.
         /// </summary>
         /// <param name="path">The path of the folder to upload to</param>
@@ -96,7 +120,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             var response = _restClient.Execute(request);
 
