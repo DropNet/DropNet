@@ -77,7 +77,7 @@ namespace DropNet.Tests
 
             var uploaded = _client.UploadFilePUT("/", localFile.Name, content);
 
-            Assert.IsTrue(uploaded);
+            Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
         }
 
@@ -93,7 +93,7 @@ namespace DropNet.Tests
 
             var uploaded = _client.UploadFile("/Test", localFile.Name, content);
 
-            Assert.IsTrue(uploaded);
+            Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
         }
 
@@ -109,7 +109,7 @@ namespace DropNet.Tests
 
             var uploaded = _client.UploadFile("/", "testfile's.txt", content);
 
-            Assert.IsTrue(uploaded);
+            Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
         }
 
@@ -125,7 +125,7 @@ namespace DropNet.Tests
 
             var uploaded = _client.UploadFile("/", "testПр.txt", content);
 
-            Assert.IsTrue(uploaded);
+            Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
         }
 
@@ -147,7 +147,7 @@ namespace DropNet.Tests
 
             var uploaded = _client.UploadFile("/", localFile.Name, content);
 
-            Assert.IsTrue(uploaded);
+            Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
         }
 

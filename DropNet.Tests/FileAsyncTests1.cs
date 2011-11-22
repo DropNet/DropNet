@@ -59,7 +59,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            _client.UploadFileAsync("/", "testПр.txt", content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
+            _client.UploadFileAsync("/", "testПр1.txt", content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
         }
 
 		[TestMethod]

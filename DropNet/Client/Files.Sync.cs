@@ -89,7 +89,7 @@ namespace DropNet
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
         /// <returns>True on success</returns>
-        public DropNetResult UploadFilePUT(string path, string filename, byte[] fileData)
+        public MetaData UploadFilePUT(string path, string filename, byte[] fileData)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -99,10 +99,10 @@ namespace DropNet
 
             var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
-            var response = _restClient.Execute(request);
+            var response = _restClient.Execute<MetaData>(request);
 
             //TODO - Return something better here?
-            return new DropNetResult(response);
+            return response.Data;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace DropNet
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
         /// <returns>True on success</returns>
-        public DropNetResult UploadFile(string path, string filename, byte[] fileData)
+        public MetaData UploadFile(string path, string filename, byte[] fileData)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -122,10 +122,10 @@ namespace DropNet
 
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
-            var response = _restClient.Execute(request);
+            var response = _restClient.Execute<MetaData>(request);
 
             //TODO - Return something better here?
-            return new DropNetResult(response);
+            return response.Data;
         }
 
         /// <summary>

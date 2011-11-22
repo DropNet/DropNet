@@ -2,22 +2,25 @@
 <package>
 	<metadata>
 		<id>DropNet</id>
-		<version>1.8</version>
+		<version>1.8.1</version>
 		<authors>Damian Karzon, Github Contributors</authors>
 		<owners>Damian Karzon</owners>
-		<description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone 7)</description>
+		<description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone 7 / 7.1)</description>
 		<language>en-AU</language>
 		<projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
 		<licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
 		<tags>DROPBOX API .NET WP7</tags>
         <dependencies>
-            <dependency id="RestSharp" version="101.3" />
+            <dependency id="Newtonsoft.Json" version="4.0.4" />
         </dependencies>
 	</metadata>
 	<files>
-		<file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
-		<file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl3-wp" />
-		<file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-WindowsPhone71" />
+        <file src="DropNet\bin\Release\RestSharp.ForDropNet.dll" target="lib\net35" />
+        <file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
+        <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.ForDropNet.dll" target="lib\sl3-wp" />
+        <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl3-wp" />
+        <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.ForDropNet.dll" target="lib\sl4-WindowsPhone71" />
+        <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-WindowsPhone71" />
 	</files>
 </package>

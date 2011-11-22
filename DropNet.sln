@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{61EE82C6
 		dropnet.nuspec = dropnet.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.WindowsPhone.Mango", "DropNet.WindowsPhone.Mango\DropNet.WindowsPhone.Mango.csproj", "{E116FA7B-24B5-4F9F-BB77-0FFC6FCB7419}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = DropNet.vsmdi
@@ -33,6 +35,10 @@ Global
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E116FA7B-24B5-4F9F-BB77-0FFC6FCB7419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E116FA7B-24B5-4F9F-BB77-0FFC6FCB7419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E116FA7B-24B5-4F9F-BB77-0FFC6FCB7419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E116FA7B-24B5-4F9F-BB77-0FFC6FCB7419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

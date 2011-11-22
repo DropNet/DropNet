@@ -43,7 +43,7 @@ namespace DropNet.Authenticators
             this._tokenSecret = tokenSecret;
         }
 
-        public void Authenticate(RestClient client, RestRequest request)
+        public void Authenticate(IRestClient client, IRestRequest request)
         {
 			if (request.Method == Method.PUT)
 			{
@@ -76,7 +76,7 @@ namespace DropNet.Authenticators
 			}
         }
 
-        private Uri BuildUri(RestRequest request)
+        private Uri BuildUri(IRestRequest request)
         {
             string resource = request.Resource;
             resource = request.Parameters.Where<Parameter>(delegate(Parameter p)
@@ -108,7 +108,7 @@ namespace DropNet.Authenticators
             return Random.Next(0x1e208, 0x98967f).ToString();
         }
 
-        private string GenerateSignature(RestRequest request)
+        private string GenerateSignature(IRestRequest request)
         {
             Uri uri = this.BuildUri(request);
             string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
