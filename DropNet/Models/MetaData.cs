@@ -4,27 +4,19 @@ using System.Runtime.Serialization;
 
 namespace DropNet.Models
 {
-    [DataContract]
     public class MetaData
     {
-        [DataMember]
         public string Hash { get; set; }
         public bool Thumb_Exists { get; set; }
-        [DataMember]
         public long Bytes { get; set; }
-        [DataMember]
         public string Modified { get; set; }
-        [DataMember]
         public string Path { get; set; }
         public bool Is_Dir { get; set; }
         public bool Is_Deleted { get; set; }
-        [DataMember]
         public string Size { get; set; }
         public string Root { get; set; }
         public string Icon { get; set; }
-        [DataMember]
         public int Revision { get; set; }
-        [DataMember]
         public List<MetaData> Contents { get; set; }
 
         public System.DateTime ModifiedDate

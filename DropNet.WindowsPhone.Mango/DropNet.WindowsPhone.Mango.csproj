@@ -41,6 +41,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.4\lib\sl3-wp\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.WindowsPhone">
+      <HintPath>..\Lib\sl4-wp71\RestSharp.WindowsPhone.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -49,7 +55,43 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DropNet\Authenticators\OAuthAuthenticator.cs">
+      <Link>Authenticators\OAuthAuthenticator.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\Client.cs">
+      <Link>Client\Client.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\Files.Async.cs">
+      <Link>Client\Files.Async.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Client\User.Async.cs">
+      <Link>Client\User.Async.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Exceptions\DropboxException.cs">
+      <Link>Exceptions\DropboxException.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Extensions\StringExtensions.cs">
+      <Link>Extensions\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Helpers\RequestHelper.cs">
+      <Link>Helpers\RequestHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\AccountInfo.cs">
+      <Link>Models\AccountInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\MetaData.cs">
+      <Link>Models\MetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\SharesResponse.cs">
+      <Link>Models\SharesResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\UserLogin.cs">
+      <Link>Models\UserLogin.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
