@@ -188,7 +188,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.Shares("/Android intro.pdf");
+            _client.Shares("/Getting Started.rtf");
         }
 
         [TestMethod]

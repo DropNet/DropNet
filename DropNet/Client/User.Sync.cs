@@ -18,7 +18,7 @@ namespace DropNet
         public string GetTokenAndBuildUrl(string callback = null)
         {
             GetToken();
-            return BuildAutorizeUrl(callback);
+            return BuildAuthorizeUrl(callback);
         }
 
         /// <summary>

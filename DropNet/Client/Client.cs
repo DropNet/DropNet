@@ -93,9 +93,9 @@ namespace DropNet
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public string BuildAutorizeUrl(string callback = null)
+        public string BuildAuthorizeUrl(string callback = null)
         {
-            return BuildAutorizeUrl(UserLogin);
+            return BuildAuthorizeUrl(UserLogin, callback);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace DropNet
         /// <param name="userLogin"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public string BuildAutorizeUrl(UserLogin userLogin, string callback = null)
+        public string BuildAuthorizeUrl(UserLogin userLogin, string callback = null)
         {
             if (userLogin == null)
             {

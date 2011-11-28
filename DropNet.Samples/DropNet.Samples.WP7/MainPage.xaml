@@ -16,11 +16,16 @@
     <phone:PhoneApplicationPage.Resources>
         <DropNet_Converters:BoolToNotVisConverter x:Key="BoolToNotVisConverter"/>
         <DropNet_Converters:BoolToVisConverter x:Key="BoolToVisConverter"/>
+        <DataTemplate x:Key="DataTemplate1">
+        	<Grid>
+        		<TextBlock Margin="0,0,1,0" TextWrapping="Wrap" Text="{Binding Name}" d:LayoutOverrides="Width, Height"/>
+        	</Grid>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="Transparent" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -33,16 +38,22 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Grid Visibility="{Binding ShowLogin, Converter={StaticResource BoolToVisConverter}}">
+            <Grid Visibility="{Binding ShowLogin, Converter={StaticResource BoolToVisConverter}}" d:IsHidden="True">
                 <StackPanel>
                     <TextBlock Text="Login"></TextBlock>
                     <Button x:Name="btnStart" Content="Start" Click="btnStart_Click"></Button>
-                    <phone:WebBrowser Margin="0" x:Name="loginBrowser" IsScriptEnabled="True"/>
+                    <phone:WebBrowser Margin="0" x:Name="loginBrowser" IsScriptEnabled="True" Height="600"/>
                 </StackPanel>
             </Grid>
             <Grid Visibility="{Binding ShowContents, Converter={StaticResource BoolToVisConverter}}">
-                <TextBlock Text="{Binding Meta.Name}"></TextBlock>
-                <ListBox ItemsSource="{Binding Meta.Contents}"></ListBox>
+                <StackPanel>
+                	<TextBlock Text="{Binding Meta.Path}" Margin="0">
+                		<TextBlock.Foreground>
+                			<SolidColorBrush Color="{StaticResource PhoneAccentColor}"/>
+                		</TextBlock.Foreground>
+                	</TextBlock>
+                	<ListBox ItemsSource="{Binding Meta.Contents}" Margin="0" ItemTemplate="{StaticResource DataTemplate1}"/>
+                </StackPanel>
             </Grid>
         </Grid>
         

@@ -29,7 +29,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Test_CanBuildAutorizeUrl()
         {
-            var authorizeUrl = _client.BuildAutorizeUrl(new DropNet.Models.UserLogin
+            var authorizeUrl = _client.BuildAuthorizeUrl(new DropNet.Models.UserLogin
                                                         {
                                                             Secret = TestVariables.Secret,
                                                             Token = TestVariables.Secret
@@ -43,7 +43,7 @@ namespace DropNet.Tests
         {
             try
             {
-                var authorizeUrl = _client.BuildAutorizeUrl();
+                var authorizeUrl = _client.BuildAuthorizeUrl();
 
                 Assert.Fail();
             }

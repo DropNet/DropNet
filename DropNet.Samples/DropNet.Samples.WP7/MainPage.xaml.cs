@@ -41,7 +41,7 @@ namespace DropNet.Samples.WP7
                     //Dont really need to do anything with the usertoken yet as its stored inside the client for the session
 
                     //Now we want to use the new Request token we have to generate an Authorize Url
-                    var tokenUrl = App.DropNetClient.BuildAuthorizeUrl(); //Spelt correctly in v1.8.1 
+                    var tokenUrl = App.DropNetClient.BuildAuthorizeUrl("http://dkdevelopment.net/BoxShotLogin.htm"); //Spelt correctly in v1.8.1 
                     //Capture the LoadCompleted event from the browser so we can check when the user has logged in
                     loginBrowser.LoadCompleted += new System.Windows.Navigation.LoadCompletedEventHandler(loginBrowser_LoadCompleted);
                     //Open a browser with the URL
@@ -60,7 +60,7 @@ namespace DropNet.Samples.WP7
         void loginBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             //Check for the callback path here (or just check it against "/1/oauth/authorize")
-            if (e.Uri.AbsolutePath == "/1/oauth/authorize")
+            if (e.Uri.AbsolutePath == "/BoxShotLogin.htm")
             {
                 //The User has logged in!
                 //Now to convert the Request Token into an Access Token
