@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using RestSharp;
 using DropNet.Extensions;
+using DropNet.Models;
 
 namespace DropNet.Helpers
 {
@@ -215,18 +216,35 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateThumbnailRequest(string path)
+        public RestRequest CreateThumbnailRequest(string path, ThumbnailSize size)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/thumbnails/dropbox{path}";
 
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("size", ThumbnailSizeString(size));
 
             return request;
         }
 
-
+        private string ThumbnailSizeString(ThumbnailSize size)
+        {
+            switch (size)
+            {
+                case ThumbnailSize.Small:
+                    return "small";
+                case ThumbnailSize.Medium:
+                    return "medium";
+                case ThumbnailSize.Large:
+                    return "large";
+                case ThumbnailSize.ExtraLarge:
+                    return "l";
+                case ThumbnailSize.ExtraLarge2:
+                    return "xl";
+            }
+            return "s";
+        }
     }
 
 	internal static class StreamUtils

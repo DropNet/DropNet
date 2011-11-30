@@ -223,11 +223,43 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Gets the thumbnail of an image given its MetaData
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public byte[] GetThumbnail(MetaData file)
+        {
+            return GetThumbnail(file.Path, ThumbnailSize.Small);
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of an image given its MetaData
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public byte[] GetThumbnail(MetaData file, ThumbnailSize size)
+        {
+            return GetThumbnail(file.Path, size);
+        }
+
+        /// <summary>
         /// Gets the thumbnail of an image given its path
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public byte[] Thumbnails(string path)
+        public byte[] GetThumbnail(string path)
+        {
+            return GetThumbnail(path, ThumbnailSize.Small);
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of an image given its path
+        /// </summary>
+        /// <param name="path">The path to the picture</param>
+        /// <param name="size">The size to return the thumbnail</param>
+        /// <returns></returns>
+        public byte[] GetThumbnail(string path, ThumbnailSize size)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -235,7 +267,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateThumbnailRequest(path);
+            var request = _requestHelper.CreateThumbnailRequest(path, size);
 
             var response = _restClient.Execute(request);
 

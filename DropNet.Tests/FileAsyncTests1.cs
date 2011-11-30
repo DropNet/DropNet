@@ -142,7 +142,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_Thumbnail_Async()
         {
-            _client.ThumbnailsAsync("/Temp/Test.png", Can_Get_Thumbnail_Async_Success, Can_Get_Thumbnail_Async_Failure);
+            _client.GetThumbnailAsync("/Temp/Test.png", Can_Get_Thumbnail_Async_Success, Can_Get_Thumbnail_Async_Failure);
         }
 
         public void Can_Get_Thumbnail_Async_Success(byte[] rawBytes)

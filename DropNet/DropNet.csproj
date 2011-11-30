@@ -82,6 +82,7 @@
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\MetaData.cs" />
     <Compile Include="Models\SharesResponse.cs" />
+    <Compile Include="Models\ThumbnailSize.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

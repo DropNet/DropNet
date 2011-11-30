@@ -77,6 +77,9 @@
     <Compile Include="..\dropnet\Models\MetaData.cs">
       <Link>Models\MetaData.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Models\ThumbnailSize.cs">
+      <Link>Models\ThumbnailSize.cs</Link>
+    </Compile>
     <Compile Include="..\dropnet\Models\UserLogin.cs">
       <Link>Models\UserLogin.cs</Link>
     </Compile>

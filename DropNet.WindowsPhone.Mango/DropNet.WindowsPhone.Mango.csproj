@@ -85,6 +85,9 @@
     <Compile Include="..\DropNet\Models\SharesResponse.cs">
       <Link>Models\SharesResponse.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Models\ThumbnailSize.cs">
+      <Link>Models\ThumbnailSize.cs</Link>
+    </Compile>
     <Compile Include="..\DropNet\Models\UserLogin.cs">
       <Link>Models\UserLogin.cs</Link>
     </Compile>

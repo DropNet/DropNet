@@ -194,7 +194,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_Thumbnail()
         {
-            var rawBytes = _client.Thumbnails("/Temp/Test.png");
+            var rawBytes = _client.GetThumbnail("/Temp/Test.png");
 
             Assert.IsNotNull(rawBytes);
 

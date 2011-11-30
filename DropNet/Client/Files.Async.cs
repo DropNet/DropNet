@@ -234,12 +234,47 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Gets the thumbnail of an image given its MetaData
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void GetThumbnailAsync(MetaData file, Action<byte[]> success, Action<DropboxException> failure)
+        {
+            GetThumbnailAsync(file.Path, ThumbnailSize.Small, success, failure);
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of an image given its MetaData
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="size"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void GetThumbnailAsync(MetaData file, ThumbnailSize size, Action<byte[]> success, Action<DropboxException> failure)
+        {
+            GetThumbnailAsync(file.Path, size, success, failure);
+        }
+
+        /// <summary>
         /// Gets the thumbnail of an image given its path
         /// </summary>
         /// <param name="path"></param>
         /// <param name="success"></param>
         /// <param name="failure"></param>
-        public void ThumbnailsAsync(string path, Action<byte[]> success, Action<DropboxException> failure)
+        public void GetThumbnailAsync(string path, Action<byte[]> success, Action<DropboxException> failure)
+        {
+            GetThumbnailAsync(path, ThumbnailSize.Small, success, failure);
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of an image given its path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="size"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void GetThumbnailAsync(string path, ThumbnailSize size, Action<byte[]> success, Action<DropboxException> failure)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -247,7 +282,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateThumbnailRequest(path);
+            var request = _requestHelper.CreateThumbnailRequest(path, size);
 
             ExecuteAsync(request,
                 (response) =>
