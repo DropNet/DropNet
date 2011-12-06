@@ -1,13 +1,60 @@
-.NET Client library for the Dropbox API
+## .NET Client library for the Dropbox API
 
-http://dkdevelopment.net/what-im-doing/dropnet/
+Full documentation here: http://dkdevelopment.net/what-im-doing/dropnet/
 
-Example usage:
+## How do I use it?
 
-	var dropNetclient = new DropNetClient("API_KEY", "API_SECRET");
+##### The Client:
+To use DropNet you need an instance of the DropNetClient class, this class does everything for DropNet. This class takes the API Key and API Secret (These must be obtained from Dropbox to access the API).
+
+    _client = new DropNetClient("API KEY", "API SECRET");
  
-	//call the functions you want from the client
-	dropNetclient.Login("test@example.com", "password");
 
-	var rootDetails = dropNetclient.GetMetaData();
-	//rootDetails.Contents is a list of the files/folders in the root
+##### Login/Tokens:
+Dropbox now requires a web authentication to get a usable token/secret, so this is a 3 step process.
+
+1. Get Request Token – This step gets an oauth token from dropbox (NOTE: the token must pass the other steps before it can be used)
+
+    // Sync
+    _client.GetToken();
+ 
+    // Async
+    _client.GetTokenAsync((userLogin) =>
+        {
+            //Dont really need to do anything with userLogin, DropNet takes care of it for now
+        },
+        (error) =>
+        {
+            //Handle error
+        });
+
+2. Authorize App with Dropbox – This step involves sending the user to a login page on the dropbox site and having them authenticate there. The DropNet client has a function to return the url for you but the rest must be handled in app, this function also takes a callback url for redirecting the user to after they have logged in. (NOTE: The token still cant be used yet.)
+
+    var url = _client.BuildAuthorizeUrl();
+    //Use the url in a browser so the user can login
+
+Open a browser with the url returned by BuildAuthorizeUrl – After we have the authorize url we need to direct the user there (use some sort of browser here depending on the platform) and navigate the user to the url. This will prompt them to login and authorize your app with the API.
+
+3. Get an Access Token from the Request Token – This is the last stage of the process, converting the oauth request token into a usable dropbox API token. This function will use the clients stored Request Token but this can be overloaded if you need to specify a token to use.
+
+    // Sync
+    var accessToken = _client.GetAccessToken(); //Store this token for "remember me" function
+ 
+    // Async
+    _client.GetAccessTokenAsync((accessToken) =>
+        {
+            //Store this token for "remember me" function
+        },
+        (error) =>
+        {
+            //Handle error
+        });
+ 
+
+Best Practices: Dropbox’s Developer page states several times in bold red font that applications should not store a users Dropbox password and to help enforce this DropNet allows you to manually set a users Token and Secret on the client.
+
+    _client = new DropNetClient("API KEY", "API SECRET", "USER TOKEN", "USER SECRET");
+    // OR
+    _client = new DropNetClient("API KEY", "API SECRET");
+    _client.UserLogin = new UserLogin { Token = "USER TOKEN", Secret = "USER SECRET" };
+ 
