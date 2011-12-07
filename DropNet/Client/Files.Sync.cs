@@ -32,7 +32,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateMetadataRequest(path);
+            var request = _requestHelper.CreateMetadataRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<MetaData>(request);
         }
@@ -51,7 +51,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateGetFileRequest(path);
+            var request = _requestHelper.CreateGetFileRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             var response = _restClient.Execute(request);
 
@@ -141,7 +141,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateDeleteFileRequest(path);
+            var request = _requestHelper.CreateDeleteFileRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<MetaData>(request);
         }
@@ -161,7 +161,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath);
+            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<MetaData>(request);
         }
@@ -181,7 +181,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath);
+            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<MetaData>(request);
         }
@@ -199,7 +199,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateCreateFolderRequest(path);
+            var request = _requestHelper.CreateCreateFolderRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<MetaData>(request);
         }
@@ -217,7 +217,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateSharesRequest(path);
+            var request = _requestHelper.CreateSharesRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             return Execute<SharesResponse>(request);
         }
@@ -267,7 +267,7 @@ namespace DropNet
             _restClient.BaseUrl = _apiContentBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateThumbnailRequest(path, size);
+            var request = _requestHelper.CreateThumbnailRequest(path, size, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
             var response = _restClient.Execute(request);
 

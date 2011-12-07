@@ -112,7 +112,7 @@ namespace DropNet.Tests
         {
             string fromPath = fixture.CreateAnonymous<string>();
             string toPath = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateCopyFileRequest(fromPath, toPath);
+            RestRequest actual = _target.CreateCopyFileRequest(fromPath, toPath, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);
@@ -136,7 +136,7 @@ namespace DropNet.Tests
         public void CreateDeleteFileRequestTest()
         {
             string path = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateDeleteFileRequest(path);
+            RestRequest actual = _target.CreateDeleteFileRequest(path, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);
@@ -155,7 +155,7 @@ namespace DropNet.Tests
         public void CreateGetFileRequestTest()
         {
             string path = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateGetFileRequest(path);
+            RestRequest actual = _target.CreateGetFileRequest(path, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);
@@ -198,7 +198,7 @@ namespace DropNet.Tests
         public void CreateMetadataRequestTest()
         {
             string path = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateMetadataRequest(path);
+            RestRequest actual = _target.CreateMetadataRequest(path, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);
@@ -219,7 +219,7 @@ namespace DropNet.Tests
         {
             string fromPath = fixture.CreateAnonymous<string>();
             string toPath = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateMoveFileRequest(fromPath, toPath);
+            RestRequest actual = _target.CreateMoveFileRequest(fromPath, toPath, "dropbox");
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);

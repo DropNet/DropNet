@@ -21,32 +21,35 @@ namespace DropNet.Helpers
             _version = version;
         }
 
-        public RestRequest CreateMetadataRequest(string path)
+        public RestRequest CreateMetadataRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/metadata/dropbox{path}";
+            request.Resource = "{version}/metadata/{root]{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
 
             return request;
         }
 
-        public RestRequest CreateSharesRequest(string path)
+        public RestRequest CreateSharesRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/shares/dropbox{path}";
+            request.Resource = "{version}/shares/{root]{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
 
             return request;
         }
 
-        public RestRequest CreateGetFileRequest(string path)
+        public RestRequest CreateGetFileRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/files/dropbox{path}";
+            request.Resource = "{version}/files/{root]{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
 
             return request;
         }
@@ -84,14 +87,15 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-		public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream)
+        public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream, string root)
 		{
 			var request = new RestRequest(Method.POST);
             //Don't want these to timeout (Maybe use something better here?)
             request.Timeout = int.MaxValue;
-			request.Resource = "{version}/files/dropbox{path}";
+            request.Resource = "{version}/files/{root]{path}";
 			request.AddParameter("version", _version, ParameterType.UrlSegment);
-			request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
 			//Need to add the "file" parameter with the file name
 			request.AddParameter("file", filename);
 
@@ -100,19 +104,19 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-		public RestRequest CreateDeleteFileRequest(string path)
+        public RestRequest CreateDeleteFileRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/fileops/delete";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
 
             request.AddParameter("path", path);
-            request.AddParameter("root", "dropbox");
+            request.AddParameter("root", root);
 
             return request;
         }
 
-        public RestRequest CreateCopyFileRequest(string fromPath, string toPath)
+        public RestRequest CreateCopyFileRequest(string fromPath, string toPath, string root)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/fileops/copy";
@@ -120,12 +124,12 @@ namespace DropNet.Helpers
 
             request.AddParameter("from_path", fromPath);
             request.AddParameter("to_path", toPath);
-            request.AddParameter("root", "dropbox");
+            request.AddParameter("root", root);
 
             return request;
         }
 
-        public RestRequest CreateMoveFileRequest(string fromPath, string toPath)
+        public RestRequest CreateMoveFileRequest(string fromPath, string toPath, string root)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/fileops/move";
@@ -133,7 +137,7 @@ namespace DropNet.Helpers
 
             request.AddParameter("from_path", fromPath);
             request.AddParameter("to_path", toPath);
-            request.AddParameter("root", "dropbox");
+            request.AddParameter("root", root);
 
             return request;
         }
@@ -204,25 +208,26 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateCreateFolderRequest(string path)
+        public RestRequest CreateCreateFolderRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/fileops/create_folder";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
 
             request.AddParameter("path", path);
-            request.AddParameter("root", "dropbox");
+            request.AddParameter("root", root);
 
             return request;
         }
 
-        public RestRequest CreateThumbnailRequest(string path, ThumbnailSize size)
+        public RestRequest CreateThumbnailRequest(string path, ThumbnailSize size, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/thumbnails/dropbox{path}";
+            request.Resource = "{version}/thumbnails/{root]{path}";
 
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
             request.AddParameter("size", ThumbnailSizeString(size));
 
             return request;
