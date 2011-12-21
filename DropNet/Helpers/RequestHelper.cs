@@ -24,7 +24,7 @@ namespace DropNet.Helpers
         public RestRequest CreateMetadataRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/metadata/{root]{path}";
+            request.Resource = "{version}/metadata/{root}{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
@@ -35,7 +35,7 @@ namespace DropNet.Helpers
         public RestRequest CreateSharesRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/shares/{root]{path}";
+            request.Resource = "{version}/shares/{root}{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
@@ -46,7 +46,7 @@ namespace DropNet.Helpers
         public RestRequest CreateGetFileRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/files/{root]{path}";
+            request.Resource = "{version}/files/{root}{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
@@ -92,7 +92,7 @@ namespace DropNet.Helpers
 			var request = new RestRequest(Method.POST);
             //Don't want these to timeout (Maybe use something better here?)
             request.Timeout = int.MaxValue;
-            request.Resource = "{version}/files/{root]{path}";
+            request.Resource = "{version}/files/{root}{path}";
 			request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
@@ -223,7 +223,7 @@ namespace DropNet.Helpers
         public RestRequest CreateThumbnailRequest(string path, ThumbnailSize size, string root)
         {
             var request = new RestRequest(Method.GET);
-            request.Resource = "{version}/thumbnails/{root]{path}";
+            request.Resource = "{version}/thumbnails/{root}{path}";
 
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);

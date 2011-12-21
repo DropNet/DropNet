@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>DropNet</id>
-		<version>1.8.1</version>
+		<version>1.8.2</version>
 		<authors>Damian Karzon, Github Contributors</authors>
 		<owners>Damian Karzon</owners>
 		<description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone 7 / 7.1)</description>
@@ -12,7 +12,7 @@
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
 		<tags>DROPBOX API .NET WP7</tags>
         <dependencies>
-            <dependency id="Newtonsoft.Json" version="4.0.4" />
+            <dependency id="Newtonsoft.Json" version="4.0.5" />
         </dependencies>
 	</metadata>
 	<files>
