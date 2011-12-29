@@ -19,8 +19,8 @@ namespace DropNet.Tests
 
         public FileTests_Sandbox()
         {
-            _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
-            _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };
+            _client = new DropNetClient(TestVariables.ApiKey_Sandbox, TestVariables.ApiSecret_Sandbox);
+            _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token_Sandbox, Secret = TestVariables.Secret_Sandbox };
             _client.UseSandbox = true;
 
             fixture = new Fixture();
@@ -29,7 +29,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData_With_Special_Char()
         {
-            var fileInfo = _client.GetMetaData("/Temp/test'.txt");
+            var fileInfo = _client.GetMetaData("/test'.txt");
             
             Assert.IsNotNull(fileInfo);
         }
@@ -38,7 +38,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File()
         {
-            var fileInfo = _client.GetFile("/Getting Started.rtf");
+            var fileInfo = _client.GetFile("/Sandbox.rtf");
 
             Assert.IsNotNull(fileInfo);
         }
@@ -46,19 +46,19 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File_Foreign_Language()
         {
-            var rawBytes = _client.GetFile("/привет.txt");
+            var rawBytes = _client.GetFile("/привет1.txt");
 
             Assert.IsNotNull(rawBytes);
 
-            File.WriteAllBytes(@"C:\Temp\привет.txt", rawBytes);
+            File.WriteAllBytes(@"C:\Temp\привет1.txt", rawBytes);
         }
 
         [TestMethod]
         public void Can_Get_File_And_Save()
         {
-            var fileInfo = _client.GetFile("/Getting Started.rtf");
+            var fileInfo = _client.GetFile("/Sandbox.rtf");
 
-            var writeStream = new FileStream("C:\\Temp\\Getting Started.rtf", FileMode.Create, FileAccess.Write);
+            var writeStream = new FileStream("C:\\Temp\\Sandbox.rtf", FileMode.Create, FileAccess.Write);
 
             writeStream.Write(fileInfo, 0, fileInfo.Length);
             writeStream.Close();
@@ -92,7 +92,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            var uploaded = _client.UploadFile("/Test", localFile.Name, content);
+            var uploaded = _client.UploadFile("/", localFile.Name, content);
 
             Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
@@ -163,10 +163,11 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData()
         {
-            var metaData = _client.GetMetaData("/Public");
+            var metaData = _client.GetMetaData("/");
 
             Assert.IsNotNull(metaData);
             Assert.IsNotNull(metaData.Contents);
+            Assert.AreEqual("app_folder", metaData.Root);
         }
 
         [TestMethod]
@@ -189,17 +190,17 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.Shares("/Getting Started.rtf");
+            _client.Shares("/Sandbox.rtf");
         }
 
         [TestMethod]
         public void Can_Get_Thumbnail()
         {
-            var rawBytes = _client.GetThumbnail("/Temp/Test.png");
+            var rawBytes = _client.GetThumbnail("/Test.png");
 
             Assert.IsNotNull(rawBytes);
 
-            File.WriteAllBytes(@"C:\Temp\Test.png", rawBytes);
+            File.WriteAllBytes(@"C:\Temp\TestSandbox.png", rawBytes);
         }
 
     }

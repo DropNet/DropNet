@@ -32,7 +32,7 @@ namespace DropNet.Tests
             var authorizeUrl = _client.BuildAuthorizeUrl(new DropNet.Models.UserLogin
                                                         {
                                                             Secret = TestVariables.Secret,
-                                                            Token = TestVariables.Secret
+                                                            Token = TestVariables.Token
                                                         });
 
             Assert.IsNotNull(authorizeUrl);
