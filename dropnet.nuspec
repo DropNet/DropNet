@@ -12,7 +12,7 @@
 		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
 		<tags>DROPBOX API .NET WP7</tags>
         <dependencies>
-            <dependency id="Newtonsoft.Json" version="4.0.5" />
+            <dependency id="Newtonsoft.Json" version="[4.0.5]" />
         </dependencies>
 	</metadata>
 	<files>
@@ -20,7 +20,7 @@
         <file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
         <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.dll" target="lib\sl3-wp" />
         <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl3-wp" />
-        <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.dll" target="lib\sl4-wp71" />
-        <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
+        <file src="DropNet.WindowsPhone.Mango\bin\Release\RestSharp.WindowsPhoneMango.dll" target="lib\sl4-wp71" />
+        <file src="DropNet.WindowsPhone.Mango\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
 	</files>
 </package>

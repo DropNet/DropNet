@@ -44,7 +44,7 @@
     <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\Lib\Ploeh.AutoFixture.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
+    <Reference Include="RestSharp, Version=102.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\Lib\net35\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />

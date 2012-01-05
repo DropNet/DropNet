@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>RestSharp.WindowsPhoneMango</name>
+        <name>RestSharp.WindowsPhone.Mango</name>
     </assembly>
     <members>
         <member name="T:RestSharp.Deserializers.DeserializeAsAttribute">

@@ -45,8 +45,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.0.5\lib\sl4-windowsphone71\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp.WindowsPhone">
-      <HintPath>..\Lib\sl4-wp71\RestSharp.WindowsPhone.dll</HintPath>
+    <Reference Include="RestSharp.WindowsPhoneMango">
+      <HintPath>..\Lib\sl4-wp71\RestSharp.WindowsPhoneMango.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
