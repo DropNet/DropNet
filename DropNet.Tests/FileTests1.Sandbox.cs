@@ -190,7 +190,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.Shares("/Sandbox.rtf");
+            _client.GetShare("/Sandbox.rtf");
         }
 
         [TestMethod]

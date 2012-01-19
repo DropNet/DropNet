@@ -205,11 +205,12 @@ namespace DropNet
         }
 
         /// <summary>
-        /// Gets a temporary public share link of the given file
+        /// Creates and returns a shareable link to files or folders.
+        /// Note: Links created by the /shares API call expire after thirty days.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public SharesResponse Shares(string path)
+        public ShareResponse GetShare(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -217,9 +218,28 @@ namespace DropNet
             _restClient.BaseUrl = _apiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
-            var request = _requestHelper.CreateSharesRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            var request = _requestHelper.CreateShareRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
-            return Execute<SharesResponse>(request);
+            return Execute<ShareResponse>(request);
+        }
+
+        /// <summary>
+        /// Returns a link directly to a file.
+        /// Similar to /shares. The difference is that this bypasses the Dropbox webserver, used to provide a preview of the file, so that you can effectively stream the contents of your media.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public ShareResponse GetMedia(string path)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateMediaRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
+
+            return Execute<ShareResponse>(request);
         }
 
         /// <summary>

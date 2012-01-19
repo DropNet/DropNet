@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DropNet.Models
 {
-    public class SharesResponse
+    public class ShareResponse
     {
         public string Url { get; set; }
         public string Expires { get; set; }

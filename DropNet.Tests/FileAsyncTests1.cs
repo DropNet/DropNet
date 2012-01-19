@@ -131,7 +131,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares_Async()
         {
-            _client.SharesAsync("/Android intro.pdf", (response) =>
+            _client.GetShareAsync("/Android intro.pdf", (response) =>
             {
             },
             (error) =>
