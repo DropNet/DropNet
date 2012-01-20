@@ -201,5 +201,15 @@ namespace DropNet.Tests
             File.WriteAllBytes(@"C:\Temp\Test.png", rawBytes);
         }
 
+        [TestMethod]
+        public void Can_Get_Media()
+        {
+            var mediaLink = _client.GetMedia("/Test/WP_20120111_011610Z.mp4");
+
+            Assert.IsNotNull(mediaLink);
+            Assert.IsNotNull(mediaLink.Expires);
+            Assert.IsNotNull(mediaLink.Url);
+        }
+
     }
 }
