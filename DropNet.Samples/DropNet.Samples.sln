@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.Samples.WP7", "Drop
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DropNet.Samples.VB", "DropNet.Samples.VB\DropNet.Samples.VB.vbproj", "{87DEB9FD-4BD8-44A5-839E-E4FADE7E1AF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.Samples.Web", "DropNet.Samples.Web\DropNet.Samples.Web.csproj", "{0C9AB699-2554-46AE-82FC-5017BB675072}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,16 @@ Global
 		{87DEB9FD-4BD8-44A5-839E-E4FADE7E1AF5}.Release|Mixed Platforms.Build.0 = Release|x86
 		{87DEB9FD-4BD8-44A5-839E-E4FADE7E1AF5}.Release|x86.ActiveCfg = Release|x86
 		{87DEB9FD-4BD8-44A5-839E-E4FADE7E1AF5}.Release|x86.Build.0 = Release|x86
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0C9AB699-2554-46AE-82FC-5017BB675072}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
