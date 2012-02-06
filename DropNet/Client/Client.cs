@@ -112,7 +112,7 @@ namespace DropNet
             }
 
             //Go 1-Liner!
-            return string.Format("https://www.dropbox.com/1/oauth/authorize?oauth_token_secret={0}&oauth_token={1}{2}", userLogin.Secret, userLogin.Token,
+            return string.Format("https://www.dropbox.com/1/oauth/authorize?oauth_token={0}{1}", userLogin.Token,
                 (string.IsNullOrEmpty(callback) ? string.Empty : "&oauth_callback=" + callback));
         }
 
