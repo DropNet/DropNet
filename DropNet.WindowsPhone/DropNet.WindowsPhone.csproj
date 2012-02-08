@@ -75,6 +75,9 @@
     <Compile Include="..\dropnet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Models\DeltaPage.cs">
+      <Link>Models\DeltaPage.cs</Link>
+    </Compile>
     <Compile Include="..\dropnet\Models\MetaData.cs">
       <Link>Models\MetaData.cs</Link>
     </Compile>

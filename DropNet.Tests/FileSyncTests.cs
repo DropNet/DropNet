@@ -216,5 +216,13 @@ namespace DropNet.Tests
             Assert.IsNotNull(mediaLink.Url);
         }
 
+        [TestMethod]
+        public void Can_Get_Delta()
+        {
+            var delta = _client.GetDelta("/");
+
+            Assert.IsNotNull(delta);
+        }
+
     }
 }
