@@ -9,12 +9,12 @@ namespace DropNet.Tests
     /// Summary description for UnitTest1
     /// </summary>
     [TestClass]
-    public class FileTests
+    public class FileSyncTests
     {
         readonly DropNetClient _client;
         readonly Fixture _fixture;
 
-        public FileTests()
+        public FileSyncTests()
         {
             _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
             _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };

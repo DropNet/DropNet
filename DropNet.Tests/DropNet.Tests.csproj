@@ -64,8 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileTests1.Sandbox.cs" />
-    <Compile Include="FileAsyncTests1.cs" />
-    <Compile Include="FileTests1.cs" />
+    <Compile Include="FileAsyncTests.cs" />
+    <Compile Include="FileSyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\RequestHelperTest.cs" />
     <Compile Include="TestVariables.cs" />

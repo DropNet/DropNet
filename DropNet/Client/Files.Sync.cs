@@ -50,7 +50,7 @@ namespace DropNet
         public List<MetaData> Search(string searchString, string path)
         {
             SetupBaseUrl();
-            var request = _requestHelper.CreateSearchRequest(searchString, path, _dropboxRoot);
+            var request = _requestHelper.CreateSearchRequest(searchString, path, DropboxRoot);
 
             return Execute<List<MetaData>>(request);
         }
@@ -330,13 +330,13 @@ namespace DropNet
 
         string Root
         {
-            get { return UseSandbox ? _sandboxRoot : _dropboxRoot; }
+            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
         }
 
         private void SetupBaseUrl()
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token,
                                                                UserLogin.Secret);
         }

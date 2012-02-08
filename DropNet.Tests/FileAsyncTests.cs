@@ -7,31 +7,25 @@ using DropNet.Exceptions;
 namespace DropNet.Tests
 {
     [TestClass]
-    public class FileAsyncTests1
+    public class FileAsyncTests
     {
-        DropNetClient _client;
-        Fixture fixture;
+        readonly DropNetClient _client;
+        readonly Fixture _fixture;
 
-        public FileAsyncTests1()
+        public FileAsyncTests()
         {
             _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
             _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };
 
-            fixture = new Fixture();
+            _fixture = new Fixture();
         }
 
         [TestMethod]
         public void Can_Get_MetaData_With_Special_Char_Async()
         {
             _client.GetMetaDataAsync("/Temp/test'.txt",
-                (metaData) =>
-                {
-                    Assert.IsNotNull(metaData);
-                },
-                (error) =>
-                {
-                    Assert.IsNull(error);
-                });
+                Assert.IsNotNull,
+                Assert.IsNull);
         }
 
         [TestMethod]
@@ -48,8 +42,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_Async()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -61,8 +55,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_Async_International_Char()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -74,8 +68,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_Async_Streaming()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -113,8 +107,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_Large_File_Async()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             for (int i = 0; i < 16; i++)
             {
@@ -142,10 +136,10 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares_Async()
         {
-            _client.GetShareAsync("/Android intro.pdf", (response) =>
+            _client.GetShareAsync("/Android intro.pdf", response =>
             {
             },
-            (error) =>
+            error =>
             {
             });
         }

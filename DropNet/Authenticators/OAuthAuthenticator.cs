@@ -36,11 +36,11 @@ namespace DropNet.Authenticators
 
         public OAuthAuthenticator(string baseUrl, string consumerKey, string consumerSecret, string token, string tokenSecret)
         {
-            this._baseUrl = baseUrl;
-            this._consumerKey = consumerKey;
-            this._consumerSecret = consumerSecret;
-            this._token = token;
-            this._tokenSecret = tokenSecret;
+            _baseUrl = baseUrl;
+            _consumerKey = consumerKey;
+            _consumerSecret = consumerSecret;
+            _token = token;
+            _tokenSecret = tokenSecret;
         }
 
         public void Authenticate(IRestClient client, IRestRequest request)
@@ -48,41 +48,42 @@ namespace DropNet.Authenticators
 			if (request.Method == Method.PUT)
 			{
                 //Do the parameters as URL segments for PUT
-                request.AddParameter("oauth_consumer_key", this._consumerKey, ParameterType.UrlSegment);
-                request.AddParameter("oauth_nonce", this.GenerateNonce(), ParameterType.UrlSegment);
-                if (!string.IsNullOrEmpty(this._token))
+                request.AddParameter("oauth_consumer_key", _consumerKey, ParameterType.UrlSegment);
+                request.AddParameter("oauth_nonce", GenerateNonce(), ParameterType.UrlSegment);
+                if (!string.IsNullOrEmpty(_token))
                 {
-                    request.AddParameter("oauth_token", this._token, ParameterType.UrlSegment);
+                    request.AddParameter("oauth_token", _token, ParameterType.UrlSegment);
                 }
-				request.AddParameter("oauth_timestamp", this.GenerateTimeStamp(), ParameterType.UrlSegment);
+				request.AddParameter("oauth_timestamp", GenerateTimeStamp(), ParameterType.UrlSegment);
                 request.AddParameter("oauth_signature_method", "HMAC-SHA1", ParameterType.UrlSegment);
                 request.AddParameter("oauth_version", "1.0", ParameterType.UrlSegment);
 				request.Parameters.Sort(new QueryParameterComparer());
-				request.AddParameter("oauth_signature", this.GenerateSignature(request), ParameterType.UrlSegment);
+				request.AddParameter("oauth_signature", GenerateSignature(request), ParameterType.UrlSegment);
 			}
 			else
 			{
 				request.AddParameter("oauth_version", "1.0");
-				request.AddParameter("oauth_nonce", this.GenerateNonce());
-				request.AddParameter("oauth_timestamp", this.GenerateTimeStamp());
+				request.AddParameter("oauth_nonce", GenerateNonce());
+				request.AddParameter("oauth_timestamp", GenerateTimeStamp());
 				request.AddParameter("oauth_signature_method", "HMAC-SHA1");
-				request.AddParameter("oauth_consumer_key", this._consumerKey);
-				if (!string.IsNullOrEmpty(this._token))
+				request.AddParameter("oauth_consumer_key", _consumerKey);
+				if (!string.IsNullOrEmpty(_token))
 				{
-					request.AddParameter("oauth_token", this._token);
+					request.AddParameter("oauth_token", _token);
 				}
 				request.Parameters.Sort(new QueryParameterComparer());
-				request.AddParameter("oauth_signature", this.GenerateSignature(request));
+				request.AddParameter("oauth_signature", GenerateSignature(request));
 			}
         }
 
         private Uri BuildUri(IRestRequest request)
         {
             string resource = request.Resource;
-            resource = request.Parameters.Where<Parameter>(delegate(Parameter p)
+            resource = request.Parameters.Where(delegate(Parameter p)
             {
                 return (p.Type == ParameterType.UrlSegment);
-            }).Aggregate<Parameter, string>(resource, delegate(string current, Parameter p)
+
+            }).Aggregate(resource, delegate(string current, Parameter p)
             {
                 return current.Replace("{" + p.Name + "}", p.Value.ToString().UrlEncode());
             });
@@ -118,36 +119,42 @@ namespace DropNet.Authenticators
             }
             str = str + uri.AbsolutePath;
             string str2 = NormalizeRequestParameters(request.Parameters);
-            StringBuilder builder = new StringBuilder();
+           
+            var builder = new StringBuilder();
             builder.AppendFormat("{0}&", request.Method.ToString().ToUpper());
             builder.AppendFormat("{0}&", str.UrlEncode());
             builder.AppendFormat("{0}", str2.UrlEncode());
+            
             string data = builder.ToString();
-            HMACSHA1 hashAlgorithm = new HMACSHA1();
-            hashAlgorithm.Key = Encoding.UTF8.GetBytes(string.Format("{0}&{1}", this._consumerSecret.UrlEncode(), string.IsNullOrEmpty(this._tokenSecret) ? string.Empty : this._tokenSecret.UrlEncode()));
+            var hashAlgorithm = new HMACSHA1
+                                    {
+                                        Key =
+                                            Encoding.UTF8.GetBytes(string.Format("{0}&{1}", _consumerSecret.UrlEncode(),
+                                                                                 string.IsNullOrEmpty(_tokenSecret)
+                                                                                     ? string.Empty
+                                                                                     : _tokenSecret.UrlEncode()))
+                                    };
             return ComputeHash(hashAlgorithm, data);
         }
 
         public string GenerateTimeStamp()
         {
-            TimeSpan span = (TimeSpan)(DateTime.UtcNow - new DateTime(0x7b2, 1, 1, 0, 0, 0, 0));
+            TimeSpan span = DateTime.UtcNow - new DateTime(0x7b2, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(span.TotalSeconds).ToString();
         }
 
-        private static string NormalizeRequestParameters(IList<Parameter> parameters)
+        private static string NormalizeRequestParameters(IEnumerable<Parameter> parameters)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             List<Parameter> list = parameters.Where(p =>
             {
                 //Hackity hack, don't come back...
                 return (p.Type == ParameterType.GetOrPost || p.Name == "file" || p.Name.StartsWith("oauth_"));
             }).ToList();
 
-            Parameter parameter = null;
-            
             for (int i = 0; i < list.Count; i++)
             {
-                parameter = list[i];
+                Parameter parameter = list[i];
                 builder.AppendFormat("{0}={1}", parameter.Name, parameter.Value.ToString().UrlEncode());
                 if (i < (list.Count - 1))
                 {

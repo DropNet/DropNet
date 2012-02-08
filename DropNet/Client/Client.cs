@@ -10,9 +10,9 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        private const string _apiBaseUrl = "https://api.dropbox.com";
-        private const string _apiContentBaseUrl = "https://api-content.dropbox.com";
-        private const string _version = "1";
+        private const string ApiBaseUrl = "https://api.dropbox.com";
+        private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
+        private const string Version = "1";
 
         /// <summary>
         /// Contains the Users Token and Secret
@@ -26,18 +26,20 @@ namespace DropNet
 
         public bool UseSandbox { get; set; }
 
-        private string _sandboxRoot = "sandbox";
-        private string _dropboxRoot = "dropbox";
+        private const string SandboxRoot = "sandbox";
+        private const string DropboxRoot = "dropbox";
 
-        private string _apiKey;
-        private string _appsecret;
+        private readonly string _apiKey;
+        private readonly string _appsecret;
 
         private RestClient _restClient;
         private RequestHelper _requestHelper;
+
         /// <summary>
         /// The number of requests that have been made by the current Client instance
         /// </summary>
         public int RequestCount { get; set; }
+
         /// <summary>
         /// The total Bytes returned from the requests made by the current Client instance
         /// </summary>
@@ -75,11 +77,11 @@ namespace DropNet
 
         private void LoadClient()
         {
-            _restClient = new RestClient(_apiBaseUrl);
+            _restClient = new RestClient(ApiBaseUrl);
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
-            _requestHelper = new RequestHelper(_version);
+            _requestHelper = new RequestHelper(Version);
 
             //probably not needed...
             RequestCount = 0;
@@ -131,7 +133,7 @@ namespace DropNet
             return response.Data;
         }
 
-        private RestSharp.RestResponse Execute(RestRequest request)
+        private RestResponse Execute(RestRequest request)
         {
             RequestCount++;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace DropNet.Models
 {
@@ -19,7 +18,7 @@ namespace DropNet.Models
         public int Revision { get; set; }
         public List<MetaData> Contents { get; set; }
 
-        public System.DateTime ModifiedDate
+        public DateTime ModifiedDate
         {
             get
             {
@@ -49,15 +48,17 @@ namespace DropNet.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(Path)) return string.Empty;
+                if (string.IsNullOrEmpty(Path))
+                {
+                    return string.Empty;
+                }
+                
                 if (Path.LastIndexOf("/") == -1)
                 {
                     return string.Empty;
                 }
-                else
-                {
-                    return string.IsNullOrEmpty(Path) ? "root" : Path.Substring(Path.LastIndexOf("/") + 1);
-                }
+
+                return string.IsNullOrEmpty(Path) ? "root" : Path.Substring(Path.LastIndexOf("/") + 1);
             }
         }
 		
@@ -65,15 +66,17 @@ namespace DropNet.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(Path)) return string.Empty;
+                if (string.IsNullOrEmpty(Path))
+                {
+                    return string.Empty;
+                }
+                
                 if (Path.LastIndexOf(".") == -1)
                 {
                     return string.Empty;
                 }
-                else
-                {
-                    return Is_Dir ? string.Empty : Path.Substring(Path.LastIndexOf("."));
-                }
+
+                return Is_Dir ? string.Empty : Path.Substring(Path.LastIndexOf("."));
             }
         }
     }
