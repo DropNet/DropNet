@@ -261,6 +261,21 @@ namespace DropNet.Helpers
             }
             return "s";
         }
+
+        public RestRequest CreateSearchRequest(string searchString, string path, string root)
+        {
+            var request = new RestRequest(Method.GET)
+                              {
+                                  Resource = "{version}/search/{root}{path}"
+                              };
+
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
+            request.AddParameter("query", searchString);
+
+            return request;
+        }
     }
 
 	internal static class StreamUtils

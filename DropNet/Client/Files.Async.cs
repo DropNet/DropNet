@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using DropNet.Models;
 using RestSharp;
 using System;
@@ -9,15 +10,18 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-
         /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
         /// </summary>
         /// <param name="path">The path of the file or folder</param>
-        /// <param name="callback">The callback Action to perform on completion</param>
+        /// <param name="success">Success call back</param>
+        /// <param name="failure">Failure call back </param>
         public void GetMetaDataAsync(string path, Action<MetaData> success, Action<DropboxException> failure)
         {
-            if (path!="" && !path.StartsWith("/")) path = "/" + path;
+            if (!string.IsNullOrEmpty(path) && !path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
             //This has to be here as Dropbox change their base URL between calls
             _restClient.BaseUrl = _apiBaseUrl;
@@ -25,15 +29,45 @@ namespace DropNet
 
             var request = _requestHelper.CreateMetadataRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
-            ExecuteAsync<MetaData>(request, success, failure);
+            ExecuteAsync(request, success, failure);
         }
 
-		/// <summary>
-		/// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
-		/// Optional 'hash' param returns HTTP code 304	(Directory contents have not changed) if contents have not changed since the
-		/// hash was retrieved on a previous call.
-		/// </summary>
-		/// <param name="path">The path of the file or folder</param>
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        /// <param name="success">Success call back</param>
+        /// <param name="failure">Failure call back </param>
+        public void SearchAsync(string searchString, Action<List<MetaData>> success, Action<DropboxException> failure)
+        {
+            SearchAsync(searchString, string.Empty, success, failure);
+        }
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        /// <param name="path">The path of the file or folder</param>
+        /// <param name="success">Success call back</param>
+        /// <param name="failure">Failure call back </param>
+        public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure)
+        {
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+
+            var request = _requestHelper.CreateSearchRequest(searchString, path,
+                                                             UseSandbox ? _sandboxRoot : _dropboxRoot);
+
+            ExecuteAsync(request, success, failure);
+        }
+
+        /// <summary>
+        /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
+        /// Optional 'hash' param returns HTTP code 304	(Directory contents have not changed) if contents have not changed since the
+        /// hash was retrieved on a previous call.
+        /// </summary>
+        /// <param name="path">The path of the file or folder</param>
         /// <param name="hash">hash - Optional. Listing return values include a hash representing the state of the directory's contents. If you provide this argument to the metadata call, you give the service an opportunity to respond with a "304 Not Modified" status code instead of a full (potentially very large) directory listing. This argument is ignored if the specified path is associated with a file or if list=false.</param>
         /// <param name="callback">The callback Action to perform on completion</param>
         public void GetMetaDataAsync(string path, string hash, Action<MetaData> success, Action<DropboxException> failure)
@@ -114,31 +148,31 @@ namespace DropNet
             ExecuteAsync(request, success, failure);
         }
 
-		/// <summary>
-		/// Uploads a File to Dropbox given the raw data.
-		/// </summary>
-		/// <param name="path">The path of the folder to upload to</param>
-		/// <param name="filename">The Name of the file to upload to dropbox</param>
-		/// <param name="fileStream">The file data</param>
-		/// <param name="success">The callback Action to perform on completion</param>
-		/// <param name="failure">The callback Action to perform on exception</param>
-		public void UploadFileAsync (string path, string filename, Stream fileStream, Action<RestResponse> success, Action<DropboxException> failure)
-		{
-			if (path != "" && !path.StartsWith ("/")) path = "/" + path;
+        /// <summary>
+        /// Uploads a File to Dropbox given the raw data.
+        /// </summary>
+        /// <param name="path">The path of the folder to upload to</param>
+        /// <param name="filename">The Name of the file to upload to dropbox</param>
+        /// <param name="fileStream">The file data</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        public void UploadFileAsync(string path, string filename, Stream fileStream, Action<RestResponse> success, Action<DropboxException> failure)
+        {
+            if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-			// NOTE philchuang: I don't like this, as the member variable _restClient, which is shared between calls, is modified - meaning that there will be race condition issues
-			// there should be multiple RestClient instances for each unique base URL
+            // NOTE philchuang: I don't like this, as the member variable _restClient, which is shared between calls, is modified - meaning that there will be race condition issues
+            // there should be multiple RestClient instances for each unique base URL
 
-			//This has to be here as Dropbox change their base URL between calls
-			_restClient.BaseUrl = _apiContentBaseUrl;
-			_restClient.Authenticator = new OAuthAuthenticator (_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = _apiContentBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, UseSandbox ? _sandboxRoot : _dropboxRoot);
 
-			ExecuteAsync (request, success, failure);
-		}
+            ExecuteAsync(request, success, failure);
+        }
 
-		/// <summary>
+        /// <summary>
         /// Deletes the file or folder from dropbox with the given path
         /// </summary>
         /// <param name="path">The Path of the file or folder to delete.</param>
