@@ -5,6 +5,7 @@ using DropNet.Helpers;
 using System;
 using DropNet.Exceptions;
 using System.Net;
+using DropNet.Authenticators;
 
 namespace DropNet
 {
@@ -206,6 +207,17 @@ namespace DropNet
             });
         }
 
+        string Root
+        {
+            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
+        }
+
+        private void SetupBaseUrl()
+        {
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = ApiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+        }
 
         private UserLogin GetUserLoginFromParams(string urlParams)
         {

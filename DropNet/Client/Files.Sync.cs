@@ -328,18 +328,18 @@ namespace DropNet
             return response.RawBytes;
         }
 
-        string Root
+        public DeltaPage GetDelta(string path)
         {
-            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            //This has to be here as Dropbox change their base URL between calls
+            SetupBaseUrl();
+
+            var request = _requestHelper.CreateDeltaRequest(path);
+
+            return Execute<DeltaPage>(request);
         }
 
-        private void SetupBaseUrl()
-        {
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = ApiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token,
-                                                               UserLogin.Secret);
-        }
     }
 }
 #endif
