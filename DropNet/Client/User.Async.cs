@@ -22,10 +22,9 @@ namespace DropNet
         /// <summary>
         /// Gets a token from the almightly dropbox.com (Token cant be used until authorized!)
         /// </summary>
-        /// <returns></returns>
         public void GetTokenAsync(Action<UserLogin> success, Action<DropboxException> failure)
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
             var request = _requestHelper.CreateTokenRequest();
@@ -33,7 +32,7 @@ namespace DropNet
             ExecuteAsync(request, response =>
             {
                 var userLogin = GetUserLoginFromParams(response.Content);
-                this.UserLogin = userLogin;
+                UserLogin = userLogin;
                 success(userLogin);
             }, failure);
         }
@@ -41,7 +40,7 @@ namespace DropNet
         //TODO - Method descriptions
         public void GetAccessTokenAsync(Action<UserLogin> success, Action<DropboxException> failure)
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
             var request = _requestHelper.CreateAccessTokenRequest();
@@ -49,26 +48,26 @@ namespace DropNet
             ExecuteAsync(request, response =>
             {
                 var userLogin = GetUserLoginFromParams(response.Content);
-                this.UserLogin = userLogin;
+                UserLogin = userLogin;
                 success(userLogin);
             }, failure);
         }
 
-        public void Account_InfoAsync(Action<AccountInfo> success, Action<DropboxException> failure)
+        public void AccountInfoAsync(Action<AccountInfo> success, Action<DropboxException> failure)
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
             var request = _requestHelper.CreateAccountInfoRequest();
 
-            ExecuteAsync<AccountInfo>(request, success, failure);
+            ExecuteAsync(request, success, failure);
         }
 
         public void CreateAccountAsync(string email, string firstName, string lastName, string password, Action<RestResponse> success, Action<DropboxException> failure)
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
 
             var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
 

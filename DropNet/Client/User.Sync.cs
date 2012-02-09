@@ -2,10 +2,7 @@
 
 using DropNet.Models;
 using RestSharp;
-using System.Net;
-using DropNet.Helpers;
 using DropNet.Authenticators;
-using DropNet.Exceptions;
 
 namespace DropNet
 {
@@ -27,7 +24,7 @@ namespace DropNet
         /// <returns></returns>
         public UserLogin GetToken()
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret);
 
             var request = _requestHelper.CreateTokenRequest();
@@ -36,14 +33,14 @@ namespace DropNet
 
             var userLogin = GetUserLoginFromParams(response.Content);
 
-            this.UserLogin = userLogin;
+            UserLogin = userLogin;
 
             return userLogin;
         }
 
         public UserLogin GetAccessToken()
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
             var request = _requestHelper.CreateAccessTokenRequest();
@@ -53,23 +50,23 @@ namespace DropNet
             var userLogin = GetUserLoginFromParams(response.Content);
 
             //This is the new Access token we have
-            this.UserLogin = userLogin;
+            UserLogin = userLogin;
 
             return userLogin;
         }
 
         public RestResponse CreateAccount(string email, string firstName, string lastName, string password)
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
 
             var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
 
             return _restClient.Execute(request);
         }
 
-        public AccountInfo Account_Info()
+        public AccountInfo AccountInfo()
         {
-            _restClient.BaseUrl = _apiBaseUrl;
+            _restClient.BaseUrl = ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
 
             var request = _requestHelper.CreateAccountInfoRequest();

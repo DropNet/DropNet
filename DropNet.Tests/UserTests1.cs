@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DropNet.Tests
@@ -9,7 +6,7 @@ namespace DropNet.Tests
     [TestClass]
     public class UserTests1
     {
-        DropNetClient _client;
+        readonly DropNetClient _client;
 
         public UserTests1()
         {
@@ -29,7 +26,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Test_CanBuildAutorizeUrl()
         {
-            var authorizeUrl = _client.BuildAuthorizeUrl(new DropNet.Models.UserLogin
+            var authorizeUrl = _client.BuildAuthorizeUrl(new Models.UserLogin
                                                         {
                                                             Secret = TestVariables.Secret,
                                                             Token = TestVariables.Token
@@ -43,7 +40,7 @@ namespace DropNet.Tests
         {
             try
             {
-                var authorizeUrl = _client.BuildAuthorizeUrl();
+                _client.BuildAuthorizeUrl();
 
                 Assert.Fail();
             }
@@ -51,7 +48,7 @@ namespace DropNet.Tests
             {
                 Assert.IsNotNull(ane);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
             }
@@ -62,7 +59,7 @@ namespace DropNet.Tests
         {
             _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };
 
-            var accountInfo = _client.Account_Info();
+            var accountInfo = _client.AccountInfo();
 
             Assert.IsNotNull(accountInfo);
             Assert.IsNotNull(accountInfo.display_name);

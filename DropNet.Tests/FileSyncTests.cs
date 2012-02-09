@@ -1,9 +1,6 @@
 ﻿using System.IO;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Ploeh.AutoFixture;
-using DropNet.Exceptions;
 using System;
 
 namespace DropNet.Tests
@@ -12,32 +9,40 @@ namespace DropNet.Tests
     /// Summary description for UnitTest1
     /// </summary>
     [TestClass]
-    public class FileTests
+    public class FileSyncTests
     {
-        DropNetClient _client;
-        Fixture fixture;
+        readonly DropNetClient _client;
+        readonly Fixture _fixture;
 
-        public FileTests()
+        public FileSyncTests()
         {
             _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
             _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };
 
-            fixture = new Fixture();
+            _fixture = new Fixture();
         }
 
         [TestMethod]
         public void Can_Get_MetaData_With_Special_Char()
         {
-            var fileInfo = _client.GetMetaData("/Temp/test'.txt");
-            
+            var fileInfo = _client.GetMetaData("/Getting Started.pdf");
+
             Assert.IsNotNull(fileInfo);
+        }
+
+        [TestMethod]
+        public void Search()
+        {
+            var result = _client.Search("Getting", string.Empty);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Count, 1, "List is empty");
         }
 
 
         [TestMethod]
         public void Can_Get_File()
         {
-            var fileInfo = _client.GetFile("/Getting Started.rtf");
+            var fileInfo = _client.GetFile("/Getting Started.pdf");
 
             Assert.IsNotNull(fileInfo);
         }
@@ -55,9 +60,9 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File_And_Save()
         {
-            var fileInfo = _client.GetFile("/Getting Started.rtf");
+            var fileInfo = _client.GetFile("/Getting Started.pdf");
 
-            var writeStream = new FileStream("C:\\Temp\\Getting Started.rtf", FileMode.Create, FileAccess.Write);
+            var writeStream = new FileStream("C:\\Temp\\Getting Started.pdf", FileMode.Create, FileAccess.Write);
 
             writeStream.Write(fileInfo, 0, fileInfo.Length);
             writeStream.Close();
@@ -68,8 +73,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_PUT()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>() + ".txt");
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>() + ".txt");
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -84,8 +89,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>() + ".txt");
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>() + ".txt");
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -100,8 +105,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_With_Special_Char()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -116,8 +121,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_File_With_International_Char()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
@@ -132,8 +137,8 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Upload_1MB_File()
         {
-            var localFile = new FileInfo(fixture.CreateAnonymous<string>());
-            var localContent = fixture.CreateAnonymous<string>();
+            var localFile = new FileInfo(_fixture.CreateAnonymous<string>());
+            var localContent = _fixture.CreateAnonymous<string>();
 
             //Make a 1MB file...
             for (int i = 0; i < 15; i++)
@@ -188,7 +193,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.GetShare("/Getting Started.rtf");
+            _client.GetShare("/Getting Started.pdf");
         }
 
         [TestMethod]

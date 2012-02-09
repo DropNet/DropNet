@@ -1,8 +1,8 @@
 ﻿#if !WINDOWS_PHONE
 
+using System.Collections.Generic;
 using System.IO;
 using DropNet.Models;
-using RestSharp;
 using DropNet.Authenticators;
 using System.Net;
 using DropNet.Exceptions;
@@ -28,13 +28,31 @@ namespace DropNet
         /// <returns></returns>
         public MetaData GetMetaData(string path)
         {
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateMetadataRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            SetupBaseUrl();
+            var request = _requestHelper.CreateMetadataRequest(path, Root);
             return Execute<MetaData>(request);
+        }
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        public List< MetaData> Search(string searchString)
+        {
+            return Search(searchString, string.Empty);
+        }
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        /// <param name="path">The path of the file or folder</param>
+        public List<MetaData> Search(string searchString, string path)
+        {
+            SetupBaseUrl();
+            var request = _requestHelper.CreateSearchRequest(searchString, path, DropboxRoot);
+
+            return Execute<List<MetaData>>(request);
         }
 
         //TODO - Make class for this to return (instead of just a byte[])
@@ -45,14 +63,14 @@ namespace DropNet
         /// <returns>The files raw bytes</returns>
         public byte[] GetFile(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiContentBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            SetupBaseUrl();
 
-            var request = _requestHelper.CreateGetFileRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            var request = _requestHelper.CreateGetFileRequest(path, Root);
             var response = _restClient.Execute(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -71,12 +89,18 @@ namespace DropNet
         public byte[] GetFileContentFromFS(FileInfo localFile)
         {
             //Get the file stream
-            byte[] bytes = null;
-            FileStream fs = new FileStream(localFile.FullName, FileMode.Open, FileAccess.Read);
-            BinaryReader br = new BinaryReader(fs);
-            long numBytes = localFile.Length;
-            bytes = br.ReadBytes((int)numBytes);
-            fs.Close();
+            byte[] bytes;
+
+            using (var fs = new FileStream(localFile.FullName, FileMode.Open, FileAccess.Read))
+            {
+                using (var br = new BinaryReader(fs))
+                {
+                    long numBytes = localFile.Length;
+                    bytes = br.ReadBytes((int)numBytes);
+                }
+
+                fs.Close();
+            }
 
             return bytes;
         }
@@ -91,14 +115,14 @@ namespace DropNet
         /// <returns>True on success</returns>
         public MetaData UploadFilePUT(string path, string filename, byte[] fileData)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiContentBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            SetupBaseUrl();
 
-            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, Root);
             var response = _restClient.Execute<MetaData>(request);
 
             //TODO - Return something better here?
@@ -114,14 +138,13 @@ namespace DropNet
         /// <returns>True on success</returns>
         public MetaData UploadFile(string path, string filename, byte[] fileData)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiContentBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            SetupBaseUrl();
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
             var response = _restClient.Execute<MetaData>(request);
 
             //TODO - Return something better here?
@@ -135,14 +158,13 @@ namespace DropNet
         /// <returns></returns>
         public MetaData Delete(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateDeleteFileRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            SetupBaseUrl();
+            var request = _requestHelper.CreateDeleteFileRequest(path, Root);
             return Execute<MetaData>(request);
         }
 
@@ -154,14 +176,18 @@ namespace DropNet
         /// <returns>True on success</returns>
         public MetaData Copy(string fromPath, string toPath)
         {
-            if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
-            if (!toPath.StartsWith("/")) toPath = "/" + toPath;
+            if (!fromPath.StartsWith("/"))
+            {
+                fromPath = "/" + fromPath;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            if (!toPath.StartsWith("/"))
+            {
+                toPath = "/" + toPath;
+            }
 
-            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            SetupBaseUrl();
+            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, Root);
 
             return Execute<MetaData>(request);
         }
@@ -174,14 +200,18 @@ namespace DropNet
         /// <returns>True on success</returns>
         public MetaData Move(string fromPath, string toPath)
         {
-            if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
-            if (!toPath.StartsWith("/")) toPath = "/" + toPath;
+            if (!fromPath.StartsWith("/"))
+            {
+                fromPath = "/" + fromPath;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            if (!toPath.StartsWith("/"))
+            {
+                toPath = "/" + toPath;
+            }
 
-            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            SetupBaseUrl();
+            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, Root);
 
             return Execute<MetaData>(request);
         }
@@ -193,13 +223,13 @@ namespace DropNet
         /// <returns>MetaData of the newly created folder</returns>
         public MetaData CreateFolder(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateCreateFolderRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            SetupBaseUrl();
+            var request = _requestHelper.CreateCreateFolderRequest(path, Root);
 
             return Execute<MetaData>(request);
         }
@@ -212,13 +242,13 @@ namespace DropNet
         /// <returns></returns>
         public ShareResponse GetShare(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateShareRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            SetupBaseUrl();
+            var request = _requestHelper.CreateShareRequest(path, Root);
 
             return Execute<ShareResponse>(request);
         }
@@ -231,13 +261,13 @@ namespace DropNet
         /// <returns></returns>
         public ShareResponse GetMedia(string path)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateMediaRequest(path, UseSandbox ? _sandboxRoot : _dropboxRoot);
+            SetupBaseUrl();
+            var request = _requestHelper.CreateMediaRequest(path, Root);
 
             return Execute<ShareResponse>(request);
         }
@@ -281,14 +311,13 @@ namespace DropNet
         /// <returns></returns>
         public byte[] GetThumbnail(string path, ThumbnailSize size)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = _apiContentBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-
-            var request = _requestHelper.CreateThumbnailRequest(path, size, UseSandbox ? _sandboxRoot : _dropboxRoot);
-
+            SetupBaseUrl();
+            var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
             var response = _restClient.Execute(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -299,6 +328,18 @@ namespace DropNet
             return response.RawBytes;
         }
 
+        string Root
+        {
+            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
+        }
+
+        private void SetupBaseUrl()
+        {
+            //This has to be here as Dropbox change their base URL between calls
+            _restClient.BaseUrl = ApiBaseUrl;
+            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token,
+                                                               UserLogin.Secret);
+        }
     }
 }
 #endif

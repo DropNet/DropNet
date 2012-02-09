@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using RestSharp;
-using DropNet.Extensions;
 using DropNet.Models;
 
 namespace DropNet.Helpers
@@ -14,7 +10,7 @@ namespace DropNet.Helpers
     /// </summary>
     public class RequestHelper
     {       
-        private string _version;
+        private readonly string _version;
 
         public RequestHelper(string version)
         {
@@ -261,6 +257,21 @@ namespace DropNet.Helpers
             }
             return "s";
         }
+
+        public RestRequest CreateSearchRequest(string searchString, string path, string root)
+        {
+            var request = new RestRequest(Method.GET)
+                              {
+                                  Resource = "{version}/search/{root}{path}"
+                              };
+
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
+            request.AddParameter("query", searchString);
+
+            return request;
+        }
     }
 
 	internal static class StreamUtils
@@ -277,7 +288,7 @@ namespace DropNet.Helpers
 
 			if (buffer == null) buffer = new byte[STREAM_BUFFER_SIZE];
 			int bufferLength = buffer.Length;
-			int bytesRead = 0;
+			int bytesRead;
 			while ((bytesRead = source.Read (buffer, 0, bufferLength)) > 0)
 				target.Write (buffer, 0, bytesRead);
 		}
