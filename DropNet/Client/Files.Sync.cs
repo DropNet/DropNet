@@ -29,7 +29,9 @@ namespace DropNet
         public MetaData GetMetaData(string path)
         {
             SetupBaseUrl();
+
             var request = _requestHelper.CreateMetadataRequest(path, Root);
+
             return Execute<MetaData>(request);
         }
 
@@ -37,7 +39,7 @@ namespace DropNet
         /// Gets list of metadata for search string
         /// </summary>
         /// <param name="searchString">The search string </param>
-        public List< MetaData> Search(string searchString)
+        public List<MetaData> Search(string searchString)
         {
             return Search(searchString, string.Empty);
         }
@@ -50,6 +52,7 @@ namespace DropNet
         public List<MetaData> Search(string searchString, string path)
         {
             SetupBaseUrl();
+
             var request = _requestHelper.CreateSearchRequest(searchString, path, DropboxRoot);
 
             return Execute<List<MetaData>>(request);
@@ -144,6 +147,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
             var response = _restClient.Execute<MetaData>(request);
 
@@ -164,6 +168,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateDeleteFileRequest(path, Root);
             return Execute<MetaData>(request);
         }
@@ -187,6 +192,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, Root);
 
             return Execute<MetaData>(request);
@@ -211,6 +217,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, Root);
 
             return Execute<MetaData>(request);
@@ -229,6 +236,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateCreateFolderRequest(path, Root);
 
             return Execute<MetaData>(request);
@@ -248,6 +256,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateShareRequest(path, Root);
 
             return Execute<ShareResponse>(request);
@@ -267,6 +276,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateMediaRequest(path, Root);
 
             return Execute<ShareResponse>(request);
@@ -317,6 +327,7 @@ namespace DropNet
             }
 
             SetupBaseUrl();
+
             var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
             var response = _restClient.Execute(request);
 
@@ -328,8 +339,16 @@ namespace DropNet
             return response.RawBytes;
         }
 
-        public DeltaPage GetDelta(string path)
+        /// <summary>
+        /// The beta delta function, gets updates for a given folder
+        /// </summary>
+        /// <param name="IKnowThisIsBetaOnly"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public DeltaPage GetDelta(bool IKnowThisIsBetaOnly, string path)
         {
+            if (!IKnowThisIsBetaOnly) return null;
+
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls

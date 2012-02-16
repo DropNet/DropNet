@@ -291,8 +291,17 @@ namespace DropNet
             ExecuteAsync(request, success, failure);
         }
 
-        public void GetDeltaAsync(string path, Action<DeltaPage> success, Action<DropboxException> failure)
+        /// <summary>
+        /// The beta delta function, gets updates for a given folder
+        /// </summary>
+        /// <param name="IKnowThisIsBetaOnly"></param>
+        /// <param name="path"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void GetDeltaAsync(bool IKnowThisIsBetaOnly, string path, Action<DeltaPage> success, Action<DropboxException> failure)
         {
+            if (!IKnowThisIsBetaOnly) return;
+
             if (!path.StartsWith("/")) path = "/" + path;
 
             //This has to be here as Dropbox change their base URL between calls
