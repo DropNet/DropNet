@@ -238,6 +238,17 @@ namespace DropNet.Helpers
             return request;
         }
 
+        internal RestRequest CreateDelta2Request(string cursor)
+        {
+            var request = new RestRequest(Method.POST);
+            request.Resource = "{version}/delta_beta2";
+
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("cursor", cursor, ParameterType.UrlSegment);
+
+            return request;
+        }
+
         public RestRequest CreateThumbnailRequest(string path, ThumbnailSize size, string root)
         {
             var request = new RestRequest(Method.GET);

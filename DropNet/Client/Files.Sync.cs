@@ -6,6 +6,7 @@ using DropNet.Models;
 using DropNet.Authenticators;
 using System.Net;
 using DropNet.Exceptions;
+using DropNet.Helpers;
 
 namespace DropNet
 {
@@ -357,6 +358,29 @@ namespace DropNet
             var request = _requestHelper.CreateDeltaRequest(path);
 
             return Execute<DeltaPage>(request);
+        }
+
+        /// <summary>
+        /// The beta delta2 function
+        /// </summary>
+        /// <param name="IKnowThisIsBetaOnly"></param>
+        /// <param name="cursor"></param>
+        /// <returns></returns>
+        public Delta2Page GetDelta2(bool IKnowThisIsBetaOnly, string cursor)
+        {
+            if (!IKnowThisIsBetaOnly) return null;
+
+            //This has to be here as Dropbox change their base URL between calls
+            SetupBaseUrl();
+
+            var request = _requestHelper.CreateDelta2Request(cursor);
+
+            var response = Execute(request);
+
+            if (string.IsNullOrEmpty(response.Content))
+                return null;
+
+            return ModelHelper.Delta2PageFromJson(response.Content);
         }
 
     }

@@ -5,6 +5,8 @@ using Moq;
 using Ploeh.AutoFixture;
 using DropNet.Exceptions;
 using System;
+using System.Net;
+using DropNet.Models;
 
 namespace DropNet.Tests
 {
@@ -202,6 +204,21 @@ namespace DropNet.Tests
 
             File.WriteAllBytes(@"C:\Temp\TestSandbox.png", rawBytes);
         }
+
+        [TestMethod]
+        public void Can_Get_Delta2()
+        {
+            var delta = _client.GetDelta2(true, "");
+
+            Assert.IsNotNull(delta);
+        }
+
+        [TestMethod]
+        public void Can_Get_Delta2_Async()
+        {
+            _client.GetDelta2Async(true, "", Assert.IsNotNull, Assert.IsNull);
+            
+        }                 
 
     }
 }
