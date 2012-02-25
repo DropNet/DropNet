@@ -1,5 +1,6 @@
 ﻿#if !WINDOWS_PHONE
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using DropNet.Models;
@@ -326,7 +327,7 @@ namespace DropNet
                 path = "/" + path;
             }
 
-            SetupBaseUrl();
+            SetupBaseUrl(contentServer: true);
 
             var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
             var response = _restClient.Execute(request);
@@ -337,6 +338,26 @@ namespace DropNet
             }
 
             return response.RawBytes;
+        }
+
+        /// <summary>
+        /// Gets the URL of the thumbnail
+        /// </summary>
+        /// <param name="path">The path to the picture</param>
+        /// <param name="size">The size to return the thumbnail</param>
+        /// <returns></returns>
+        public Uri GetThumbnailUrl(string path, ThumbnailSize size)
+        {
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
+
+            SetupBaseUrl(contentServer: true);
+
+            var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
+            _restClient.Authenticator.Authenticate(_restClient, request);
+            return _restClient.BuildUri(request);
         }
 
         /// <summary>
