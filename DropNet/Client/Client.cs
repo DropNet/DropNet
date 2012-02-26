@@ -6,6 +6,7 @@ using System;
 using DropNet.Exceptions;
 using System.Net;
 using DropNet.Authenticators;
+using DropNet.DeSerializers;
 
 namespace DropNet
 {
@@ -79,8 +80,8 @@ namespace DropNet
         private void LoadClient()
         {
             _restClient = new RestClient(ApiBaseUrl);
-            _restClient.ClearHandlers();
-            _restClient.AddHandler("*", new JsonDeserializer());
+            _restClient.ClearHandlers();           
+            _restClient.AddHandler("*", new CustomJsonDeserializer());
 
             _requestHelper = new RequestHelper(Version);
 

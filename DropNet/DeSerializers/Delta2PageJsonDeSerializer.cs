@@ -2,24 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DropNet.Models;
+using RestSharp.Deserializers;
 using Newtonsoft.Json.Linq;
+using DropNet.Models;
 using Newtonsoft.Json;
 
-namespace DropNet.Helpers
+namespace DropNet.DeSerializers
 {
-    static class ModelHelper
+    class Delta2PageJsonDeserializer : IDeserializer
     {
-        /// <summary>
-        /// Converts the json string returned from the dropbox beta2_delta api call to a Delta2Page object
-        /// </summary>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        public static Delta2Page Delta2PageFromJson(string json)
+        public string DateFormat
         {
-            var o = JObject.Parse(json);
+            get;
+            set;
+        }
 
-            var page = new Delta2Page();
+        public T Deserialize<T>(RestSharp.RestResponse response) where T : new ()
+        {
+            if (typeof(T) != typeof(Delta2Page))
+                throw new Exception("This deserializer only works for deserializing to a Delta2Page");
+
+            var o = JObject.Parse(response.Content);
+
+            var page = new T() as Delta2Page;
             page.Reset = o["reset"].Value<bool>();
             page.Cursor = o["cursor"].Value<string>();
             page.Reset = o["has_more"].Value<bool>();
@@ -52,9 +57,20 @@ namespace DropNet.Helpers
                 page.Entries.Add(entry);
             }
 
-            return page;
-
+            return (T)Convert.ChangeType(page, typeof(T));                 
         }
 
+        public string Namespace
+        {
+            get;
+            set;
+        }
+
+        public string RootElement
+        {
+            get;
+            set;
+
+        }        
     }
 }

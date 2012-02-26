@@ -7,6 +7,7 @@ using DropNet.Authenticators;
 using System.Net;
 using DropNet.Exceptions;
 using DropNet.Helpers;
+using RestSharp.Deserializers;
 
 namespace DropNet
 {
@@ -373,14 +374,11 @@ namespace DropNet
             //This has to be here as Dropbox change their base URL between calls
             SetupBaseUrl();
 
-            var request = _requestHelper.CreateDelta2Request(cursor);
+            var request = _requestHelper.CreateDelta2Request(cursor);            
 
-            var response = Execute(request);
+            var response = Execute<Delta2Page>(request);               
 
-            if (string.IsNullOrEmpty(response.Content))
-                return null;
-
-            return ModelHelper.Delta2PageFromJson(response.Content);
+            return response;
         }
 
     }
