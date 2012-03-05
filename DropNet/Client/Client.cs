@@ -212,10 +212,10 @@ namespace DropNet
             get { return UseSandbox ? SandboxRoot : DropboxRoot; }
         }
 
-        private void SetupBaseUrl()
+        private void SetupBaseUrl(bool contentServer = false)
         {
             //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = ApiBaseUrl;
+            _restClient.BaseUrl = contentServer ? ApiContentBaseUrl : ApiBaseUrl;
             _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
         }
 
