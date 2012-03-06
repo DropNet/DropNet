@@ -28,11 +28,9 @@ namespace DropNet
         /// <returns></returns>
         public MetaData GetMetaData(string path)
         {
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateMetadataRequest(path, Root);
 
-            return Execute<MetaData>(request);
+            return Execute<MetaData>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -51,11 +49,9 @@ namespace DropNet
         /// <param name="path">The path of the file or folder</param>
         public List<MetaData> Search(string searchString, string path)
         {
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateSearchRequest(searchString, path, DropboxRoot);
 
-            return Execute<List<MetaData>>(request);
+            return Execute<List<MetaData>>(ApiType.Base, request);
         }
 
         //TODO - Make class for this to return (instead of just a byte[])
@@ -71,15 +67,8 @@ namespace DropNet
                 path = "/" + path;
             }
 
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateGetFileRequest(path, Root);
-            var response = _restClient.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new DropboxException(response);
-            }
+            var response = Execute(ApiType.Content, request);
 
             return response.RawBytes;
         }
@@ -122,9 +111,6 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, Root);
             var response = _restClient.Execute<MetaData>(request);
 
@@ -145,9 +131,6 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
             var response = _restClient.Execute<MetaData>(request);
 
@@ -166,11 +149,8 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateDeleteFileRequest(path, Root);
-            return Execute<MetaData>(request);
+            return Execute<MetaData>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -190,12 +170,9 @@ namespace DropNet
             {
                 toPath = "/" + toPath;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, Root);
 
-            return Execute<MetaData>(request);
+            return Execute<MetaData>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -215,12 +192,9 @@ namespace DropNet
             {
                 toPath = "/" + toPath;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, Root);
 
-            return Execute<MetaData>(request);
+            return Execute<MetaData>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -234,12 +208,9 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateCreateFolderRequest(path, Root);
 
-            return Execute<MetaData>(request);
+            return Execute<MetaData>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -255,11 +226,9 @@ namespace DropNet
                 path = "/" + path;
             }
 
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateShareRequest(path, Root);
 
-            return Execute<ShareResponse>(request);
+            return Execute<ShareResponse>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -274,12 +243,9 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateMediaRequest(path, Root);
 
-            return Execute<ShareResponse>(request);
+            return Execute<ShareResponse>(ApiType.Base, request);
         }
 
         /// <summary>
@@ -325,16 +291,9 @@ namespace DropNet
             {
                 path = "/" + path;
             }
-
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
-            var response = _restClient.Execute(request);
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new DropboxException(response);
-            }
+            var response = Execute(ApiType.Content, request);
 
             return response.RawBytes;
         }
@@ -351,12 +310,9 @@ namespace DropNet
 
             if (!path.StartsWith("/")) path = "/" + path;
 
-            //This has to be here as Dropbox change their base URL between calls
-            SetupBaseUrl();
-
             var request = _requestHelper.CreateDeltaRequest(path);
 
-            return Execute<DeltaPage>(request);
+            return Execute<DeltaPage>(ApiType.Base, request);
         }
 
     }

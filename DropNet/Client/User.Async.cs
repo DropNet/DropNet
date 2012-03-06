@@ -8,17 +8,6 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        //TODO - Fix this for Async?
-        ///// <summary>
-        ///// Shorthand method to get a token from Dropbox and build the Url to authorize it.
-        ///// </summary>
-        ///// <returns></returns>
-        //public string GetTokenAndBuildUrlAsync(Action<UserLogin> success, Action<DropboxException> failure, string callback = null)
-        //{
-        //    GetTokenAsync(success, failure);
-        //    return BuildAutorizeUrl(callback);
-        //}
-
         /// <summary>
         /// Gets a token from the almightly dropbox.com (Token cant be used until authorized!)
         /// </summary>
@@ -29,7 +18,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateTokenRequest();
 
-            ExecuteAsync(request, response =>
+            ExecuteAsync(ApiType.Base, request, response =>
             {
                 var userLogin = GetUserLoginFromParams(response.Content);
                 UserLogin = userLogin;
@@ -37,7 +26,11 @@ namespace DropNet
             }, failure);
         }
 
-        //TODO - Method descriptions
+        /// <summary>
+        /// Converts a request token into an Access token after the user has authorized access via dropbox.com
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
         public void GetAccessTokenAsync(Action<UserLogin> success, Action<DropboxException> failure)
         {
             _restClient.BaseUrl = ApiBaseUrl;
@@ -45,7 +38,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateAccessTokenRequest();
 
-            ExecuteAsync(request, response =>
+            ExecuteAsync(ApiType.Base, request, response =>
             {
                 var userLogin = GetUserLoginFromParams(response.Content);
                 UserLogin = userLogin;
@@ -53,6 +46,11 @@ namespace DropNet
             }, failure);
         }
 
+        /// <summary>
+        /// Gets AccountInfo
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
         public void AccountInfoAsync(Action<AccountInfo> success, Action<DropboxException> failure)
         {
             //This has to be here as Dropbox change their base URL between calls
@@ -61,9 +59,11 @@ namespace DropNet
 
             var request = _requestHelper.CreateAccountInfoRequest();
 
-            ExecuteAsync(request, success, failure);
+            ExecuteAsync(ApiType.Base, request, success, failure);
         }
 
+
+        [Obsolete("No longer supported by Dropbox")]
         public void CreateAccountAsync(string email, string firstName, string lastName, string password, Action<RestResponse> success, Action<DropboxException> failure)
         {
             //This has to be here as Dropbox change their base URL between calls
@@ -71,7 +71,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
 
-            ExecuteAsync(request, success, failure);
+            ExecuteAsync(ApiType.Base, request, success, failure);
         }
     }
 }

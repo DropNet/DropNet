@@ -27,7 +27,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Get_MetaData_With_Special_Char()
+        public void SANDBOX_Can_Get_MetaData_With_Special_Char()
         {
             var fileInfo = _client.GetMetaData("/test'.txt");
             
@@ -36,7 +36,7 @@ namespace DropNet.Tests
 
 
         [TestMethod]
-        public void Can_Get_File()
+        public void SANDBOX_Can_Get_File()
         {
             var fileInfo = _client.GetFile("/Sandbox.rtf");
 
@@ -44,7 +44,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Get_File_Foreign_Language()
+        public void SANDBOX_Can_Get_File_Foreign_Language()
         {
             var rawBytes = _client.GetFile("/привет1.txt");
 
@@ -54,7 +54,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Get_File_And_Save()
+        public void SANDBOX_Can_Get_File_And_Save()
         {
             var fileInfo = _client.GetFile("/Sandbox.rtf");
 
@@ -67,7 +67,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Upload_File_PUT()
+        public void SANDBOX_Can_Upload_File_PUT()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>() + ".txt");
             var localContent = fixture.CreateAnonymous<string>();
@@ -83,7 +83,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Upload_File()
+        public void SANDBOX_Can_Upload_File()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>() + ".txt");
             var localContent = fixture.CreateAnonymous<string>();
@@ -99,7 +99,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Upload_File_With_Special_Char()
+        public void SANDBOX_Can_Upload_File_With_Special_Char()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>());
             var localContent = fixture.CreateAnonymous<string>();
@@ -115,7 +115,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Upload_File_With_International_Char()
+        public void SANDBOX_Can_Upload_File_With_International_Char()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>());
             var localContent = fixture.CreateAnonymous<string>();
@@ -131,7 +131,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Upload_1MB_File()
+        public void SANDBOX_Can_Upload_1MB_File()
         {
             var localFile = new FileInfo(fixture.CreateAnonymous<string>());
             var localContent = fixture.CreateAnonymous<string>();
@@ -153,7 +153,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Delete_File()
+        public void SANDBOX_Can_Delete_File()
         {
             var deleted = _client.Delete("/Test.txt");
 
@@ -161,7 +161,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Get_MetaData()
+        public void SANDBOX_Can_Get_MetaData()
         {
             var metaData = _client.GetMetaData("/");
 
@@ -171,7 +171,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Get_MetaData_Root()
+        public void SANDBOX_Can_Get_MetaData_Root()
         {
             var metaData = _client.GetMetaData();
 
@@ -180,7 +180,7 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Create_Folder()
+        public void SANDBOX_Can_Create_Folder()
         {
             var metaData = _client.CreateFolder(string.Format("TestFolder1{0:yyyyMMddhhmmss}", DateTime.Now));
 
@@ -188,13 +188,13 @@ namespace DropNet.Tests
         }
 
         [TestMethod]
-        public void Can_Shares()
+        public void SANDBOX_Can_Shares()
         {
             _client.GetShare("/Sandbox.rtf");
         }
 
         [TestMethod]
-        public void Can_Get_Thumbnail()
+        public void SANDBOX_Can_Get_Thumbnail()
         {
             var rawBytes = _client.GetThumbnail("/Test.png");
 

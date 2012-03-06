@@ -25,7 +25,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData_With_Special_Char()
         {
-            var fileInfo = _client.GetMetaData("/Getting Started.pdf");
+            var fileInfo = _client.GetMetaData("/Test/Getting'Started.rtf");
 
             Assert.IsNotNull(fileInfo);
         }
@@ -35,14 +35,14 @@ namespace DropNet.Tests
         {
             var result = _client.Search("Getting", string.Empty);
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count, 1, "List is empty");
+            Assert.IsTrue(result.Count > 0, "List is empty");
         }
 
 
         [TestMethod]
         public void Can_Get_File()
         {
-            var fileInfo = _client.GetFile("/Getting Started.pdf");
+            var fileInfo = _client.GetFile("/Test/Getting Started.rtf");
 
             Assert.IsNotNull(fileInfo);
         }
@@ -50,7 +50,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File_Foreign_Language()
         {
-            var rawBytes = _client.GetFile("/привет.txt");
+            var rawBytes = _client.GetFile("/Test/привет.txt");
 
             Assert.IsNotNull(rawBytes);
 
@@ -60,9 +60,9 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_File_And_Save()
         {
-            var fileInfo = _client.GetFile("/Getting Started.pdf");
+            var fileInfo = _client.GetFile("/Test/Getting Started.rtf");
 
-            var writeStream = new FileStream("C:\\Temp\\Getting Started.pdf", FileMode.Create, FileAccess.Write);
+            var writeStream = new FileStream("C:\\Temp\\Getting Started.rtf", FileMode.Create, FileAccess.Write);
 
             writeStream.Write(fileInfo, 0, fileInfo.Length);
             writeStream.Close();
@@ -193,7 +193,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.GetShare("/Getting Started.pdf");
+            _client.GetShare("/Test/Getting Started.rtf");
         }
 
         [TestMethod]

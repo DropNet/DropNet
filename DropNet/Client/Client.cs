@@ -15,10 +15,20 @@ namespace DropNet
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
         private const string Version = "1";
 
+        private UserLogin _userLogin;
+
         /// <summary>
         /// Contains the Users Token and Secret
         /// </summary>
-        public UserLogin UserLogin { get; set; }
+        public UserLogin UserLogin
+        {
+            get { return _userLogin; }
+            set
+            {
+                _userLogin = value;
+                SetAuthProviders();
+            }
+        }
 
         /// <summary>
         /// Sets the Callback Url used for login requests
@@ -34,18 +44,17 @@ namespace DropNet
         private readonly string _appsecret;
 
         private RestClient _restClient;
+        private RestClient _restClientContent;
         private RequestHelper _requestHelper;
 
         /// <summary>
-        /// The number of requests that have been made by the current Client instance
+        /// Gets the directory root for the requests (full or sandbox mode)
         /// </summary>
-        public int RequestCount { get; set; }
-
-        /// <summary>
-        /// The total Bytes returned from the requests made by the current Client instance
-        /// </summary>
-        public long DataCount { get; set; }
-
+        string Root
+        {
+            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
+        }
+        
         /// <summary>
         /// Default Constructor for the DropboxClient
         /// </summary>
@@ -71,9 +80,9 @@ namespace DropNet
             _apiKey = apiKey;
             _appsecret = appSecret;
 
-            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
-
             LoadClient();
+
+            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
         }
 
         private void LoadClient()
@@ -82,12 +91,13 @@ namespace DropNet
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
+            _restClientContent = new RestClient(ApiContentBaseUrl);
+            _restClientContent.ClearHandlers();
+            _restClientContent.AddHandler("*", new JsonDeserializer());
+
             _requestHelper = new RequestHelper(Version);
 
-            //probably not needed...
-            RequestCount = 0;
-            DataCount = 0;
-
+            //Default to full access
             UseSandbox = false;
         }
 
@@ -120,36 +130,58 @@ namespace DropNet
         }
 
 #if !WINDOWS_PHONE
-        private T Execute<T>(RestRequest request) where T : new()
+        private T Execute<T>(ApiType apiType, RestRequest request) where T : new()
         {
-            RequestCount++;
-
-            var response = _restClient.Execute<T>(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
+            RestResponse<T> response;
+            if (apiType == ApiType.Base)
             {
-                throw new DropboxException(response);
+                response = _restClient.Execute<T>(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientContent.Execute<T>(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
             }
 
             return response.Data;
         }
 
-        private RestResponse Execute(RestRequest request)
+        private RestResponse Execute(ApiType apiType, RestRequest request)
         {
-            RequestCount++;
-
-            var response = _restClient.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
+            RestResponse response;
+            if (apiType == ApiType.Base)
             {
-                throw new DropboxException(response);
+                response = _restClient.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientContent.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new DropboxException(response);
+                }
             }
 
             return response;
         }
 #endif
 
-        private void ExecuteAsync(RestRequest request, Action<RestResponse> success, Action<DropboxException> failure)
+        private void ExecuteAsync(ApiType apiType, RestRequest request, Action<RestResponse> success, Action<DropboxException> failure)
         {
 #if WINDOWS_PHONE
             //check for network connection
@@ -163,22 +195,37 @@ namespace DropNet
                 return;
             }
 #endif
-            RequestCount++;
-
-            _restClient.ExecuteAsync(request, (response) =>
+            if (apiType == ApiType.Base)
             {
-                if (response.StatusCode != HttpStatusCode.OK)
+                _restClient.ExecuteAsync(request, (response) =>
                 {
-                    failure(new DropboxException(response));
-                }
-                else
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response);
+                    }
+                });
+            }
+            else
+            {
+                _restClientContent.ExecuteAsync(request, (response) =>
                 {
-                    success(response);
-                }
-            });
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response);
+                    }
+                });
+            }
         }
 
-        private void ExecuteAsync<T>(RestRequest request, Action<T> success, Action<DropboxException> failure) where T : new()
+        private void ExecuteAsync<T>(ApiType apiType, RestRequest request, Action<T> success, Action<DropboxException> failure) where T : new()
         {
 #if WINDOWS_PHONE
             //check for network connection
@@ -192,31 +239,34 @@ namespace DropNet
                 return;
             }
 #endif
-            RequestCount++;
-
-            _restClient.ExecuteAsync<T>(request, (response) =>
+            if (apiType == ApiType.Base)
             {
-                if (response.StatusCode != HttpStatusCode.OK)
+                _restClient.ExecuteAsync<T>(request, (response) =>
                 {
-                    failure(new DropboxException(response));
-                }
-                else
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response.Data);
+                    }
+                });
+            }
+            else
+            {
+                _restClientContent.ExecuteAsync<T>(request, (response) =>
                 {
-                    success(response.Data);
-                }
-            });
-        }
-
-        string Root
-        {
-            get { return UseSandbox ? SandboxRoot : DropboxRoot; }
-        }
-
-        private void SetupBaseUrl(bool contentServer = false)
-        {
-            //This has to be here as Dropbox change their base URL between calls
-            _restClient.BaseUrl = contentServer ? ApiContentBaseUrl : ApiBaseUrl;
-            _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response.Data);
+                    }
+                });
+            }
         }
 
         private UserLogin GetUserLoginFromParams(string urlParams)
@@ -239,6 +289,22 @@ namespace DropNet
             }
 
             return userLogin;
+        }
+
+        private void SetAuthProviders()
+        {
+            if (UserLogin != null)
+            {
+                //Set the OauthAuthenticator only when the UserLogin property changes
+                _restClientContent.Authenticator = new OAuthAuthenticator(_restClientContent.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+                _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
+            }
+        }
+
+        enum ApiType
+        {
+            Base,
+            Content
         }
     }
 }

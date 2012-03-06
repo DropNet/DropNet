@@ -3,6 +3,7 @@
 using DropNet.Models;
 using RestSharp;
 using DropNet.Authenticators;
+using System;
 
 namespace DropNet
 {
@@ -29,7 +30,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateTokenRequest();
 
-            var response = Execute(request);
+            var response = Execute(ApiType.Base, request);
 
             var userLogin = GetUserLoginFromParams(response.Content);
 
@@ -45,7 +46,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateAccessTokenRequest();
 
-            var response = Execute(request);
+            var response = Execute(ApiType.Base, request);
 
             var userLogin = GetUserLoginFromParams(response.Content);
 
@@ -55,13 +56,12 @@ namespace DropNet
             return userLogin;
         }
 
+        [Obsolete("No longer supported by Dropbox")]
         public RestResponse CreateAccount(string email, string firstName, string lastName, string password)
         {
-            _restClient.BaseUrl = ApiBaseUrl;
-
             var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
 
-            return _restClient.Execute(request);
+            return Execute(ApiType.Base, request);
         }
 
         public AccountInfo AccountInfo()
@@ -71,7 +71,7 @@ namespace DropNet
 
             var request = _requestHelper.CreateAccountInfoRequest();
 
-            return Execute<AccountInfo>(request);
+            return Execute<AccountInfo>(ApiType.Base, request);
         }
 
     }
