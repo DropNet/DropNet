@@ -20,7 +20,7 @@ namespace DropNet.Authenticators
         private const string NonceKey = "oauth_nonce";
         private static readonly Random Random = new Random();
         private const string SignatureKey = "oauth_signature";
-        private const string SignatureMethod = "HMAC-SHA1";
+        private const string SignatureMethod = "PLAINTEXT";
         private const string SignatureMethodKey = "oauth_signature_method";
         private const string TimestampKey = "oauth_timestamp";
         private const string TokenKey = "oauth_token";
@@ -55,7 +55,7 @@ namespace DropNet.Authenticators
                     request.AddParameter("oauth_token", _token, ParameterType.UrlSegment);
                 }
 				request.AddParameter("oauth_timestamp", GenerateTimeStamp(), ParameterType.UrlSegment);
-                request.AddParameter("oauth_signature_method", "HMAC-SHA1", ParameterType.UrlSegment);
+                request.AddParameter("oauth_signature_method", SignatureMethod, ParameterType.UrlSegment);
                 request.AddParameter("oauth_version", "1.0", ParameterType.UrlSegment);
 				request.Parameters.Sort(new QueryParameterComparer());
 				request.AddParameter("oauth_signature", GenerateSignature(request), ParameterType.UrlSegment);
@@ -65,7 +65,7 @@ namespace DropNet.Authenticators
 				request.AddParameter("oauth_version", "1.0");
 				request.AddParameter("oauth_nonce", GenerateNonce());
 				request.AddParameter("oauth_timestamp", GenerateTimeStamp());
-				request.AddParameter("oauth_signature_method", "HMAC-SHA1");
+				request.AddParameter("oauth_signature_method", SignatureMethod);
 				request.AddParameter("oauth_consumer_key", _consumerKey);
 				if (!string.IsNullOrEmpty(_token))
 				{
@@ -111,30 +111,44 @@ namespace DropNet.Authenticators
 
         private string GenerateSignature(IRestRequest request)
         {
-            Uri uri = this.BuildUri(request);
-            string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
-            if (((uri.Scheme != "http") || (uri.Port != 80)) && ((uri.Scheme != "https") || (uri.Port != 0x1bb)))
+            if (SignatureMethod == "PLAINTEXT")
             {
-                str = str + ":" + uri.Port;
+                if (string.IsNullOrEmpty(_tokenSecret))
+                {
+                    return _consumerSecret;
+                }
+                else
+                {
+                    return _consumerSecret + "&" + _tokenSecret;
+                }
             }
-            str = str + uri.AbsolutePath;
-            string str2 = NormalizeRequestParameters(request.Parameters);
-           
-            var builder = new StringBuilder();
-            builder.AppendFormat("{0}&", request.Method.ToString().ToUpper());
-            builder.AppendFormat("{0}&", str.UrlEncode());
-            builder.AppendFormat("{0}", str2.UrlEncode());
-            
-            string data = builder.ToString();
-            var hashAlgorithm = new HMACSHA1
-                                    {
-                                        Key =
-                                            Encoding.UTF8.GetBytes(string.Format("{0}&{1}", _consumerSecret.UrlEncode(),
-                                                                                 string.IsNullOrEmpty(_tokenSecret)
-                                                                                     ? string.Empty
-                                                                                     : _tokenSecret.UrlEncode()))
-                                    };
-            return ComputeHash(hashAlgorithm, data);
+            else
+            {
+                Uri uri = this.BuildUri(request);
+                string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
+                if (((uri.Scheme != "http") || (uri.Port != 80)) && ((uri.Scheme != "https") || (uri.Port != 0x1bb)))
+                {
+                    str = str + ":" + uri.Port;
+                }
+                str = str + uri.AbsolutePath;
+                string str2 = NormalizeRequestParameters(request.Parameters);
+
+                var builder = new StringBuilder();
+                builder.AppendFormat("{0}&", request.Method.ToString().ToUpper());
+                builder.AppendFormat("{0}&", str.UrlEncode());
+                builder.AppendFormat("{0}", str2.UrlEncode());
+
+                string data = builder.ToString();
+                var hashAlgorithm = new HMACSHA1
+                                        {
+                                            Key =
+                                                Encoding.UTF8.GetBytes(string.Format("{0}&{1}", _consumerSecret.UrlEncode(),
+                                                                                     string.IsNullOrEmpty(_tokenSecret)
+                                                                                         ? string.Empty
+                                                                                         : _tokenSecret.UrlEncode()))
+                                        };
+                return ComputeHash(hashAlgorithm, data);
+            }
         }
 
         public string GenerateTimeStamp()
