@@ -161,7 +161,7 @@ namespace DropNet.Tests
             Assert.IsTrue(actual.Method == Method.GET);
             Assert.IsNotNull(actual.Resource);
             Assert.IsNotNull(actual.Parameters);
-            Assert.IsTrue(actual.Parameters.Count == 2);
+            Assert.IsTrue(actual.Parameters.Count == 3);
             Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "version").Value, _version));
             Assert.IsTrue(actual.Parameters.Find(x => x.Name == "version").Type == ParameterType.UrlSegment);
             Assert.IsTrue(String.Equals(actual.Parameters.Find(x => x.Name == "path").Value, path));

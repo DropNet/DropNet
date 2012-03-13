@@ -112,7 +112,7 @@ namespace DropNet
                 path = "/" + path;
             }
             var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, Root);
-            var response = _restClient.Execute<MetaData>(request);
+            var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
             return response.Data;
@@ -132,7 +132,7 @@ namespace DropNet
                 path = "/" + path;
             }
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
-            var response = _restClient.Execute<MetaData>(request);
+            var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
             return response.Data;

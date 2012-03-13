@@ -113,14 +113,7 @@ namespace DropNet.Authenticators
         {
             if (SignatureMethod == "PLAINTEXT")
             {
-                if (string.IsNullOrEmpty(_tokenSecret))
-                {
-                    return _consumerSecret;
-                }
-                else
-                {
-                    return _consumerSecret + "&" + _tokenSecret;
-                }
+                return _consumerSecret + "&" + _tokenSecret;
             }
             else
             {
