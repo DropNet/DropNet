@@ -3,23 +3,23 @@
     public enum ThumbnailSize
     {
         /// <summary>
-        /// 32px x 32px
+        /// 32px response 32px
         /// </summary>
         Small,
         /// <summary>
-        /// 64px x 64px
+        /// 64px response 64px
         /// </summary>
         Medium,
         /// <summary>
-        /// 128px x 128px
+        /// 128px response 128px
         /// </summary>
         Large,
         /// <summary>
-        /// 640px x 480px
+        /// 640px response 480px
         /// </summary>
         ExtraLarge,
         /// <summary>
-        /// 1024px x 768px
+        /// 1024px response 768px
         /// </summary>
         ExtraLarge2 //dumb name
     }

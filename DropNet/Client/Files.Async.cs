@@ -5,6 +5,9 @@ using RestSharp;
 using System;
 using DropNet.Authenticators;
 using DropNet.Exceptions;
+using System.Net;
+using DropNet.Helpers;
+using System.Diagnostics;
 
 namespace DropNet
 {
@@ -262,6 +265,25 @@ namespace DropNet
             ExecuteAsync<DeltaPage>(ApiType.Base, request, success, failure);
         }
 
+        /// <summary>
+        /// The beta2 delta function, gets updates for a given folder
+        /// </summary>
+        /// <param name="IKnowThisIsBetaOnly"></param>
+        /// <param name="path"></param>
+        /// <param name="success"></param>
+        /// <param name="failure"></param>
+        public void GetDelta2Async(bool IKnowThisIsBetaOnly, string path, Action<Delta2Page> success, Action<DropboxException> failure)
+        {
+            if (!IKnowThisIsBetaOnly) return;            
+
+            //This has to be here as Dropbox change their base URL between calls
+            SetupBaseUrl();
+
+            var request = _requestHelper.CreateDelta2Request(path);            
+
+            ExecuteAsync<Delta2Page>(request, success, failure);                 
+        }           
+        
         /// <summary>
         /// Gets the thumbnail of an image given its MetaData
         /// </summary>
