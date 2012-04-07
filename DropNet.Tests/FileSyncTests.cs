@@ -80,7 +80,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            var uploaded = _client.UploadFilePUT("/", localFile.Name, content);
+            var uploaded = _client.UploadFilePUT("/Test", localFile.Name, content);
 
             Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
@@ -112,7 +112,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            var uploaded = _client.UploadFile("/", "testfile's.txt", content);
+            var uploaded = _client.UploadFile("/Test", "testfile's.txt", content);
 
             Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
@@ -128,7 +128,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            var uploaded = _client.UploadFile("/", "testПр.txt", content);
+            var uploaded = _client.UploadFile("/Test", "testПр.txt", content);
 
             Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
@@ -150,7 +150,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            var uploaded = _client.UploadFile("/", localFile.Name, content);
+            var uploaded = _client.UploadFile("/Test", localFile.Name, content);
 
             Assert.IsNotNull(uploaded);
             File.Delete(localFile.FullName);
@@ -159,7 +159,9 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Delete_File()
         {
-            var deleted = _client.Delete("/Test.txt");
+            var filename = string.Format("TestDelete{0:yyyyMMddhhmmss}.txt", DateTime.Now);
+            var uploaded = _client.UploadFile("/Test", filename, new byte[] { 12, 34, 29, 18 });
+            var deleted = _client.Delete("/Test/" + filename);
 
             Assert.IsNotNull(deleted);
         }
@@ -185,7 +187,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Create_Folder()
         {
-            var metaData = _client.CreateFolder(string.Format("TestFolder1{0:yyyyMMddhhmmss}", DateTime.Now));
+            var metaData = _client.CreateFolder(string.Format("Test/TestFolder1{0:yyyyMMddhhmmss}", DateTime.Now));
 
             Assert.IsNotNull(metaData);
         }

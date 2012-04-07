@@ -49,7 +49,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            _client.UploadFileAsync("/", localFile.Name, content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
+            _client.UploadFileAsync("/Test", localFile.Name, content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            _client.UploadFileAsync("/", "testПр1.txt", content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
+            _client.UploadFileAsync("/Test", "testПр1.txt", content, Can_Upload_File_Async_Success, Can_Upload_File_Async_Failure);
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace DropNet.Tests
             var waitForUploadFinished = new ManualResetEvent(false);
             using (var fileStream = localFile.OpenRead())
             {
-                _client.UploadFileAsync("/", localFile.Name, fileStream,
+                _client.UploadFileAsync("/Test", localFile.Name, fileStream,
                     response =>
                     {
                         Can_Upload_File_Async_Success(response);
@@ -119,7 +119,7 @@ namespace DropNet.Tests
             Assert.IsTrue(File.Exists(localFile.FullName));
             byte[] content = _client.GetFileContentFromFS(localFile);
 
-            _client.UploadFileAsync("/", localFile.Name, content, Can_Upload_Large_File_Async_Success, Can_Upload_Large_File_Async_Failure);
+            _client.UploadFileAsync("/Test", localFile.Name, content, Can_Upload_Large_File_Async_Success, Can_Upload_Large_File_Async_Failure);
 
             //TODO - Delete
         }
@@ -136,7 +136,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares_Async()
         {
-            _client.GetShareAsync("/Android intro.pdf", response =>
+            _client.GetShareAsync("/Test/Getting Started.rtf", response =>
             {
             },
             error =>
