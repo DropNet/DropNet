@@ -1,11 +1,13 @@
-﻿using DropNet.Models;
-using RestSharp;
-using RestSharp.Deserializers;
-using DropNet.Helpers;
-using System;
-using DropNet.Exceptions;
+﻿using System;
 using System.Net;
 using DropNet.Authenticators;
+using DropNet.Exceptions;
+using DropNet.Extensions;
+using DropNet.Helpers;
+using DropNet.Models;
+using RestSharp;
+using RestSharp.Deserializers;
+using System.Threading.Tasks;
 
 namespace DropNet
 {
@@ -29,12 +31,10 @@ namespace DropNet
                 SetAuthProviders();
             }
         }
-
+        
         /// <summary>
-        /// Sets the Callback Url used for login requests
+        /// To use Dropbox API in sandbox mode (app folder access) set to true
         /// </summary>
-        public string Callback { get; set; }
-
         public bool UseSandbox { get; set; }
 
         private const string SandboxRoot = "sandbox";
@@ -266,6 +266,30 @@ namespace DropNet
                         success(response.Data);
                     }
                 });
+            }
+        }
+
+        private Task<T> ExecuteTask<T>(ApiType apiType, RestRequest request) where T : new()
+        {
+            if (apiType == ApiType.Base)
+            {
+                return _restClient.ExecuteTask<T>(request);
+            }
+            else
+            {
+                return _restClientContent.ExecuteTask<T>(request);
+            }
+        }
+
+        private Task<RestResponse> ExecuteTask(ApiType apiType, RestRequest request)
+        {
+            if (apiType == ApiType.Base)
+            {
+                return _restClient.ExecuteTask(request);
+            }
+            else
+            {
+                return _restClientContent.ExecuteTask(request);
             }
         }
 

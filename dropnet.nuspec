@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
-	<metadata>
-		<id>DropNet</id>
-		<version>1.9.3</version>
-		<authors>Damian Karzon, Github Contributors</authors>
-		<owners>Damian Karzon</owners>
-		<description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone)</description>
-		<language>en-AU</language>
-		<projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
-		<licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
-		<iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
-		<tags>DROPBOX API .NET WP7</tags>
-	</metadata>
-	<files>
-        <file src="DropNet\bin\Release\RestSharp.dll" target="lib\net35" />
-        <file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
-        <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.dll" target="lib\sl4-wp71" />
-        <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
-	</files>
+  <metadata>
+    <id>DropNet</id>
+    <version>2.0</version>
+    <authors>Damian Karzon, Github Contributors</authors>
+    <owners>Damian Karzon</owners>
+    <description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone)</description>
+    <language>en-AU</language>
+    <projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
+    <licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
+    <iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
+    <tags>DROPBOX API .NET WP7</tags>
+  </metadata>
+  <files>
+    <file src="DropNet\bin\Release\RestSharp.dll" target="lib\net35" />
+    <file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
+    <file src="DropNet.WindowsPhone\bin\Release\RestSharp.WindowsPhone.dll" target="lib\sl4-wp71" />
+    <file src="DropNet.WindowsPhone\bin\Release\System.Threading.Tasks.WP71.dll" target="lib\sl4-wp71" />
+    <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
+  </files>
 </package>

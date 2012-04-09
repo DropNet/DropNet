@@ -45,6 +45,9 @@
     <Reference Include="RestSharp.WindowsPhone">
       <HintPath>..\Lib\sl4-wp71\RestSharp.WindowsPhone.dll</HintPath>
     </Reference>
+    <Reference Include="System.Threading.Tasks.WP71">
+      <HintPath>..\Lib\sl4-wp71\System.Threading.Tasks.WP71.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -62,11 +65,17 @@
     <Compile Include="..\dropnet\Client\Files.Async.cs">
       <Link>Client\Files.Async.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Client\Files.Task.cs">
+      <Link>Client\Files.Task.cs</Link>
+    </Compile>
     <Compile Include="..\dropnet\Client\User.Async.cs">
       <Link>Client\User.Async.cs</Link>
     </Compile>
     <Compile Include="..\dropnet\Exceptions\DropboxException.cs">
       <Link>Exceptions\DropboxException.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Extensions\RestClientExtensions.cs">
+      <Link>Extensions\RestClientExtensions.cs</Link>
     </Compile>
     <Compile Include="..\dropnet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>

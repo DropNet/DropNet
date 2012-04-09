@@ -3,6 +3,7 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ploeh.AutoFixture;
 using DropNet.Exceptions;
+using DropNet.Models;
 
 namespace DropNet.Tests
 {
@@ -95,9 +96,9 @@ namespace DropNet.Tests
             //TODO - Delete
         }
 
-        private void Can_Upload_File_Async_Success(RestSharp.RestResponse response)
+        private void Can_Upload_File_Async_Success(MetaData metadata)
         {
-            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+            Assert.IsNotNull(metadata);
         }
         private void Can_Upload_File_Async_Failure(DropboxException error)
         {
@@ -124,9 +125,9 @@ namespace DropNet.Tests
             //TODO - Delete
         }
 
-        private void Can_Upload_Large_File_Async_Success(RestSharp.RestResponse response)
+        private void Can_Upload_Large_File_Async_Success(MetaData metadata)
         {
-            Assert.IsTrue(response.StatusCode == System.Net.HttpStatusCode.OK);
+            Assert.IsNotNull(metadata);
         }
         private void Can_Upload_Large_File_Async_Failure(DropboxException error)
         {

@@ -59,6 +59,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileTaskTests.cs" />
     <Compile Include="FileTests1.Sandbox.cs" />
     <Compile Include="FileAsyncTests.cs" />
     <Compile Include="FileSyncTests.cs" />

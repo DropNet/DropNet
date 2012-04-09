@@ -106,7 +106,7 @@ namespace DropNet.Helpers
 			//Need to add the "file" parameter with the file name
 			request.AddParameter("file", filename);
 
-			request.AddFile("file", s => StreamUtils.CopyStream (fileStream, s), filename);
+			request.AddFile("file", s => StreamUtils.CopyStream(fileStream, s), filename);
 
 			return request;
 		}

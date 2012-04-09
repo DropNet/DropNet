@@ -23,7 +23,7 @@ namespace DropNet
                 path = "/" + path;
             }
 
-            var request = _requestHelper.CreateMetadataRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateMetadataRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -41,7 +41,7 @@ namespace DropNet
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateMetadataRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateMetadataRequest(path, Root);
 
             request.AddParameter("hash", hash);
 
@@ -68,7 +68,7 @@ namespace DropNet
         /// <param name="failure">Failure call back </param>
         public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure)
         {
-            var request = _requestHelper.CreateSearchRequest(searchString, path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateSearchRequest(searchString, path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -85,7 +85,7 @@ namespace DropNet
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateGetFileRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateGetFileRequest(path, Root);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
@@ -97,7 +97,7 @@ namespace DropNet
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="localFile">The local file to upload</param>/// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void UploadFileAsync(string path, FileInfo localFile, Action<RestResponse> success, Action<DropboxException> failure)
+        public void UploadFileAsync(string path, FileInfo localFile, Action<MetaData> success, Action<DropboxException> failure)
         {
             //Get the file stream
             byte[] bytes;
@@ -122,11 +122,11 @@ namespace DropNet
         /// <param name="fileData">The file data</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void UploadFileAsync(string path, string filename, byte[] fileData, Action<RestResponse> success, Action<DropboxException> failure)
+        public void UploadFileAsync(string path, string filename, byte[] fileData, Action<MetaData> success, Action<DropboxException> failure)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
@@ -139,11 +139,11 @@ namespace DropNet
         /// <param name="fileStream">The file data</param>
         /// <param name="success">The callback Action to perform on completion</param>
         /// <param name="failure">The callback Action to perform on exception</param>
-        public void UploadFileAsync(string path, string filename, Stream fileStream, Action<RestResponse> success, Action<DropboxException> failure)
+        public void UploadFileAsync(string path, string filename, Stream fileStream, Action<MetaData> success, Action<DropboxException> failure)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
@@ -158,7 +158,7 @@ namespace DropNet
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateDeleteFileRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateDeleteFileRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -175,7 +175,7 @@ namespace DropNet
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
-            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateCopyFileRequest(fromPath, toPath, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -192,7 +192,7 @@ namespace DropNet
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
 
-            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateMoveFileRequest(fromPath, toPath, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -207,7 +207,7 @@ namespace DropNet
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateCreateFolderRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateCreateFolderRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -223,7 +223,7 @@ namespace DropNet
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateShareRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateShareRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -239,7 +239,7 @@ namespace DropNet
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateMediaRequest(path, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateMediaRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -307,7 +307,7 @@ namespace DropNet
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateThumbnailRequest(path, size, UseSandbox ? SandboxRoot : DropboxRoot);
+            var request = _requestHelper.CreateThumbnailRequest(path, size, Root);
 
             ExecuteAsync(ApiType.Content, request,
                 response => success(response.RawBytes),
