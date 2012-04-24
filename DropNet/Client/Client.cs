@@ -130,9 +130,9 @@ namespace DropNet
         }
 
 #if !WINDOWS_PHONE
-        private T Execute<T>(ApiType apiType, RestRequest request) where T : new()
+        private T Execute<T>(ApiType apiType, IRestRequest request) where T : new()
         {
-            RestResponse<T> response;
+            IRestResponse<T> response;
             if (apiType == ApiType.Base)
             {
                 response = _restClient.Execute<T>(request);
@@ -155,9 +155,9 @@ namespace DropNet
             return response.Data;
         }
 
-        private RestResponse Execute(ApiType apiType, RestRequest request)
+        private IRestResponse Execute(ApiType apiType, IRestRequest request)
         {
-            RestResponse response;
+            IRestResponse response;
             if (apiType == ApiType.Base)
             {
                 response = _restClient.Execute(request);
@@ -181,7 +181,7 @@ namespace DropNet
         }
 #endif
 
-        private void ExecuteAsync(ApiType apiType, RestRequest request, Action<RestResponse> success, Action<DropboxException> failure)
+        private void ExecuteAsync(ApiType apiType, IRestRequest request, Action<IRestResponse> success, Action<DropboxException> failure)
         {
 #if WINDOWS_PHONE
             //check for network connection
@@ -197,7 +197,7 @@ namespace DropNet
 #endif
             if (apiType == ApiType.Base)
             {
-                _restClient.ExecuteAsync(request, (response) =>
+                _restClient.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -211,7 +211,7 @@ namespace DropNet
             }
             else
             {
-                _restClientContent.ExecuteAsync(request, (response) =>
+                _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -225,7 +225,7 @@ namespace DropNet
             }
         }
 
-        private void ExecuteAsync<T>(ApiType apiType, RestRequest request, Action<T> success, Action<DropboxException> failure) where T : new()
+        private void ExecuteAsync<T>(ApiType apiType, IRestRequest request, Action<T> success, Action<DropboxException> failure) where T : new()
         {
 #if WINDOWS_PHONE
             //check for network connection
@@ -241,7 +241,7 @@ namespace DropNet
 #endif
             if (apiType == ApiType.Base)
             {
-                _restClient.ExecuteAsync<T>(request, (response) =>
+                _restClient.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -255,7 +255,7 @@ namespace DropNet
             }
             else
             {
-                _restClientContent.ExecuteAsync<T>(request, (response) =>
+                _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -269,7 +269,7 @@ namespace DropNet
             }
         }
 
-        private Task<T> ExecuteTask<T>(ApiType apiType, RestRequest request) where T : new()
+        private Task<T> ExecuteTask<T>(ApiType apiType, IRestRequest request) where T : new()
         {
             if (apiType == ApiType.Base)
             {
@@ -281,7 +281,7 @@ namespace DropNet
             }
         }
 
-        private Task<RestResponse> ExecuteTask(ApiType apiType, RestRequest request)
+        private Task<IRestResponse> ExecuteTask(ApiType apiType, IRestRequest request)
         {
             if (apiType == ApiType.Base)
             {

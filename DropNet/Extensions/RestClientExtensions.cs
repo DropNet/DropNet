@@ -16,8 +16,8 @@ namespace DropNet.Extensions
 {
     public static class RestClientExtensions
     {
-        public static Task<TResult> ExecuteTask<TResult>(this RestClient client,
-                                                         RestRequest request) where TResult : new()
+        public static Task<TResult> ExecuteTask<TResult>(this IRestClient client,
+                                                         IRestRequest request) where TResult : new()
         {
             var tcs = new TaskCompletionSource<TResult>();
 
@@ -38,7 +38,7 @@ namespace DropNet.Extensions
                                     }
 #endif
                         client.ExecuteAsync<TResult>(request,
-                                                     (response) =>
+                                                     (response, asynchandle) =>
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {
@@ -60,10 +60,10 @@ namespace DropNet.Extensions
         }
 
 
-        public static Task<RestResponse> ExecuteTask(this RestClient client,
-                                                         RestRequest request)
+        public static Task<IRestResponse> ExecuteTask(this IRestClient client,
+                                                         IRestRequest request)
         {
-            var tcs = new TaskCompletionSource<RestResponse>();
+            var tcs = new TaskCompletionSource<IRestResponse>();
 
             WaitCallback
                 asyncWork = _ =>
@@ -82,7 +82,7 @@ namespace DropNet.Extensions
                                     }
 #endif
                         client.ExecuteAsync(request,
-                                                     (response) =>
+                                                     (response, asynchandle) =>
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {

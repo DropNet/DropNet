@@ -32,3 +32,6 @@ download/
 /DropNet.CLI/possantest.bat
 *.ncrunchproject
 *.ncrunchsolution
+.DS_Store
+*.pidb
+*.userprefs

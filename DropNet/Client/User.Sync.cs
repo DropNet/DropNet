@@ -56,13 +56,7 @@ namespace DropNet
             return userLogin;
         }
 
-        [Obsolete("No longer supported by Dropbox!")]
-        public RestResponse CreateAccount(string email, string firstName, string lastName, string password)
-        {
-            var request = _requestHelper.CreateNewAccountRequest(_apiKey, email, firstName, lastName, password);
-
-            return Execute(ApiType.Base, request);
-        }
+        
 
         public AccountInfo AccountInfo()
         {
