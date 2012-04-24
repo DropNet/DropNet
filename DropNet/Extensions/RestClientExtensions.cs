@@ -38,7 +38,7 @@ namespace DropNet.Extensions
                                     }
 #endif
                         client.ExecuteAsync<TResult>(request,
-                                                     (response) =>
+                                                     (response, asynchandle) =>
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {
@@ -82,7 +82,7 @@ namespace DropNet.Extensions
                                     }
 #endif
                         client.ExecuteAsync(request,
-                                                     (response) =>
+                                                     (response, asynchandle) =>
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {

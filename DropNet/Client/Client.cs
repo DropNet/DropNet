@@ -197,7 +197,7 @@ namespace DropNet
 #endif
             if (apiType == ApiType.Base)
             {
-                _restClient.ExecuteAsync(request, (response) =>
+                _restClient.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -211,7 +211,7 @@ namespace DropNet
             }
             else
             {
-                _restClientContent.ExecuteAsync(request, (response) =>
+                _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -241,7 +241,7 @@ namespace DropNet
 #endif
             if (apiType == ApiType.Base)
             {
-                _restClient.ExecuteAsync<T>(request, (response) =>
+                _restClient.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
@@ -255,7 +255,7 @@ namespace DropNet
             }
             else
             {
-                _restClientContent.ExecuteAsync<T>(request, (response) =>
+                _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
