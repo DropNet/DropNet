@@ -1,5 +1,6 @@
 ﻿#if !WINDOWS_PHONE
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using DropNet.Models;
@@ -105,6 +106,7 @@ namespace DropNet
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
         /// <returns>True on success</returns>
+        [Obsolete("PUT doesn't work with current RestSharp. Sorry :(")]
         public MetaData UploadFilePUT(string path, string filename, byte[] fileData)
         {
             if (!path.StartsWith("/"))

@@ -46,7 +46,7 @@ namespace DropNet
             return ExecuteTask<List<MetaData>>(ApiType.Base, request);
         }
 
-        public Task<RestResponse> GetFileTask(string path)
+        public Task<IRestResponse> GetFileTask(string path)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -73,7 +73,7 @@ namespace DropNet
             return ExecuteTask<MetaData>(ApiType.Content, request);
         }
 
-        public Task<RestResponse> DeleteTask(string path)
+        public Task<IRestResponse> DeleteTask(string path)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
@@ -82,7 +82,7 @@ namespace DropNet
             return ExecuteTask(ApiType.Base, request);
         }
 
-        public Task<RestResponse> CopyTask(string fromPath, string toPath)
+        public Task<IRestResponse> CopyTask(string fromPath, string toPath)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -92,7 +92,7 @@ namespace DropNet
             return ExecuteTask(ApiType.Base, request);
         }
 
-        public Task<RestResponse> MoveTask(string fromPath, string toPath)
+        public Task<IRestResponse> MoveTask(string fromPath, string toPath)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -129,22 +129,22 @@ namespace DropNet
             return ExecuteTask<ShareResponse>(ApiType.Base, request);
         }
 
-        public Task<RestResponse> GetThumbnailTask(MetaData file)
+        public Task<IRestResponse> GetThumbnailTask(MetaData file)
         {
             return GetThumbnailTask(file.Path, ThumbnailSize.Small);
         }
 
-        public Task<RestResponse> GetThumbnailTask(MetaData file, ThumbnailSize size)
+        public Task<IRestResponse> GetThumbnailTask(MetaData file, ThumbnailSize size)
         {
             return GetThumbnailTask(file.Path, size);
         }
 
-        public Task<RestResponse> GetThumbnailTask(string path)
+        public Task<IRestResponse> GetThumbnailTask(string path)
         {
             return GetThumbnailTask(path, ThumbnailSize.Small);
         }
 
-        public Task<RestResponse> GetThumbnailTask(string path, ThumbnailSize size)
+        public Task<IRestResponse> GetThumbnailTask(string path, ThumbnailSize size)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 

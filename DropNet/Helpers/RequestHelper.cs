@@ -69,7 +69,9 @@ namespace DropNet.Helpers
 			request.AddParameter("path", path, ParameterType.UrlSegment);
 			request.AddParameter("root", root, ParameterType.UrlSegment);
 			//Need to add the "file" parameter with the file name
-			request.AddParameter("file", filename);
+            // This isn't needed. Dropbox is particular about the ordering,
+            // but the oauth sig only needs the filename, which we have in the OTHER parameter
+			//request.AddParameter("file", filename);
 
 			request.AddFile("file", fileData, filename);
 
