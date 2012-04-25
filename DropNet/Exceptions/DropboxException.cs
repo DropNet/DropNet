@@ -10,7 +10,7 @@ namespace DropNet.Exceptions
         /// <summary>
         /// The response of the error call (for Debugging use)
         /// </summary>
-        public RestResponseBase Response { get; private set; }
+        public IRestResponse Response { get; private set; }
 
         public DropboxException()
         {
@@ -22,7 +22,7 @@ namespace DropNet.Exceptions
 
         }
 
-        public DropboxException(RestResponseBase r)
+        public DropboxException(IRestResponse r)
         {
             Response = r;
             StatusCode = r.StatusCode;
