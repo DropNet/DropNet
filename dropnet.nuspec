@@ -9,7 +9,7 @@
     <language>en-AU</language>
     <projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
     <licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
-    <iconUrl>http://dkdevelopment.net/Images/DropNetIcon.png</iconUrl>
+    <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
     <tags>DROPBOX API .NET WP7</tags>
   </metadata>
   <files>
