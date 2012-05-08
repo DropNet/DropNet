@@ -7,6 +7,8 @@ using DropNet.Models;
 using DropNet.Authenticators;
 using System.Net;
 using DropNet.Exceptions;
+using RestSharp;
+using RestSharp.Deserializers;
 
 namespace DropNet
 {
@@ -321,22 +323,65 @@ namespace DropNet
         }
 
         /// <summary>
-        /// The beta delta function, gets updates for a given folder
+        /// Gets the deltas for a user's folders and files.
         /// </summary>
-        /// <param name="IKnowThisIsBetaOnly"></param>
-        /// <param name="path"></param>
+        /// <param name="cursor">The value returned from the prior call to GetDelta or an empty string</param>
         /// <returns></returns>
-        public DeltaPage GetDelta(bool IKnowThisIsBetaOnly, string path)
+        public DeltaPage GetDelta(string cursor)
         {
-            if (!IKnowThisIsBetaOnly) return null;
+            var request = _requestHelper.CreateDeltaRequest(cursor);
 
-            if (!path.StartsWith("/")) path = "/" + path;
+            var deltaResponse =  Execute<DeltaPageInternal>(ApiType.Base, request);
 
-            var request = _requestHelper.CreateDeltaRequest(path);
+            var deltaPage = new DeltaPage
+                                {
+                                    Cursor = deltaResponse.Cursor,
+                                    Has_More = deltaResponse.Has_More,
+                                    Reset = deltaResponse.Reset,
+                                    Entries = new List<DeltaEntry>()
+                                };
 
-            return Execute<DeltaPage>(ApiType.Base, request);
+            foreach (var stringList in deltaResponse.Entries)
+            {
+                deltaPage.Entries.Add(StringListToDeltaEntry(stringList));
+            }
+
+            return deltaPage;
         }
 
+        /// <summary>
+        /// Helper function to convert a stringlist to a DeltaEntry object
+        /// </summary>
+        /// <param name="stringList"></param>
+        /// <returns></returns>
+        private DeltaEntry StringListToDeltaEntry(List<string> stringList)
+        {
+            var deltaEntry = new DeltaEntry
+            {
+                Path = stringList[0]
+            };
+            if (!String.IsNullOrEmpty(stringList[1]))
+            {
+                var jsonDeserializer = new JsonDeserializer();
+                var fakeresponse = new RestResponse
+                {
+                    Content = stringList[1]
+                };
+                deltaEntry.MetaData = jsonDeserializer.Deserialize<MetaData>(fakeresponse);
+            }
+            return deltaEntry;
+        } 
+
+        /// <summary>
+        /// Private class used to deal with the DropBox API returning two different types in a given list
+        /// </summary>
+        private class DeltaPageInternal
+        {
+            public string Cursor { get; set; }
+            public bool Has_More { get; set; }
+            public bool Reset { get; set; }
+            public List<List<string>> Entries { get; set; }
+        }
     }
 }
 #endif

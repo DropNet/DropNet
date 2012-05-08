@@ -221,7 +221,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_Delta()
         {
-            var delta = _client.GetDelta(true, "/");
+            var delta = _client.GetDelta("");
 
             Assert.IsNotNull(delta);
         }
