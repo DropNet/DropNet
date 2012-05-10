@@ -203,5 +203,14 @@ namespace DropNet.Tests
             File.WriteAllBytes(@"C:\Temp\TestSandbox.png", rawBytes);
         }
 
+        [TestMethod]
+        public void SANDBOX_Can_Get_Delta()
+        {
+            var deltaPage = _client.GetDelta("");
+
+            Assert.IsNotNull(deltaPage);
+
+        }
+
     }
 }

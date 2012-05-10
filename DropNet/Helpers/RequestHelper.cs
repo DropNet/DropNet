@@ -231,13 +231,13 @@ namespace DropNet.Helpers
             return request;
         }
 
-        internal RestRequest CreateDeltaRequest(string path)
+        internal RestRequest CreateDeltaRequest(string cursor)
         {
             var request = new RestRequest(Method.POST);
-            request.Resource = "{version}/delta_beta";
+            request.Resource = "{version}/delta";
 
             request.AddParameter("version", _version, ParameterType.UrlSegment);
-            request.AddParameter("cursor", path, ParameterType.UrlSegment);
+            request.AddParameter("cursor", cursor);
 
             return request;
         }
