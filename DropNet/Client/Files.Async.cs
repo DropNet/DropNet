@@ -81,7 +81,7 @@ namespace DropNet
         /// /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
         
-        public void GetFileAsync(string path, Action<RestResponse> success, Action<DropboxException> failure)
+        public void GetFileAsync(string path, Action<IRestResponse> success, Action<DropboxException> failure)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
@@ -154,7 +154,7 @@ namespace DropNet
         /// <param name="path">The Path of the file or folder to delete.</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void DeleteAsync(string path, Action<RestResponse> success, Action<DropboxException> failure)
+        public void DeleteAsync(string path, Action<IRestResponse> success, Action<DropboxException> failure)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
@@ -170,7 +170,7 @@ namespace DropNet
         /// <param name="toPath">The path to where the file or folder is getting copied</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void CopyAsync(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
+        public void CopyAsync(string fromPath, string toPath, Action<IRestResponse> success, Action<DropboxException> failure)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
@@ -187,7 +187,7 @@ namespace DropNet
         /// <param name="toPath">The path to where the file or folder is getting moved</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void MoveAsync(string fromPath, string toPath, Action<RestResponse> success, Action<DropboxException> failure)
+        public void MoveAsync(string fromPath, string toPath, Action<IRestResponse> success, Action<DropboxException> failure)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
             if (!toPath.StartsWith("/")) toPath = "/" + toPath;
