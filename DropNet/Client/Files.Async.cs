@@ -29,6 +29,22 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Returns a link directly to a file.
+        /// Similar to /shares. The difference is that this bypasses the Dropbox webserver, used to provide a preview of the file, so that you can effectively stream the contents of your media.
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <param name="success">Success callback </param>
+        /// <param name="failure">Failure callback </param>
+        public void GetMediaAsync(string path, Action<ShareResponse> success, Action<DropboxException> failure)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            var request = _requestHelper.CreateMediaRequest(path, Root);
+
+            ExecuteAsync(ApiType.Base, request, success, failure);
+        }
+
+        /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
         /// Optional 'hash' param returns HTTP code 304	(Directory contents have not changed) if contents have not changed since the
         /// hash was retrieved on a previous call.

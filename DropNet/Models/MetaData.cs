@@ -1,21 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DropNet.Models
 {
+    [DataContract]
     public class MetaData
     {
+        [DataMember]
         public string Hash { get; set; }
+        
+        [DataMember]
         public bool Thumb_Exists { get; set; }
+
+        [DataMember]
         public long Bytes { get; set; }
+
+        [DataMember]
         public string Modified { get; set; }
+
+        [DataMember]
         public string Path { get; set; }
+
+        [DataMember]
         public bool Is_Dir { get; set; }
+
+        [DataMember]
         public bool Is_Deleted { get; set; }
+
+        [DataMember]
         public string Size { get; set; }
+
+        [DataMember]
         public string Root { get; set; }
+
+        [DataMember]
         public string Icon { get; set; }
+
+        [DataMember]
         public int Revision { get; set; }
+
+        [DataMember]
         public List<MetaData> Contents { get; set; }
 
         public DateTime ModifiedDate
