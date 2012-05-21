@@ -354,7 +354,7 @@ namespace DropNet
         /// </summary>
         /// <param name="stringList"></param>
         /// <returns></returns>
-        private DeltaEntry StringListToDeltaEntry(List<string> stringList)
+        DeltaEntry StringListToDeltaEntry(List<string> stringList)
         {
             var deltaEntry = new DeltaEntry
             {
@@ -372,16 +372,7 @@ namespace DropNet
             return deltaEntry;
         } 
 
-        /// <summary>
-        /// Private class used to deal with the DropBox API returning two different types in a given list
-        /// </summary>
-        private class DeltaPageInternal
-        {
-            public string Cursor { get; set; }
-            public bool Has_More { get; set; }
-            public bool Reset { get; set; }
-            public List<List<string>> Entries { get; set; }
-        }
+       
     }
 }
 #endif

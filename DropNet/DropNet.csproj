@@ -80,6 +80,7 @@
     <Compile Include="Helpers\RequestHelper.cs" />
     <Compile Include="Models\AccountCreationResult.cs" />
     <Compile Include="Models\AccountInfo.cs" />
+    <Compile Include="Models\DeltaPageInternal.cs" />
     <Compile Include="Models\DeltaPage.cs" />
     <Compile Include="Models\MetaData.cs" />
     <Compile Include="Models\SharesResponse.cs" />

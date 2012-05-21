@@ -3,8 +3,8 @@ using System.IO;
 using DropNet.Models;
 using RestSharp;
 using System;
-using DropNet.Authenticators;
 using DropNet.Exceptions;
+using RestSharp.Deserializers;
 
 namespace DropNet
 {
@@ -24,6 +24,22 @@ namespace DropNet
             }
 
             var request = _requestHelper.CreateMetadataRequest(path, Root);
+
+            ExecuteAsync(ApiType.Base, request, success, failure);
+        }
+
+        /// <summary>
+        /// Returns a link directly to a file.
+        /// Similar to /shares. The difference is that this bypasses the Dropbox webserver, used to provide a preview of the file, so that you can effectively stream the contents of your media.
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <param name="success">Success callback </param>
+        /// <param name="failure">Failure callback </param>
+        public void GetMediaAsync(string path, Action<ShareResponse> success, Action<DropboxException> failure)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            var request = _requestHelper.CreateMediaRequest(path, Root);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
@@ -80,7 +96,7 @@ namespace DropNet
         /// <param name="path">The path of the file to download</param>
         /// /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        
+
         public void GetFileAsync(string path, Action<IRestResponse> success, Action<DropboxException> failure)
         {
             if (!path.StartsWith("/")) path = "/" + path;
@@ -221,46 +237,69 @@ namespace DropNet
         /// <param name="failure">Failure callback </param>
         public void GetShareAsync(string path, Action<ShareResponse> success, Action<DropboxException> failure)
         {
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
 
             var request = _requestHelper.CreateShareRequest(path, Root);
-
-            ExecuteAsync(ApiType.Base, request, success, failure);
-        }
-
-        /// <summary>
-        /// Returns a link directly to a file.
-        /// Similar to /shares. The difference is that this bypasses the Dropbox webserver, used to provide a preview of the file, so that you can effectively stream the contents of your media.
-        /// </summary>
-        /// <param name="path">The path</param>
-        /// <param name="success">Success callback </param>
-        /// <param name="failure">Failure callback </param>
-        public void GetMediaAsync(string path, Action<ShareResponse> success, Action<DropboxException> failure)
-        {
-            if (!path.StartsWith("/")) path = "/" + path;
-
-            var request = _requestHelper.CreateMediaRequest(path, Root);
-
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
 
         /// <summary>
         /// The beta delta function, gets updates for a given folder
         /// </summary>
-        /// <param name="IKnowThisIsBetaOnly"></param>
-        /// <param name="path"></param>
-        /// <param name="success"></param>
-        /// <param name="failure"></param>
-        public void GetDeltaAsync(bool IKnowThisIsBetaOnly, string path, Action<DeltaPage> success, Action<DropboxException> failure)
+        /// <param name="cursor">Cursor returned by prvious call</param>
+        /// <param name="success">Success Callback</param>
+        /// <param name="failure">Failure Callback</param>
+        public void GetDeltaAsync(string cursor, Action<DeltaPage> success, Action<DropboxException> failure)
         {
-            if (!IKnowThisIsBetaOnly) return;
+            var request = _requestHelper.CreateDeltaRequest(cursor);
+            ExecuteAsync<DeltaPageInternal>(ApiType.Base, request,
+                deltaResponse =>
+                {
+                    var deltaPage = new DeltaPage
+                    {
+                        Cursor = deltaResponse.Cursor,
+                        Has_More = deltaResponse.Has_More,
+                        Reset = deltaResponse.Reset,
+                        Entries = new List<DeltaEntry>()
+                    };
 
-            if (!path.StartsWith("/")) path = "/" + path;
+                    foreach (var stringList in deltaResponse.Entries)
+                    {
+                        deltaPage.Entries.Add(StringListToDelta(stringList));
+                    }
 
-            var request = _requestHelper.CreateDeltaRequest(path);
+                    success (deltaPage);
+                },
 
-            ExecuteAsync<DeltaPage>(ApiType.Base, request, success, failure);
+                failure);
         }
+
+        /// <summary>
+        /// Helper function to convert a stringlist to a DeltaEntry object
+        /// </summary>
+        /// <param name="stringList"></param>
+        /// <returns></returns>
+        DeltaEntry StringListToDelta(List<string> stringList)
+        {
+            var deltaEntry = new DeltaEntry
+            {
+                Path = stringList[0]
+            };
+            if (!String.IsNullOrEmpty(stringList[1]))
+            {
+                var jsonDeserializer = new JsonDeserializer();
+                var fakeresponse = new RestResponse
+                {
+                    Content = stringList[1]
+                };
+                deltaEntry.MetaData = jsonDeserializer.Deserialize<MetaData>(fakeresponse);
+            }
+            return deltaEntry;
+        } 
+
 
         /// <summary>
         /// Gets the thumbnail of an image given its MetaData
