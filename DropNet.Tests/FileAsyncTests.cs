@@ -15,8 +15,14 @@ namespace DropNet.Tests
 
         public FileAsyncTests()
         {
-            _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret);
-            _client.UserLogin = new Models.UserLogin { Token = TestVariables.Token, Secret = TestVariables.Secret };
+            _client = new DropNetClient(TestVariables.ApiKey, TestVariables.ApiSecret)
+                          {
+                              UserLogin = new UserLogin
+                                              {
+                                                  Token = TestVariables.Token, 
+                                                  Secret = TestVariables.Secret
+                                              }
+                          };
 
             _fixture = new Fixture();
         }
@@ -36,7 +42,7 @@ namespace DropNet.Tests
                                                {
                                                    Assert.IsNotNull(s);
                                                    Assert.AreEqual(1, s.Count);
-                                               }, 
+                                               },
                                                Assert.IsNull);
         }
 
@@ -74,7 +80,7 @@ namespace DropNet.Tests
 
             File.WriteAllText(localFile.FullName, localContent, System.Text.Encoding.UTF8);
             Assert.IsTrue(File.Exists(localFile.FullName));
-            byte[] content = _client.GetFileContentFromFS(localFile);
+            _client.GetFileContentFromFS(localFile);
 
             var waitForUploadFinished = new ManualResetEvent(false);
             using (var fileStream = localFile.OpenRead())
@@ -162,5 +168,10 @@ namespace DropNet.Tests
             Assert.IsTrue(false);
         }
 
+        [TestMethod]
+        public void Can_Get_Delta_Async()
+        {
+         _client.GetDeltaAsync("", Assert.IsNotNull, f => Assert.Fail(f.ToString()));   
+        }
     }
 }
