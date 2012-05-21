@@ -4,6 +4,7 @@ using DropNet.Models;
 using RestSharp;
 using System;
 using DropNet.Exceptions;
+using RestSharp.Deserializers;
 
 namespace DropNet
 {
@@ -251,15 +252,38 @@ namespace DropNet
 
                     foreach (var stringList in deltaResponse.Entries)
                     {
-                        deltaPage.Entries.Add(StringListToDeltaEntry(stringList));
+                        deltaPage.Entries.Add(StringListToDelta(stringList));
                     }
 
                     success (deltaPage);
                 },
 
                 failure);
-
         }
+
+        /// <summary>
+        /// Helper function to convert a stringlist to a DeltaEntry object
+        /// </summary>
+        /// <param name="stringList"></param>
+        /// <returns></returns>
+        DeltaEntry StringListToDelta(List<string> stringList)
+        {
+            var deltaEntry = new DeltaEntry
+            {
+                Path = stringList[0]
+            };
+            if (!String.IsNullOrEmpty(stringList[1]))
+            {
+                var jsonDeserializer = new JsonDeserializer();
+                var fakeresponse = new RestResponse
+                {
+                    Content = stringList[1]
+                };
+                deltaEntry.MetaData = jsonDeserializer.Deserialize<MetaData>(fakeresponse);
+            }
+            return deltaEntry;
+        } 
+
 
         /// <summary>
         /// Gets the thumbnail of an image given its MetaData
