@@ -16,6 +16,7 @@ namespace DropNet.Models
         public string Root { get; set; }
         public string Icon { get; set; }
         public int Revision { get; set; }
+		public string Rev { get; set; }
         public List<MetaData> Contents { get; set; }
 
         public DateTime ModifiedDate

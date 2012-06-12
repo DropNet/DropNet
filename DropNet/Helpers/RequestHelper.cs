@@ -61,6 +61,19 @@ namespace DropNet.Helpers
             return request;
         }
 
+		public RestRequest CreateGetFileRequest(string path, string root, long startByte, long endByte, string rev)
+		{
+			var request = new RestRequest(Method.GET);
+			request.Resource = "{version}/files/{root}{path}";
+			request.AddParameter("version", _version, ParameterType.UrlSegment);
+			request.AddParameter("path", path, ParameterType.UrlSegment);
+			request.AddParameter("root", root, ParameterType.UrlSegment);
+			request.AddParameter("rev", rev, ParameterType.UrlSegment);
+			request.AddHeader("Range", "bytes=" + startByte + "-" + endByte);
+
+			return request;
+		}
+
 		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData, string root)
 		{
 			var request = new RestRequest(Method.POST);
