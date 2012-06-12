@@ -146,7 +146,7 @@ namespace DropNet
             {
                 response = _restClientContent.Execute<T>(request);
 
-                if (response.StatusCode != HttpStatusCode.OK)
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                 {
                     throw new DropboxException(response);
                 }
@@ -171,7 +171,7 @@ namespace DropNet
             {
                 response = _restClientContent.Execute(request);
 
-                if (response.StatusCode != HttpStatusCode.OK)
+				if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                 {
                     throw new DropboxException(response);
                 }
@@ -213,7 +213,7 @@ namespace DropNet
             {
                 _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
+					if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
                         failure(new DropboxException(response));
                     }
@@ -257,7 +257,7 @@ namespace DropNet
             {
                 _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
+					if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
                         failure(new DropboxException(response));
                     }

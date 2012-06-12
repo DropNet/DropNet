@@ -90,6 +90,24 @@ namespace DropNet
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
 
+		/// <summary>
+		/// Downloads a part of a File from dropbox given the path
+		/// </summary>
+		/// <param name="path">The path of the file to download</param>
+		/// <param name="startByte">The index of the first byte to get.</param>
+		/// <param name="endByte">The index of the last byte to get.</param>
+		/// <param name="rev">Revision of the file</param>
+		/// <param name="success">Success callback </param>
+		/// <param name="failure">Failure callback </param>
+		public void GetFileAsync(string path, long startByte, long endByte, string rev, Action<IRestResponse> success, Action<DropboxException> failure)
+		{
+			if (!path.StartsWith("/")) path = "/" + path;
+
+			var request = _requestHelper.CreateGetFileRequest(path, Root, startByte, endByte, rev);
+
+			ExecuteAsync(ApiType.Content, request, success, failure);
+		}
+
 #if !WINDOWS_PHONE && !MONOTOUCH
         /// <summary>
         /// Uploads a File to Dropbox from the local file system to the specified folder
