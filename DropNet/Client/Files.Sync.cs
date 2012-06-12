@@ -76,6 +76,28 @@ namespace DropNet
             return response.RawBytes;
         }
 
+		//TODO - Make class for this to return (instead of just a byte[])
+		/// <summary>
+		/// Downloads a part of a File from dropbox given the path and a revision token.
+		/// </summary>
+		/// <param name="path">The path of the file to download</param>
+		/// <param name="startByte">The index of the first byte to get.</param>
+		/// <param name="endByte">The index of the last byte to get.</param>
+		/// <param name="rev">Revision string as featured by <code>MetaData.Rev</code></param>
+		/// <returns>The files raw bytes between <paramref name="startByte"/> and <paramref name="endByte"/>.</returns>
+		public byte[] GetFile(string path, long startByte, long endByte, string rev)
+		{
+			if (!path.StartsWith("/"))
+			{
+				path = "/" + path;
+			}
+
+			var request = _requestHelper.CreateGetFileRequest(path, Root, startByte, endByte, rev);
+			var response = Execute(ApiType.Content, request);
+
+			return response.RawBytes;
+		}
+
         /// <summary>
         /// Retrieve the content of a file in the local file system
         /// </summary>
