@@ -129,7 +129,7 @@ namespace DropNet
                 (string.IsNullOrEmpty(callback) ? string.Empty : "&oauth_callback=" + callback));
         }
 
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !WINRT
         private T Execute<T>(ApiType apiType, IRestRequest request) where T : new()
         {
             IRestResponse<T> response;
@@ -269,6 +269,8 @@ namespace DropNet
             }
         }
 
+#if !WINRT
+
         private Task<T> ExecuteTask<T>(ApiType apiType, IRestRequest request) where T : new()
         {
             if (apiType == ApiType.Base)
@@ -292,6 +294,8 @@ namespace DropNet
                 return _restClientContent.ExecuteTask(request);
             }
         }
+
+#endif
 
         private UserLogin GetUserLoginFromParams(string urlParams)
         {

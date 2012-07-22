@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RestSharp;
-using System.Security.Cryptography;
 using DropNet.Extensions;
 
 namespace DropNet.Authenticators
@@ -90,20 +89,6 @@ namespace DropNet.Authenticators
             return new Uri(string.Format("{0}/{1}", this._baseUrl, resource));
         }
 
-        private static string ComputeHash(HashAlgorithm hashAlgorithm, string data)
-        {
-            if (hashAlgorithm == null)
-            {
-                throw new ArgumentNullException("hashAlgorithm");
-            }
-            if (string.IsNullOrEmpty(data))
-            {
-                throw new ArgumentNullException("data");
-            }
-            byte[] bytes = Encoding.UTF8.GetBytes(data);
-            return Convert.ToBase64String(hashAlgorithm.ComputeHash(bytes));
-        }
-
         public string GenerateNonce()
         {
             return Random.Next(0x1e208, 0x98967f).ToString();
@@ -111,37 +96,7 @@ namespace DropNet.Authenticators
 
         private string GenerateSignature(IRestRequest request)
         {
-            if (SignatureMethod == "PLAINTEXT")
-            {
-                return _consumerSecret + "&" + _tokenSecret;
-            }
-            else
-            {
-                Uri uri = this.BuildUri(request);
-                string str = string.Format("{0}://{1}", uri.Scheme, uri.Host);
-                if (((uri.Scheme != "http") || (uri.Port != 80)) && ((uri.Scheme != "https") || (uri.Port != 0x1bb)))
-                {
-                    str = str + ":" + uri.Port;
-                }
-                str = str + uri.AbsolutePath;
-                string str2 = NormalizeRequestParameters(request.Parameters);
-
-                var builder = new StringBuilder();
-                builder.AppendFormat("{0}&", request.Method.ToString().ToUpper());
-                builder.AppendFormat("{0}&", str.UrlEncode());
-                builder.AppendFormat("{0}", str2.UrlEncode());
-
-                string data = builder.ToString();
-                var hashAlgorithm = new HMACSHA1
-                                        {
-                                            Key =
-                                                Encoding.UTF8.GetBytes(string.Format("{0}&{1}", _consumerSecret.UrlEncode(),
-                                                                                     string.IsNullOrEmpty(_tokenSecret)
-                                                                                         ? string.Empty
-                                                                                         : _tokenSecret.UrlEncode()))
-                                        };
-                return ComputeHash(hashAlgorithm, data);
-            }
+            return _consumerSecret + "&" + _tokenSecret;
         }
 
         public string GenerateTimeStamp()

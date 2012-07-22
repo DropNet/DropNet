@@ -108,7 +108,7 @@ namespace DropNet
 			ExecuteAsync(ApiType.Content, request, success, failure);
 		}
 
-#if !WINDOWS_PHONE && !MONOTOUCH
+#if !WINDOWS_PHONE && !MONOTOUCH && !WINRT
         /// <summary>
         /// Uploads a File to Dropbox from the local file system to the specified folder
         /// </summary>
