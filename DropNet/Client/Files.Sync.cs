@@ -52,7 +52,7 @@ namespace DropNet
         /// <param name="path">The path of the file or folder</param>
         public List<MetaData> Search(string searchString, string path)
         {
-            var request = _requestHelper.CreateSearchRequest(searchString, path, DropboxRoot);
+            var request = _requestHelper.CreateSearchRequest(searchString, path, Root);
 
             return Execute<List<MetaData>>(ApiType.Base, request);
         }
