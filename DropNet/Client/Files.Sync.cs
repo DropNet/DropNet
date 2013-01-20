@@ -36,6 +36,19 @@ namespace DropNet
             return Execute<MetaData>(ApiType.Base, request);
         }
 
+		/// <summary>
+		/// Gets List of MetaData for a File versions. Each metadata item contains info about file in certain version on Dropbox.
+		/// </summary>
+		/// <param name="path">The path of the file</param>
+		/// <param name="limit">Maximal number of versions to fetch.</param>
+		/// <returns></returns>
+		public List<MetaData> GetVersions(string path, int limit)
+		{
+			var request = _requestHelper.CreateVersionsRequest(path, Root, limit);
+			
+			return Execute<List<MetaData>>(ApiType.Base, request);
+		}
+
         /// <summary>
         /// Gets list of metadata for search string
         /// </summary>
