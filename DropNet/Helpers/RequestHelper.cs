@@ -28,6 +28,18 @@ namespace DropNet.Helpers
             return request;
         }
 
+		public RestRequest CreateVersionsRequest(string path, string root, int rev_limit)
+		{
+			var request = new RestRequest(Method.GET);
+			request.Resource = "{version}/revisions/{root}{path}";
+			request.AddParameter("version", _version, ParameterType.UrlSegment);
+			request.AddParameter("path", path, ParameterType.UrlSegment);
+			request.AddParameter("root", root, ParameterType.UrlSegment);
+			request.AddParameter("rev_limit", rev_limit, ParameterType.UrlSegment);
+
+			return request;
+		}
+
         public RestRequest CreateShareRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
