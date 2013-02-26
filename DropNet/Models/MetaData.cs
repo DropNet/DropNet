@@ -24,7 +24,7 @@ namespace DropNet.Models
             get
             {
                 //cast to datetime and return
-                return DateTime.Parse(Modified); //RFC1123 format date codes are returned by API
+                return Modified == null ? DateTime.MinValue : DateTime.Parse(Modified); //RFC1123 format date codes are returned by API
             }
         }
 
@@ -33,6 +33,8 @@ namespace DropNet.Models
             get
             {
                 string str = Modified;
+                if (str == null)
+                    return DateTime.MinValue;
                 if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
                 if (!str.EndsWith(" UTC")) str += " UTC";
                 return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
