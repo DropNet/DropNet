@@ -76,6 +76,6 @@ Want to chat about DropNet? http://jabbr.net/#/rooms/DropNet
 
 ***
 
- **Like DropNet?** Endore me on Coderwall
+ **Like DropNet?** Endorse me on Coderwall
  
  [![endorse](http://api.coderwall.com/dkarzon/endorsecount.png)](http://coderwall.com/dkarzon)
