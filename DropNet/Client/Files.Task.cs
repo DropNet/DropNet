@@ -153,5 +153,14 @@ namespace DropNet
             return ExecuteTask(ApiType.Content, request);
         }
 
+        public Task<CopyRefResponse> GetCopyRefTask(string path)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            var request = _requestHelper.CreateCopyRefRequest(path, Root);
+
+            return ExecuteTask<CopyRefResponse>(ApiType.Base, request);
+        }
+
     }
 }

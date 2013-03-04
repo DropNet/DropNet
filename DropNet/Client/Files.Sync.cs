@@ -358,6 +358,24 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Creates and returns a copy_ref to a file.
+        /// 
+        /// This reference string can be used to copy that file to another user's Dropbox by passing it in as the from_copy_ref parameter on /fileops/copy.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public CopyRefResponse GetCopyRef(string path)
+        {
+            if (!path.StartsWith("/"))
+            {
+                path = "/" + path;
+            }
+            var request = _requestHelper.CreateCopyRefRequest(path, Root);
+
+            return Execute<CopyRefResponse>(ApiType.Base, request);
+        }
+
+        /// <summary>
         /// Gets the deltas for a user's folders and files.
         /// </summary>
         /// <param name="cursor">The value returned from the prior call to GetDelta or an empty string</param>
