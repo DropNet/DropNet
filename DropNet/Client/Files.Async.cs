@@ -199,6 +199,22 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Copies a file or folder on Dropbox using a copy_ref as the source.
+        /// </summary>
+        /// <param name="fromCopyRef">Specifies a copy_ref generated from a previous /copy_ref call</param>
+        /// <param name="toPath">The path to where the file or folder is getting copied</param>
+        /// <param name="success">Success callback </param>
+        /// <param name="failure">Failure callback </param>
+        public void CopyFromCopyRefAsync(string fromCopyRef, string toPath, Action<IRestResponse> success, Action<DropboxException> failure)
+        {
+            if (!toPath.StartsWith("/")) toPath = "/" + toPath;
+
+            var request = _requestHelper.CreateCopyFileFromCopyRefRequest(fromCopyRef, toPath, Root);
+
+            ExecuteAsync(ApiType.Base, request, success, failure);
+        }
+
+        /// <summary>
         /// Moves a file or folder on Dropbox
         /// </summary>
         /// <param name="fromPath">The path to the file or folder to move</param>

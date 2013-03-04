@@ -165,6 +165,19 @@ namespace DropNet.Helpers
             return request;
         }
 
+        public RestRequest CreateCopyFileFromCopyRefRequest(string fromCopyRef, string toPath, string root)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/fileops/copy";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+
+            request.AddParameter("from_copy_ref", fromCopyRef);
+            request.AddParameter("to_path", toPath);
+            request.AddParameter("root", root);
+
+            return request;
+        }
+
         public RestRequest CreateMoveFileRequest(string fromPath, string toPath, string root)
         {
             var request = new RestRequest(Method.GET);

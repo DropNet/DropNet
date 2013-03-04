@@ -92,6 +92,15 @@ namespace DropNet
             return ExecuteTask(ApiType.Base, request);
         }
 
+        public Task<IRestResponse> CopyFromCopyRefTask(string fromCopyRef, string toPath)
+        {
+            if (!toPath.StartsWith("/")) toPath = "/" + toPath;
+
+            var request = _requestHelper.CreateCopyFileFromCopyRefRequest(fromCopyRef, toPath, Root);
+
+            return ExecuteTask(ApiType.Base, request);
+        }
+
         public Task<IRestResponse> MoveTask(string fromPath, string toPath)
         {
             if (!fromPath.StartsWith("/")) fromPath = "/" + fromPath;
