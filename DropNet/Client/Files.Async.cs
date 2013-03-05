@@ -348,5 +348,22 @@ namespace DropNet
                 failure);
         }
 
+        /// <summary>
+        /// Creates and returns a copy_ref to a file.
+        /// 
+        /// This reference string can be used to copy that file to another user's Dropbox by passing it in as the from_copy_ref parameter on /fileops/copy.
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <param name="success">Success callback </param>
+        /// <param name="failure">Failure callback </param>
+        public void GetCopyRefAsync(string path, Action<CopyRefResponse> success, Action<DropboxException> failure)
+        {
+            if (!path.StartsWith("/")) path = "/" + path;
+
+            var request = _requestHelper.CreateCopyRefRequest(path, Root);
+
+            ExecuteAsync(ApiType.Base, request, success, failure);
+        }
+
     }
 }
