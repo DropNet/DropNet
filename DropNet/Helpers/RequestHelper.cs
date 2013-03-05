@@ -62,6 +62,17 @@ namespace DropNet.Helpers
             return request;
         }
 
+        public RestRequest CreateCopyRefRequest(string path, string root)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/copy_ref/{root}{path}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
+
+            return request;
+        }
+
         public RestRequest CreateGetFileRequest(string path, string root)
         {
             var request = new RestRequest(Method.GET);
