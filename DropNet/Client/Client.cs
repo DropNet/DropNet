@@ -45,7 +45,9 @@ namespace DropNet
 
         private RestClient _restClient;
         private RestClient _restClientContent;
-        private RequestHelper _requestHelper;
+        private RequestHelper _requestHelper;        
+        
+        private IWebProxy _proxy;
 
         /// <summary>
         /// Gets the directory root for the requests (full or sandbox mode)
@@ -60,10 +62,13 @@ namespace DropNet
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
-        public DropNetClient(string apiKey, string appSecret)
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, IWebProxy proxy = null)
         {
             _apiKey = apiKey;
             _appsecret = appSecret;
+
+            _proxy = proxy;
 
             LoadClient();
         }
@@ -75,11 +80,14 @@ namespace DropNet
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="userToken">The User authentication token</param>
         /// <param name="userSecret">The Users matching secret</param>
-        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy = null)
         {
             _apiKey = apiKey;
             _appsecret = appSecret;
 
+            _proxy = proxy;
+            
             LoadClient();
 
             UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
@@ -88,6 +96,9 @@ namespace DropNet
         private void LoadClient()
         {
             _restClient = new RestClient(ApiBaseUrl);
+            
+             _restClient.Proxy = _proxy;
+            
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
