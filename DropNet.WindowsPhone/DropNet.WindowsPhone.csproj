@@ -80,6 +80,9 @@
     <Compile Include="..\dropnet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Models\CopyRefResponse.cs">
+      <Link>Models\CopyRefResponse.cs</Link>
+    </Compile>
     <Compile Include="..\DropNet\Models\DeltaPage.cs">
       <Link>Models\DeltaPage.cs</Link>
     </Compile>

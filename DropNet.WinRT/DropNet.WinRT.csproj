@@ -29,9 +29,10 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINRT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -126,6 +127,9 @@
     </Compile>
     <Compile Include="..\DropNet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\CopyRefResponse.cs">
+      <Link>Models\CopyRefResponse.cs</Link>
     </Compile>
     <Compile Include="..\DropNet\Models\DeltaPage.cs">
       <Link>Models\DeltaPage.cs</Link>

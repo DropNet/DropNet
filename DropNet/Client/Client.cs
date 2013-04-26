@@ -31,7 +31,7 @@ namespace DropNet
                 SetAuthProviders();
             }
         }
-        
+
         /// <summary>
         /// To use Dropbox API in sandbox mode (app folder access) set to true
         /// </summary>
@@ -45,9 +45,11 @@ namespace DropNet
 
         private RestClient _restClient;
         private RestClient _restClientContent;
-        private RequestHelper _requestHelper;        
-        
-        private IWebProxy _proxy;
+        private RequestHelper _requestHelper;
+
+#if !WINDOWS_PHONE && !WINRT
+        public IWebProxy Proxy { get; set; }
+#endif
 
         /// <summary>
         /// Gets the directory root for the requests (full or sandbox mode)
@@ -56,19 +58,17 @@ namespace DropNet
         {
             get { return UseSandbox ? SandboxRoot : DropboxRoot; }
         }
-        
+
         /// <summary>
         /// Default Constructor for the DropboxClient
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, IWebProxy proxy = null)
+        public DropNetClient(string apiKey, string appSecret)
         {
             _apiKey = apiKey;
             _appsecret = appSecret;
-
-            _proxy = proxy;
 
             LoadClient();
         }
@@ -81,13 +81,11 @@ namespace DropNet
         /// <param name="userToken">The User authentication token</param>
         /// <param name="userSecret">The Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy = null)
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
         {
             _apiKey = apiKey;
             _appsecret = appSecret;
 
-            _proxy = proxy;
-            
             LoadClient();
 
             UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
@@ -96,9 +94,11 @@ namespace DropNet
         private void LoadClient()
         {
             _restClient = new RestClient(ApiBaseUrl);
-            
-             _restClient.Proxy = _proxy;
-            
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClient.Proxy = Proxy;
+#endif
+
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
@@ -182,7 +182,7 @@ namespace DropNet
             {
                 response = _restClientContent.Execute(request);
 
-				if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                 {
                     throw new DropboxException(response);
                 }
@@ -224,7 +224,7 @@ namespace DropNet
             {
                 _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
-					if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
                         failure(new DropboxException(response));
                     }
@@ -268,7 +268,7 @@ namespace DropNet
             {
                 _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
-					if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
                         failure(new DropboxException(response));
                     }
