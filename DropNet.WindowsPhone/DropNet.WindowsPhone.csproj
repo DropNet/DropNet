@@ -43,7 +43,7 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="RestSharp.WindowsPhone">
-      <HintPath>..\Lib\sl4-wp71\RestSharp.WindowsPhone.dll</HintPath>
+      <HintPath>..\packages\RestSharp.104.1\lib\sl4-wp71\RestSharp.WindowsPhone.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks.WP71">
       <HintPath>..\Lib\sl4-wp71\System.Threading.Tasks.WP71.dll</HintPath>
@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
