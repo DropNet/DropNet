@@ -120,11 +120,11 @@ namespace DropNet
             return ExecuteTask<MetaData>(ApiType.Base, request);
         }
 
-        public Task<ShareResponse> GetShareTask(string path)
+        public Task<ShareResponse> GetShareTask(string path, bool shortUrl = true)
         {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateShareRequest(path, Root);
+            var request = _requestHelper.CreateShareRequest(path, Root, shortUrl);
 
             return ExecuteTask<ShareResponse>(ApiType.Base, request);
         }

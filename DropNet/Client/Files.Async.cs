@@ -255,9 +255,22 @@ namespace DropNet
         /// <param name="failure">Failure callback </param>
         public void GetShareAsync(string path, Action<ShareResponse> success, Action<DropboxException> failure)
         {
+            GetShareAsync(path, true, success, failure);
+        }
+
+        /// <summary>
+        /// Creates and returns a shareable link to files or folders.
+        /// Note: Links created by the /shares API call expire after thirty days.
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <param name="shortUrl">True to shorten the share url </param>
+        /// <param name="success">Success callback </param>
+        /// <param name="failure">Failure callback </param>
+        public void GetShareAsync(string path, bool shortUrl, Action<ShareResponse> success, Action<DropboxException> failure)
+        {
             if (!path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateShareRequest(path, Root);
+            var request = _requestHelper.CreateShareRequest(path, Root, shortUrl);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }

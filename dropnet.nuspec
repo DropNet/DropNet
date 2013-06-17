@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DropNet</id>
-    <version>1.9.4.1</version>
+    <version>1.9.5</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
     <description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone)</description>
@@ -16,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="DropNet\bin\Release\DropNet.dll" target="lib\net35" />
+    <file src="DropNet\bin\Release\DropNet.dll" target="lib\net40" />
     <file src="DropNet.WindowsPhone\bin\Release\System.Threading.Tasks.WP71.dll" target="lib\sl4-wp71" />
     <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
   </files>

@@ -295,14 +295,14 @@ namespace DropNet
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public ShareResponse GetShare(string path)
+        public ShareResponse GetShare(string path, bool shortUrl = true)
         {
             if (!path.StartsWith("/"))
             {
                 path = "/" + path;
             }
 
-            var request = _requestHelper.CreateShareRequest(path, Root);
+            var request = _requestHelper.CreateShareRequest(path, Root, shortUrl);
 
             return Execute<ShareResponse>(ApiType.Base, request);
         }

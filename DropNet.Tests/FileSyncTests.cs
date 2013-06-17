@@ -195,7 +195,19 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Shares()
         {
-            _client.GetShare("/Test/Getting Started.rtf");
+            var shareResponse = _client.GetShare("/Test/Getting Started.rtf");
+
+            Assert.IsNotNull(shareResponse);
+            Assert.IsNotNull(shareResponse.Url);
+        }
+
+        [TestMethod]
+        public void Can_Shares_Long()
+        {
+            var shareResponse = _client.GetShare("/Test/Getting Started.rtf", false);
+
+            Assert.IsNotNull(shareResponse);
+            Assert.IsNotNull(shareResponse.Url);
         }
 
         [TestMethod]

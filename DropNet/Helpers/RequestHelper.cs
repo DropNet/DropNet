@@ -40,13 +40,14 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-        public RestRequest CreateShareRequest(string path, string root)
+        public RestRequest CreateShareRequest(string path, string root, bool shortUrl)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/shares/{root}{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
+            request.AddParameter("short_url", shortUrl);
 
             return request;
         }
