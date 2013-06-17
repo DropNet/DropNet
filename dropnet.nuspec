@@ -5,7 +5,7 @@
     <version>1.9.5</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
-    <description>.NET Client for the Dropbox API (.NET 3.5 and Windows Phone)</description>
+    <description>.NET Client for the Dropbox API (.NET 4 and Windows Phone)</description>
     <language>en-AU</language>
     <projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
     <licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
