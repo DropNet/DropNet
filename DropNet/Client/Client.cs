@@ -8,6 +8,7 @@ using DropNet.Models;
 using RestSharp;
 using RestSharp.Deserializers;
 using System.Threading.Tasks;
+using OAuth2Authenticator = DropNet.Authenticators.OAuth2Authenticator;
 
 namespace DropNet
 {
@@ -42,6 +43,7 @@ namespace DropNet
 
         private readonly string _apiKey;
         private readonly string _appsecret;
+        private readonly AuthenticationMethod _authenticationMethod;
 
         private RestClient _restClient;
         private RestClient _restClientContent;
@@ -64,30 +66,41 @@ namespace DropNet
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="authenticationMethod">The authentication method to use.</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret)
+        public DropNetClient(string apiKey, string appSecret, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
         {
+            LoadClient();
             _apiKey = apiKey;
             _appsecret = appSecret;
-
-            LoadClient();
+            _authenticationMethod = authenticationMethod;
+            UserLogin = null;
         }
 
         /// <summary>
-        /// Creates an instance of the DropNetClient given an API Key/Secret and a User Token/Secret
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth2 Access Token
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
-        /// <param name="userToken">The User authentication token</param>
-        /// <param name="userSecret">The Users matching secret</param>
+        /// <param name="accessToken">The OAuth2 access token</param>
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, string accessToken)
+            : this(apiKey, appSecret, AuthenticationMethod.OAuth2)
+        {
+            UserLogin = new UserLogin { Token = accessToken };
+        }
+
+        /// <summary>
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth1 User Token/Secret
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="userToken">The OAuth1 User authentication token</param>
+        /// <param name="userSecret">The OAuth1 Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
         public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
+            :this(apiKey, appSecret)
         {
-            _apiKey = apiKey;
-            _appsecret = appSecret;
-
-            LoadClient();
-
             UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
         }
 
@@ -134,10 +147,25 @@ namespace DropNet
             {
                 throw new ArgumentNullException("userLogin");
             }
+            RestRequest request = _requestHelper.BuildAuthorizeUrl(userLogin.Token, callback);
+            return _restClient.BuildUri(request).ToString();
+        }
 
-            //Go 1-Liner!
-            return string.Format("https://www.dropbox.com/1/oauth/authorize?oauth_token={0}{1}", userLogin.Token.UrlEncode(),
-                (string.IsNullOrEmpty(callback) ? string.Empty : "&oauth_callback=" + callback.UrlEncode()));
+        /// <summary>
+        /// This starts the OAuth 2.0 authorization flow. This isn't an API call—it's the web page that lets the user sign in to Dropbox and authorize your app. The user must be redirected to the page over HTTPS and it should be presented to the user through their web browser. After the user decides whether or not to authorize your app, they will be redirected to the URL specified by the 'redirectUri'.
+        /// </summary>
+        /// <param name="oAuth2AuthorizationFlow">The type of authorization flow to use.  See the OAuth2AuthorizationFlow enum documentation for more information.</param>
+        /// <param name="redirectUri">Where to redirect the user after authorization has completed. This must be the exact URI registered in the app console (https://www.dropbox.com/developers/apps), though localhost and 127.0.0.1 are always accepted. A redirect URI is required for a token flow, but optional for code. If the redirect URI is omitted, the code will be presented directly to the user and they will be invited to enter the information in your app.</param>
+        /// <param name="state">Arbitrary data that will be passed back to your redirect URI. This parameter can be used to track a user through the authorization flow in order to prevent cross-site request forgery (CRSF) attacks.</param>
+        /// <returns>A URL to which your app should redirect the user for authorization.  After the user authorizes your app, they will be sent to your redirect URI. The type of response varies based on the 'oauth2AuthorizationFlow' argument.  .</returns>
+        public string BuildAuthorizeUrl(OAuth2AuthorizationFlow oAuth2AuthorizationFlow, string redirectUri, string state = null)
+        {
+            if (string.IsNullOrWhiteSpace(redirectUri))
+            {
+                throw new ArgumentNullException("redirectUri");
+            }
+            RestRequest request = _requestHelper.BuildOAuth2AuthorizeUrl(oAuth2AuthorizationFlow, _apiKey, redirectUri, state);
+            return _restClient.BuildUri(request).ToString();
         }
 
 #if !WINDOWS_PHONE && !WINRT
@@ -332,12 +360,17 @@ namespace DropNet
 
         private void SetAuthProviders()
         {
-            if (UserLogin != null)
-            {
-                //Set the OauthAuthenticator only when the UserLogin property changes
-                _restClientContent.Authenticator = new OAuthAuthenticator(_restClientContent.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-                _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-            }
+            _restClientContent.Authenticator = GetAuthenticator(_restClientContent.BaseUrl);
+            _restClient.Authenticator = GetAuthenticator(_restClient.BaseUrl);
+        }
+
+        private IAuthenticator GetAuthenticator(string baseUrl)
+        {
+            var userToken = UserLogin == null ? null : UserLogin.Token;
+            var userSecret = UserLogin == null ? null : UserLogin.Secret;
+            return _authenticationMethod.Equals(AuthenticationMethod.OAuth1)
+                       ? (IAuthenticator)(new OAuthAuthenticator(baseUrl, _apiKey, _appsecret, userToken, userSecret))
+                       : new OAuth2Authenticator(userToken);
         }
 
         enum ApiType
@@ -345,5 +378,22 @@ namespace DropNet
             Base,
             Content
         }
+
+        /// <summary>
+        /// Dropbox supports versions 1 and 2 of the OAuth spec.
+        /// </summary>
+        public enum AuthenticationMethod
+        {
+            /// <summary>
+            /// OAuth1 is the 'standard' authentication mode for Dropbox. For more information see https://www.dropbox.com/developers/core/docs#request-token
+            /// </summary>
+            OAuth1,
+
+            /// <summary>
+            /// OAuth2 support in Dropbox was implemented in 2013. For more information see https://www.dropbox.com/developers/core/docs#oa2-authorize
+            /// </summary>
+            OAuth2
+        }
+
     }
 }

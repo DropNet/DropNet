@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using DropNet.Authenticators;
 using RestSharp;
 using DropNet.Models;
 
@@ -257,6 +258,67 @@ namespace DropNet.Helpers
             request.AddParameter("last_name", lastName);
             request.AddParameter("password", password);
 
+            return request;
+        }
+
+        public RestRequest BuildAuthorizeUrl(string userToken, string callback = null)
+        {
+            if (string.IsNullOrWhiteSpace(userToken))
+            {
+                throw new ArgumentNullException("userToken");
+            }
+
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/oauth/authorize";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("oauth_token", userToken);
+            if (!string.IsNullOrWhiteSpace(callback))
+            {
+                request.AddParameter("oauth_callback", callback);
+            }
+
+            return request;
+        }
+
+        /// <summary>
+        /// This is the first step the OAuth 2.0 authorization flow. This isn't an API call—it's the web page that lets the user sign in to Dropbox and authorize your app. The user must be redirected to the page over HTTPS and it should be presented to the user through their web browser. After the user decides whether or not to authorize your app, they will be redirected to the URL specified by redirect_uri.
+        /// </summary>
+        /// <param name="oAuth2AuthorizationFlow">The type of authorization flow to use.  See AuthorizationFlow documentation for descriptions of each.</param>
+        /// <param name="consumerKey"></param>
+        /// <param name="redirectUri">Where to redirect the user after authorization has completed. This must be the exact URI registered in the app console, though localhost and 127.0.0.1 are always accepted. A redirect URI is required for a token flow, but optional for code. If the redirect URI is omitted, the code will be presented directly to the user and they will be invited to enter the information in your app.</param>
+        /// <param name="state">Arbitrary data that will be passed back to your redirect URI. This parameter can be used to track a user through the authorization flow.</param>
+        /// <returns>A URL to which you should redirect the user.  Because /oauth2/authorize is a website, there is no direct return value. However, after the user authorizes your app, they will be sent to your redirect URI. The type of response varies based on the response_type.</returns>
+        public RestRequest BuildOAuth2AuthorizeUrl(OAuth2AuthorizationFlow oAuth2AuthorizationFlow, string consumerKey, string redirectUri, string state = null)
+        {
+            var request = new RestRequest("{version}/oauth2/authorize", Method.GET);
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("response_type", Enum.GetName(typeof(OAuth2AuthorizationFlow), oAuth2AuthorizationFlow).ToLower());
+            request.AddParameter("client_id", consumerKey);
+            request.AddParameter("redirect_uri", redirectUri);
+            if (!string.IsNullOrWhiteSpace(state))
+            {
+                request.AddParameter("state", state);
+            }
+            return request;
+        }
+
+        /// <summary>
+        /// This is the second and final step in the OAuth 2.0 'code' authorization flow.  It retrieves an OAuth2 access token using the code provided by Dropbox.
+        /// </summary>
+        /// <param name="code">The code provided by Dropbox when the user was redirected back to the calling site.</param>
+        /// <param name="redirectUri">The calling site's host name, for verification only</param>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <returns></returns>
+        public RestRequest CreateOAuth2AccessTokenRequest(string code, string redirectUri, string consumerKey, string consumerSecret)
+        {
+            var request = new RestRequest("{version}/oauth2/token", Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("code", code);
+            request.AddParameter("grant_type", "authorization_code");
+            request.AddParameter("client_id", consumerKey);
+            request.AddParameter("client_secret", consumerSecret);
+            request.AddParameter("redirect_uri", redirectUri);
             return request;
         }
 
