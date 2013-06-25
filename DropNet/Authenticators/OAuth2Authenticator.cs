@@ -10,7 +10,10 @@ namespace DropNet.Authenticators
 
         public override void Authenticate(IRestClient client, IRestRequest request)
         {
-            request.AddHeader("Authorization", string.Format("Bearer {0}", AccessToken));
+            if (!string.IsNullOrWhiteSpace(AccessToken))
+            {
+                request.AddHeader("Authorization", string.Format("Bearer {0}", AccessToken));
+            }
         }
     }
 
