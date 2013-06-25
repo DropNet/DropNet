@@ -8,6 +8,7 @@ using DropNet.Models;
 using RestSharp;
 using RestSharp.Deserializers;
 using System.Threading.Tasks;
+using OAuth2Authenticator = DropNet.Authenticators.OAuth2Authenticator;
 
 namespace DropNet
 {
@@ -42,6 +43,7 @@ namespace DropNet
 
         private readonly string _apiKey;
         private readonly string _appsecret;
+        private readonly AuthenticationMethod _authenticationMethod;
 
         private RestClient _restClient;
         private RestClient _restClientContent;
@@ -64,30 +66,41 @@ namespace DropNet
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="authenticationMethod">The method (OAuth1/OAuth2) to use for user authentication.</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret)
+        public DropNetClient(string apiKey, string appSecret, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
         {
+            LoadClient();
             _apiKey = apiKey;
             _appsecret = appSecret;
-
-            LoadClient();
+            _authenticationMethod = authenticationMethod;
+            UserLogin = null;
         }
 
         /// <summary>
-        /// Creates an instance of the DropNetClient given an API Key/Secret and a User Token/Secret
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth2 Access Token
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
-        /// <param name="userToken">The User authentication token</param>
-        /// <param name="userSecret">The Users matching secret</param>
+        /// <param name="accessToken">The OAuth2 access token</param>
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, string accessToken)
+            : this(apiKey, appSecret, AuthenticationMethod.OAuth2)
+        {
+            UserLogin = new UserLogin { Token = accessToken };
+        }
+
+        /// <summary>
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth1 User Token/Secret
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="userToken">The OAuth1 User authentication token</param>
+        /// <param name="userSecret">The OAuth1 Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
         public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
+            :this(apiKey, appSecret)
         {
-            _apiKey = apiKey;
-            _appsecret = appSecret;
-
-            LoadClient();
-
             UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
         }
 
@@ -332,13 +345,19 @@ namespace DropNet
 
         private void SetAuthProviders()
         {
-            if (UserLogin != null)
-            {
-                //Set the OauthAuthenticator only when the UserLogin property changes
-                _restClientContent.Authenticator = new OAuthAuthenticator(_restClientContent.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-                _restClient.Authenticator = new OAuthAuthenticator(_restClient.BaseUrl, _apiKey, _appsecret, UserLogin.Token, UserLogin.Secret);
-            }
+            _restClientContent.Authenticator = GetAuthenticator(_restClientContent.BaseUrl);
+            _restClient.Authenticator = GetAuthenticator(_restClient.BaseUrl);
         }
+
+        private IAuthenticator GetAuthenticator(string baseUrl)
+        {
+            var userToken = UserLogin == null ? null : UserLogin.Token;
+            var userSecret = UserLogin == null ? null : UserLogin.Secret;
+            return _authenticationMethod.Equals(AuthenticationMethod.OAuth1)
+                       ? (IAuthenticator)(new OAuthAuthenticator(baseUrl, _apiKey, _appsecret, userToken, userSecret))
+                       : new OAuth2Authenticator(userToken);
+        }
+
 
         enum ApiType
         {

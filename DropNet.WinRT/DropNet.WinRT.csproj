@@ -104,6 +104,9 @@
     <Compile Include="..\DropNet\Authenticators\OAuthAuthenticator.cs">
       <Link>Authenticators\OAuthAuthenticator.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Authenticators\OAuth2Authenticator.cs">
+      <Link>Authenticators\OAuth2Authenticator.cs</Link>
+    </Compile>
     <Compile Include="..\DropNet\Client\Client.cs">
       <Link>Client\Client.cs</Link>
     </Compile>
