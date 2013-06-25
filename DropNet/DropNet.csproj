@@ -62,6 +62,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authenticators\OAuth2Authenticator.cs" />
     <Compile Include="Authenticators\OAuthAuthenticator.cs">
       <SubType>Code</SubType>
     </Compile>
