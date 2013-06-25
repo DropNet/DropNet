@@ -46,7 +46,7 @@ namespace DropNet
         /// <param name="failure"></param>
         /// <param name="code">The authorization code provided by Dropbox when the user was redirected back to your site.</param>
         /// <param name="redirectUri">The redirect Uri for your site. This is only used to validate that it matches the original /oauth2/authorize; the user will not be redirected again.</param>
-        public UserLogin GetAccessTokenAsync(Action<UserLogin> success, Action<DropboxException> failure, string code, string redirectUri)
+        public void GetAccessTokenAsync(Action<UserLogin> success, Action<DropboxException> failure, string code, string redirectUri)
         {
             RestRequest request = _requestHelper.CreateOAuth2AccessTokenRequest(code, redirectUri, _apiKey, _appsecret);
             ExecuteAsync<OAuth2AccessToken>(ApiType.Base, request, response =>
