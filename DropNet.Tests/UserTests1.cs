@@ -1,4 +1,5 @@
 ﻿using System;
+using DropNet.Authenticators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DropNet.Tests
@@ -66,5 +67,56 @@ namespace DropNet.Tests
             Assert.IsNotNull(accountInfo.uid);
         }
 
+        [TestMethod]
+        public void BuildOAuth2AuthorizationUrl_RedirectUriIsRequired()
+        {
+            try
+            {
+                _client.BuildAuthorizeUrl(OAuth2AuthorizationFlow.Code, null);
+                Assert.Fail();
+            }
+            catch (ArgumentNullException ane)
+            {
+                Assert.IsNotNull(ane);
+            }
+            catch (Exception)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void BuildOAuth2AuthorizationUrl_CodeFlow_NoState()
+        {
+            TestOAuth2AuthorizationUrl(OAuth2AuthorizationFlow.Code, "code");
+        }
+
+        [TestMethod]
+        public void BuildOAuth2AuthorizationUrl_CodeFlow_WithState()
+        {
+            TestOAuth2AuthorizationUrl(OAuth2AuthorizationFlow.Code, "code", "foobar");
+        }
+
+        [TestMethod]
+        public void BuildOAuth2AuthorizationUrl_TokenFlow_NoState()
+        {
+            TestOAuth2AuthorizationUrl(OAuth2AuthorizationFlow.Token, "token");
+        }
+
+        [TestMethod]
+        public void BuildOAuth2AuthorizationUrl_TokenFlow_WithState()
+        {
+            TestOAuth2AuthorizationUrl(OAuth2AuthorizationFlow.Token, "token", "foobar");
+        }
+
+        private void TestOAuth2AuthorizationUrl(OAuth2AuthorizationFlow oAuth2AuthorizationFlow, string expectedResponseType, string state = null)
+        {
+            const string expectedFormat = "https://api.dropbox.com/1/oauth2/authorize?response_type={0}&client_id={1}&redirect_uri=http://example.com{2}";
+            var stateQuery = string.IsNullOrWhiteSpace(state) ? string.Empty : string.Format("&state={0}", state);
+            var expected = string.Format(expectedFormat, expectedResponseType, TestVariables.ApiKey, stateQuery);
+            var actual = _client.BuildAuthorizeUrl(oAuth2AuthorizationFlow, "http://example.com", state);
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

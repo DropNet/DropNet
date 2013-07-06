@@ -62,6 +62,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authenticators\OAuth2Authenticator.cs" />
     <Compile Include="Authenticators\OAuthAuthenticator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -80,6 +81,7 @@
     <Compile Include="Models\CopyRefResponse.cs" />
     <Compile Include="Models\DeltaPage.cs" />
     <Compile Include="Models\MetaData.cs" />
+    <Compile Include="Models\OAuth2AccessToken.cs" />
     <Compile Include="Models\SharesResponse.cs" />
     <Compile Include="Models\ThumbnailSize.cs" />
     <Compile Include="Models\UserLogin.cs" />
