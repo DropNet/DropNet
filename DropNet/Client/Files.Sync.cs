@@ -136,14 +136,12 @@ namespace DropNet
         }
 
         /// <summary>
-        /// NOTE: DOES NOT WORK, Use UploadFile
         /// Uploads a File to Dropbox given the raw data. 
         /// </summary>
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
         /// <returns>True on success</returns>
-        [Obsolete("PUT doesn't work with current RestSharp. Sorry :(")]
         public MetaData UploadFilePUT(string path, string filename, byte[] fileData)
         {
             if (!path.StartsWith("/"))
@@ -194,6 +192,44 @@ namespace DropNet
             var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Starts a chunked upload to Dropbox given a byte array.
+        /// </summary>
+        /// <param name="fileData">The file data</param>
+        /// <returns>A object representing the chunked upload on success</returns>
+        public ChunkedUpload StartChunkedUpload(byte[] fileData)
+        {
+            var request = _requestHelper.CreateChunkedUploadRequest(fileData);
+            var response = _restClientContent.Execute<ChunkedUpload>(request);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Add data to a chunked upload given a byte array.
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="fileData">The file data</param>
+        /// <returns>A object representing the chunked upload on success</returns>
+        public ChunkedUpload AppendChunkedUpload(ChunkedUpload upload, byte[] fileData)
+        {
+            var request = _requestHelper.CreateAppendChunkedUploadRequest(upload, fileData);
+            var response = _restClientContent.Execute<ChunkedUpload>(request);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Commit a completed chunked upload
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="path">The full path of the file to upload to</param>
+        /// <returns>A object representing the chunked upload on success</returns>
+        public MetaData CommitChunkedUpload(ChunkedUpload upload, string path)
+        {
+            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root);
+            var response = _restClientContent.Execute<MetaData>(request);
             return response.Data;
         }
 
