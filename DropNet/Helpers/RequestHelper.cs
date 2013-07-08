@@ -129,7 +129,7 @@ namespace DropNet.Helpers
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename, ParameterType.UrlSegment);
 
-			request.AddFile("file", fileData, filename);
+            request.AddParameter("file", fileData, ParameterType.RequestBody);
 
 			return request;
 		}
@@ -152,6 +152,48 @@ namespace DropNet.Helpers
 
 			return request;
 		}
+
+        public RestRequest CreateChunkedUploadRequest(byte[] fileData)
+        {
+            var request = new RestRequest(Method.PUT);
+            request.Resource = "{version}/chunked_upload?oauth_consumer_key={oauth_consumer_key}&oauth_nonce={oauth_nonce}";
+            request.Resource += "&oauth_token={oauth_token}&oauth_timestamp={oauth_timestamp}";
+            request.Resource += "&oauth_signature={oauth_signature}&oauth_signature_method={oauth_signature_method}&oauth_version={oauth_version}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+
+            request.AddParameter("file", fileData, ParameterType.RequestBody);
+
+            return request;
+        }
+
+        public RestRequest CreateAppendChunkedUploadRequest(ChunkedUpload upload, byte[] fileData)
+        {
+            var request = new RestRequest(Method.PUT);
+            request.Resource = "{version}/chunked_upload?upload_id={upload_id}&offset={offset}&oauth_consumer_key={oauth_consumer_key}&oauth_nonce={oauth_nonce}";
+            request.Resource += "&oauth_token={oauth_token}&oauth_timestamp={oauth_timestamp}";
+            request.Resource += "&oauth_signature={oauth_signature}&oauth_signature_method={oauth_signature_method}&oauth_version={oauth_version}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("upload_id", upload.UploadId, ParameterType.UrlSegment);
+            request.AddParameter("offset", upload.Offset, ParameterType.UrlSegment);
+
+            request.AddParameter("file", fileData, ParameterType.RequestBody);
+
+            return request;
+        }
+
+        public RestRequest CreateCommitChunkedUploadRequest(ChunkedUpload upload, string path, string root)
+        {
+            var request = new RestRequest(Method.POST);
+            request.Resource = "{version}/commit_chunked_upload/{root}{path}";
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("path", path, ParameterType.UrlSegment);
+            request.AddParameter("root", root, ParameterType.UrlSegment);
+
+            request.AddParameter("overwrite", true);
+            request.AddParameter("upload_id", upload.UploadId);
+
+            return request;
+        }
 
         public RestRequest CreateDeleteFileRequest(string path, string root)
         {
