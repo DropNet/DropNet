@@ -225,10 +225,11 @@ namespace DropNet
         /// </summary>
         /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
         /// <param name="path">The full path of the file to upload to</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file.</param>
         /// <returns>A object representing the chunked upload on success</returns>
-        public MetaData CommitChunkedUpload(ChunkedUpload upload, string path)
+        public MetaData CommitChunkedUpload(ChunkedUpload upload, string path, bool overwrite = true)
         {
-            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root);
+            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root, overwrite);
             var response = _restClientContent.Execute<MetaData>(request);
             return response.Data;
         }
