@@ -181,7 +181,7 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateCommitChunkedUploadRequest(ChunkedUpload upload, string path, string root)
+        public RestRequest CreateCommitChunkedUploadRequest(ChunkedUpload upload, string path, string root, bool overwrite)
         {
             var request = new RestRequest(Method.POST);
             request.Resource = "{version}/commit_chunked_upload/{root}{path}";
@@ -189,7 +189,7 @@ namespace DropNet.Helpers
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
 
-            request.AddParameter("overwrite", true);
+            request.AddParameter("overwrite", overwrite);
             request.AddParameter("upload_id", upload.UploadId);
 
             return request;
