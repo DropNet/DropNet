@@ -56,6 +56,9 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DropNet\Authenticators\OAuth2Authenticator.cs">
+      <Link>Authenticators\OAuth2Authenticator.cs</Link>
+    </Compile>
     <Compile Include="..\dropnet\Client\Client.cs">
       <Link>Client\Client.cs</Link>
     </Compile>
@@ -80,6 +83,9 @@
     <Compile Include="..\dropnet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Models\ChunkedUpload.cs">
+      <Link>Models\ChunkedUpload.cs</Link>
+    </Compile>
     <Compile Include="..\DropNet\Models\CopyRefResponse.cs">
       <Link>Models\CopyRefResponse.cs</Link>
     </Compile>
@@ -88,6 +94,9 @@
     </Compile>
     <Compile Include="..\dropnet\Models\MetaData.cs">
       <Link>Models\MetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\OAuth2AccessToken.cs">
+      <Link>Models\OAuth2AccessToken.cs</Link>
     </Compile>
     <Compile Include="..\DropNet\Models\ThumbnailSize.cs">
       <Link>Models\ThumbnailSize.cs</Link>

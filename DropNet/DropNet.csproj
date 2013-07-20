@@ -76,7 +76,6 @@
     <Compile Include="Extensions\RestClientExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\RequestHelper.cs" />
-    <Compile Include="Models\AccountCreationResult.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\ChunkedUpload.cs" />
     <Compile Include="Models\CopyRefResponse.cs" />
