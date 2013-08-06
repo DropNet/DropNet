@@ -31,6 +31,8 @@ namespace DropNet
         /// <returns></returns>
         public MetaData GetMetaData(string path)
         {
+			if (path != "" && !path.StartsWith("/")) path = "/" + path;
+
             var request = _requestHelper.CreateMetadataRequest(path, Root);
 
             return Execute<MetaData>(ApiType.Base, request);

@@ -108,9 +108,6 @@
     <Compile Include="..\DropNet\Helpers\RequestHelper.cs">
       <Link>Helpers\RequestHelper.cs</Link>
     </Compile>
-    <Compile Include="..\DropNet\Models\AccountCreationResult.cs">
-      <Link>Models\AccountCreationResult.cs</Link>
-    </Compile>
     <Compile Include="..\DropNet\Models\AccountInfo.cs">
       <Link>Models\AccountInfo.cs</Link>
     </Compile>
@@ -131,6 +128,18 @@
     </Compile>
     <Compile Include="..\DropNet\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\ChunkedUpload.cs">
+      <Link>Models\ChunkedUpload.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\CopyRefResponse.cs">
+      <Link>Models\CopyRefResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Models\OAuth2AccessToken.cs">
+      <Link>Models\OAuth2AccessToken.cs</Link>
+    </Compile>
+    <Compile Include="..\DropNet\Authenticators\OAuth2Authenticator.cs">
+      <Link>Authenticators\OAuth2Authenticator.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>
