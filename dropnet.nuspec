@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DropNet</id>
-    <version>1.9.5</version>
+    <version>1.9.6</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
     <description>.NET Client for the Dropbox API (.NET 4 and Windows Phone)</description>
