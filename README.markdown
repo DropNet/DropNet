@@ -74,6 +74,8 @@ Open a browser with the url returned by BuildAuthorizeUrl - After we have the au
 Want to chat about DropNet? http://jabbr.net/#/rooms/DropNet
 
 
+Questions? http://stackoverflow.com/questions/tagged/dropnet
+
 ***
 
  **Like DropNet?** Endorse me on Coderwall
