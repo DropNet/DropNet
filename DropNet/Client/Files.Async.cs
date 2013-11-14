@@ -115,7 +115,9 @@ namespace DropNet
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="localFile">The local file to upload</param>/// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void UploadFileAsync(string path, FileInfo localFile, Action<MetaData> success, Action<DropboxException> failure)
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        public void UploadFileAsync(string path, FileInfo localFile, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
         {
             //Get the file stream
             byte[] bytes;
@@ -128,7 +130,7 @@ namespace DropNet
                 }
             }
 
-            UploadFileAsync(path, localFile.Name, bytes, success, failure);
+            UploadFileAsync(path, localFile.Name, bytes, success, failure, overwrite, parentRevision);
         }
 #endif
 
@@ -140,11 +142,13 @@ namespace DropNet
         /// <param name="fileData">The file data</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        public void UploadFileAsync(string path, string filename, byte[] fileData, Action<MetaData> success, Action<DropboxException> failure)
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        public void UploadFileAsync(string path, string filename, byte[] fileData, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root, overwrite, parentRevision);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
@@ -157,11 +161,13 @@ namespace DropNet
         /// <param name="fileStream">The file data</param>
         /// <param name="success">The callback Action to perform on completion</param>
         /// <param name="failure">The callback Action to perform on exception</param>
-        public void UploadFileAsync(string path, string filename, Stream fileStream, Action<MetaData> success, Action<DropboxException> failure)
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        public void UploadFileAsync(string path, string filename, Stream fileStream, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root, overwrite, parentRevision);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }

@@ -55,20 +55,20 @@ namespace DropNet
             return ExecuteTask(ApiType.Content, request);
         }
 
-        public Task<MetaData> UploadFileTask(string path, string filename, byte[] fileData)
+        public Task<MetaData> UploadFileTask(string path, string filename, byte[] fileData, bool overwrite = true, string parentRevision = null)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root, overwrite, parentRevision);
 
             return ExecuteTask<MetaData>(ApiType.Content, request);
         }
 
-        public Task<MetaData> UploadFileTask(string path, string filename, Stream fileStream)
+        public Task<MetaData> UploadFileTask(string path, string filename, Stream fileStream, bool overwrite = true, string parentRevision = null)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root, overwrite, parentRevision);
 
             return ExecuteTask<MetaData>(ApiType.Content, request);
         }
