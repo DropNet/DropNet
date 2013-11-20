@@ -143,14 +143,16 @@ namespace DropNet
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <returns>True on success</returns>
-        public MetaData UploadFilePUT(string path, string filename, byte[] fileData)
+        public MetaData UploadFilePUT(string path, string filename, byte[] fileData, bool overwrite = true, string parentRevision = null)
         {
             if (!path.StartsWith("/"))
             {
                 path = "/" + path;
             }
-            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, Root);
+            var request = _requestHelper.CreateUploadFilePutRequest(path, filename, fileData, Root, overwrite, parentRevision);
             var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
@@ -163,14 +165,16 @@ namespace DropNet
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="fileData">The file data</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <returns>True on success</returns>
-        public MetaData UploadFile(string path, string filename, byte[] fileData)
+        public MetaData UploadFile(string path, string filename, byte[] fileData, bool overwrite = true, string parentRevision = null)
         {
             if (!path.StartsWith("/"))
             {
                 path = "/" + path;
             }
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, fileData, Root, overwrite, parentRevision);
             var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
@@ -183,14 +187,16 @@ namespace DropNet
         /// <param name="path">The path of the folder to upload to</param>
         /// <param name="filename">The Name of the file to upload to dropbox</param>
         /// <param name="stream">The file stream</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <returns>True on success</returns>
-        public MetaData UploadFile(string path, string filename, Stream stream)
+        public MetaData UploadFile(string path, string filename, Stream stream, bool overwrite = true, string parentRevision = null)
         {
             if (!path.StartsWith("/"))
             {
                 path = "/" + path;
             }
-            var request = _requestHelper.CreateUploadFileRequest(path, filename, stream, Root);
+            var request = _requestHelper.CreateUploadFileRequest(path, filename, stream, Root, overwrite, parentRevision);
             var response = _restClientContent.Execute<MetaData>(request);
 
             //TODO - Return something better here?
@@ -227,11 +233,12 @@ namespace DropNet
         /// </summary>
         /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
         /// <param name="path">The full path of the file to upload to</param>
-        /// <param name="overwrite">Specify wether the file upload should replace an existing file.</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <returns>A object representing the chunked upload on success</returns>
-        public MetaData CommitChunkedUpload(ChunkedUpload upload, string path, bool overwrite = true)
+        public MetaData CommitChunkedUpload(ChunkedUpload upload, string path, bool overwrite = true, string parentRevision = null)
         {
-            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root, overwrite);
+            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root, overwrite, parentRevision);
             var response = _restClientContent.Execute<MetaData>(request);
             return response.Data;
         }

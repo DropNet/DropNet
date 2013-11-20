@@ -99,7 +99,7 @@ namespace DropNet.Helpers
 			return request;
 		}
 
-		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData, string root)
+		public RestRequest CreateUploadFileRequest(string path, string filename, byte[] fileData, string root, bool overwrite, string parent_revision)
 		{
 			var request = new RestRequest(Method.POST);
 			request.Resource = "{version}/files/{root}{path}";
@@ -111,12 +111,18 @@ namespace DropNet.Helpers
             // but the oauth sig only needs the filename, which we have in the OTHER parameter
 			//request.AddParameter("file", filename);
 
+            request.AddParameter("overwrite", overwrite);
+            if (!String.IsNullOrEmpty(parent_revision))
+            {
+                request.AddParameter("parent_rev", parent_revision);
+            }
+
 			request.AddFile("file", fileData, filename);
 
 			return request;
 		}
 
-		public RestRequest CreateUploadFilePutRequest(string path, string filename, byte[] fileData, string root)
+        public RestRequest CreateUploadFilePutRequest(string path, string filename, byte[] fileData, string root, bool overwrite, string parent_revision)
 		{
 			var request = new RestRequest(Method.PUT);
             //Need to put the OAuth Parmeters in the Resource to get around them being put in the body
@@ -129,12 +135,18 @@ namespace DropNet.Helpers
             //Need to add the "file" parameter with the file name
             request.AddParameter("file", filename, ParameterType.UrlSegment);
 
+            request.AddParameter("overwrite", overwrite);
+            if (!String.IsNullOrEmpty(parent_revision))
+            {
+                request.AddParameter("parent_rev", parent_revision);
+            }
+
             request.AddParameter("file", fileData, ParameterType.RequestBody);
 
 			return request;
 		}
 
-        public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream, string root)
+        public RestRequest CreateUploadFileRequest(string path, string filename, Stream fileStream, string root, bool overwrite, string parent_revision)
 		{
 			var request = new RestRequest(Method.POST);
             //Don't want these to timeout (Maybe use something better here?)
@@ -147,6 +159,12 @@ namespace DropNet.Helpers
             // This isn't needed. Dropbox is particular about the ordering,
             // but the oauth sig only needs the filename, which we have in the OTHER parameter
 			//request.AddParameter("file", filename);
+
+            request.AddParameter("overwrite", overwrite);
+            if (!String.IsNullOrEmpty(parent_revision))
+            {
+                request.AddParameter("parent_rev", parent_revision);
+            }
 
 			request.AddFile("file", s => StreamUtils.CopyStream(fileStream, s), filename);
 
@@ -181,7 +199,7 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateCommitChunkedUploadRequest(ChunkedUpload upload, string path, string root, bool overwrite)
+        public RestRequest CreateCommitChunkedUploadRequest(ChunkedUpload upload, string path, string root, bool overwrite, string parent_revision)
         {
             var request = new RestRequest(Method.POST);
             request.Resource = "{version}/commit_chunked_upload/{root}{path}";
@@ -191,6 +209,10 @@ namespace DropNet.Helpers
 
             request.AddParameter("overwrite", overwrite);
             request.AddParameter("upload_id", upload.UploadId);
+            if (!String.IsNullOrEmpty(parent_revision))
+            {
+                request.AddParameter("parent_rev", parent_revision);
+            }
 
             return request;
         }
