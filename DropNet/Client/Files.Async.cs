@@ -173,6 +173,49 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Starts a chunked upload to Dropbox given a byte array.
+        /// </summary>
+        /// <param name="fileData">The file data</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        public void StartChunkedUploadAsync(byte[] fileData, Action<ChunkedUpload> success, Action<DropboxException> failure)
+        {
+            var request = _requestHelper.CreateChunkedUploadRequest(fileData);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Add data to a chunked upload given a byte array.
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="fileData">The file data</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        public void  AppendChunkedUploadAsync(ChunkedUpload upload, byte[] fileData, Action<ChunkedUpload> success, Action<DropboxException> failure)
+        {
+            var request = _requestHelper.CreateAppendChunkedUploadRequest(upload, fileData);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Commit a completed chunked upload
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="path">The full path of the file to upload to</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        public void CommitChunkedUploadAsync(ChunkedUpload upload, string path, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
+        {
+            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root, overwrite, parentRevision);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
         /// Deletes the file or folder from dropbox with the given path
         /// </summary>
         /// <param name="path">The Path of the file or folder to delete.</param>
