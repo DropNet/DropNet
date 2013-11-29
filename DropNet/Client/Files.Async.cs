@@ -3,7 +3,6 @@ using System.IO;
 using DropNet.Models;
 using RestSharp;
 using System;
-using DropNet.Authenticators;
 using DropNet.Exceptions;
 
 namespace DropNet
@@ -170,6 +169,22 @@ namespace DropNet
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root, overwrite, parentRevision);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Uploads a File to Dropbox in chunks that are assembled into a single file when finished.
+        /// </summary>
+        /// <param name="chunkNeeded">The callback function that returns a byte array given an offset</param>
+        /// <param name="path">The full path of the file to upload to</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        /// <param name="fileSize">The total size of the file if available</param>
+        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null, long? fileSize = null)
+        {
+            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, overwrite, parentRevision, fileSize);
+            chunkedUploader.Start();
         }
 
         /// <summary>
