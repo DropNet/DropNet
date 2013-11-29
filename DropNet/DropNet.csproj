@@ -79,6 +79,7 @@
     <Compile Include="Helpers\RequestHelper.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\ChunkedUpload.cs" />
+    <Compile Include="Models\ChunkedUploadProgress.cs" />
     <Compile Include="Models\CopyRefResponse.cs" />
     <Compile Include="Models\DeltaPage.cs" />
     <Compile Include="Models\MetaData.cs" />

@@ -178,12 +178,13 @@ namespace DropNet
         /// <param name="path">The full path of the file to upload to</param>
         /// <param name="success">The callback Action to perform on completion</param>
         /// <param name="failure">The callback Action to perform on exception</param>
+        /// <param name="progress">The optional callback Action that receives upload progress</param>
         /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
         /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <param name="fileSize">The total size of the file if available</param>
-        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null, long? fileSize = null)
+        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, Action<ChunkedUploadProgress> progress = null, bool overwrite = true, string parentRevision = null, long? fileSize = null)
         {
-            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, overwrite, parentRevision, fileSize);
+            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, progress, overwrite, parentRevision, fileSize);
             chunkedUploader.Start();
         }
 

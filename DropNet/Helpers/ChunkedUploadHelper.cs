@@ -11,11 +11,13 @@ namespace DropNet.Helpers
         private readonly string _path;
         private readonly Action<MetaData> _success;
         private readonly Action<DropboxException> _failure;
+        private readonly Action<ChunkedUploadProgress> _progress;
         private readonly bool _overwrite;
         private readonly string _parentRevision;
         private readonly long? _fileSize;
+        private long _chunksCompleted;
 
-        public ChunkedUploadHelper(DropNetClient client, Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, bool overwrite, string parentRevision, long? fileSize)
+        public ChunkedUploadHelper(DropNetClient client, Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, Action<ChunkedUploadProgress> progress, bool overwrite, string parentRevision, long? fileSize)
         {
             if (client == null)
             {
@@ -42,6 +44,7 @@ namespace DropNet.Helpers
             _path = path;
             _success = success;
             _failure = failure;
+            _progress = progress;
             _overwrite = overwrite;
             _parentRevision = parentRevision;
             _fileSize = fileSize;
@@ -56,11 +59,22 @@ namespace DropNet.Helpers
                 _failure.Invoke(new DropboxException("Aborting chunked upload because chunkNeeded function returned no data on first call."));
             }
 
+            UpdateProgress(0, null);
             _client.StartChunkedUploadAsync(firstChunk, OnChunkSuccess, OnChunkedUploadFailure );
+        }
+
+        private void UpdateProgress(long offset, string uploadId)
+        {
+            if (_progress != null)
+            {
+                _progress.Invoke(new ChunkedUploadProgress(uploadId, _chunksCompleted, offset, _fileSize));
+            }
         }
 
         private void OnChunkSuccess(ChunkedUpload chunkedUpload)
         {
+            _chunksCompleted++;
+            UpdateProgress(chunkedUpload.Offset, chunkedUpload.UploadId);
             var offset = chunkedUpload.Offset;
             var nextChunk = _fileSize.GetValueOrDefault(long.MaxValue) > offset
                                 ? _chunkNeeded.Invoke(offset)
