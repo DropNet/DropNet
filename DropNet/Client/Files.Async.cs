@@ -3,7 +3,6 @@ using System.IO;
 using DropNet.Models;
 using RestSharp;
 using System;
-using DropNet.Authenticators;
 using DropNet.Exceptions;
 
 namespace DropNet
@@ -168,6 +167,66 @@ namespace DropNet
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
             var request = _requestHelper.CreateUploadFileRequest(path, filename, fileStream, Root, overwrite, parentRevision);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Uploads a File to Dropbox in chunks that are assembled into a single file when finished.
+        /// </summary>
+        /// <param name="chunkNeeded">The callback function that returns a byte array given an offset</param>
+        /// <param name="path">The full path of the file to upload to</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        /// <param name="progress">The optional callback Action that receives upload progress</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        /// <param name="fileSize">The total size of the file if available</param>
+        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, Action<ChunkedUploadProgress> progress = null, bool overwrite = true, string parentRevision = null, long? fileSize = null)
+        {
+            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, progress, overwrite, parentRevision, fileSize);
+            chunkedUploader.Start();
+        }
+
+        /// <summary>
+        /// Starts a chunked upload to Dropbox given a byte array.
+        /// </summary>
+        /// <param name="fileData">The file data</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        public void StartChunkedUploadAsync(byte[] fileData, Action<ChunkedUpload> success, Action<DropboxException> failure)
+        {
+            var request = _requestHelper.CreateChunkedUploadRequest(fileData);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Add data to a chunked upload given a byte array.
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="fileData">The file data</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        public void  AppendChunkedUploadAsync(ChunkedUpload upload, byte[] fileData, Action<ChunkedUpload> success, Action<DropboxException> failure)
+        {
+            var request = _requestHelper.CreateAppendChunkedUploadRequest(upload, fileData);
+
+            ExecuteAsync(ApiType.Content, request, success, failure);
+        }
+
+        /// <summary>
+        /// Commit a completed chunked upload
+        /// </summary>
+        /// <param name="upload">A ChunkedUpload object received from the StartChunkedUpload method</param>
+        /// <param name="path">The full path of the file to upload to</param>
+        /// <param name="success">The callback Action to perform on completion</param>
+        /// <param name="failure">The callback Action to perform on exception</param>
+        /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
+        /// <param name="parentRevision">The revision of the file you're editing</param>
+        public void CommitChunkedUploadAsync(ChunkedUpload upload, string path, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
+        {
+            var request = _requestHelper.CreateCommitChunkedUploadRequest(upload, path, Root, overwrite, parentRevision);
 
             ExecuteAsync(ApiType.Content, request, success, failure);
         }
