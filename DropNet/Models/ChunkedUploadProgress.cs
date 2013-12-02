@@ -8,14 +8,16 @@ namespace DropNet.Models
         private readonly string _uploadId;
         private readonly long _chunksCompleted;
         private readonly long _bytesSaved;
+        private readonly long _retryCount;
         private readonly long? _fileSize;
 
-        public ChunkedUploadProgress(string uploadId, long chunksCompleted, long bytesSaved, long? fileSize)
+        public ChunkedUploadProgress(string uploadId, long chunksCompleted, long bytesSaved, long retryCount, long? fileSize)
         {
             _uploadId = uploadId;
-            this._chunksCompleted = chunksCompleted;
-            this._bytesSaved = bytesSaved;
-            this._fileSize = fileSize;
+            _chunksCompleted = chunksCompleted;
+            _bytesSaved = bytesSaved;
+            _retryCount = retryCount;
+            _fileSize = fileSize;
         }
 
         public string UploadId
@@ -47,6 +49,14 @@ namespace DropNet.Models
             get
             {
                 return this._fileSize;
+            }
+        }
+
+        public long RetryCount
+        {
+            get
+            {
+                return this._retryCount;
             }
         }
     }

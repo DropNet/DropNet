@@ -182,9 +182,10 @@ namespace DropNet
         /// <param name="overwrite">Specify wether the file upload should replace an existing file</param>
         /// <param name="parentRevision">The revision of the file you're editing</param>
         /// <param name="fileSize">The total size of the file if available</param>
-        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, Action<ChunkedUploadProgress> progress = null, bool overwrite = true, string parentRevision = null, long? fileSize = null)
+        /// <param name="maxRetries">The number of times to retry uploading if a chunk fails, unlimited if null.</param>
+        public void UploadChunkedFileAsync(Func<long, byte[]> chunkNeeded, string path, Action<MetaData> success, Action<DropboxException> failure, Action<ChunkedUploadProgress> progress = null, bool overwrite = true, string parentRevision = null, long? fileSize = null, long? maxRetries = null)
         {
-            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, progress, overwrite, parentRevision, fileSize);
+            var chunkedUploader = new DropNet.Helpers.ChunkedUploadHelper(this, chunkNeeded, path, success, failure, progress, overwrite, parentRevision, fileSize, maxRetries);
             chunkedUploader.Start();
         }
 
