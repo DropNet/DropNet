@@ -33,6 +33,18 @@ namespace DropNet
             }
         }
 
+        public TimeSpan Timeout
+        {
+            get { return TimeSpan.FromMilliseconds(_restClient.Timeout); } 
+            set { _restClient.Timeout = value.Milliseconds; }
+        }
+
+        public int TimeoutMS
+        {
+            get { return _restClient.Timeout; }
+            set { _restClient.Timeout = value; }
+        }
+
         /// <summary>
         /// To use Dropbox API in sandbox mode (app folder access) set to true
         /// </summary>
