@@ -132,7 +132,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new DropboxRestException(response, HttpStatusCode.OK);
+                    throw new DropboxException(response);
                 }
             }
             else
@@ -141,7 +141,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                 {
-                    throw new DropboxRestException(response, HttpStatusCode.OK, HttpStatusCode.PartialContent);
+                    throw new DropboxException(response);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new DropboxRestException(response, HttpStatusCode.OK);
+                    throw new DropboxException(response);
                 }
             }
             else
@@ -166,7 +166,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                 {
-                    throw new DropboxRestException(response, HttpStatusCode.OK, HttpStatusCode.PartialContent);
+                    throw new DropboxException(response);
                 }
             }
 
@@ -194,7 +194,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        failure(new DropboxRestException(response, HttpStatusCode.OK));
+                        failure(new DropboxException(response));
                     }
                     else
                     {
@@ -208,7 +208,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
-                        failure(new DropboxRestException(response, HttpStatusCode.OK, HttpStatusCode.PartialContent));
+                        failure(new DropboxException(response));
                     }
                     else
                     {
@@ -238,7 +238,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        failure(new DropboxRestException(response, HttpStatusCode.OK));
+                        failure(new DropboxException(response));
                     }
                     else
                     {
@@ -252,7 +252,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
                     {
-                        failure(new DropboxRestException(response, HttpStatusCode.OK, HttpStatusCode.PartialContent));
+                        failure(new DropboxException(response));
                     }
                     else
                     {

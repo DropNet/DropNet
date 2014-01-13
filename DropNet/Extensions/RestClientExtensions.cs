@@ -42,7 +42,7 @@ namespace DropNet.Extensions
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {
-                                                             tcs.SetException(new DropboxRestException(response, HttpStatusCode.OK));
+                                                             tcs.SetException(new DropboxException(response));
                                                          }
                                                          else
                                                          {
@@ -86,7 +86,7 @@ namespace DropNet.Extensions
                                                      {
                                                          if (response.StatusCode != HttpStatusCode.OK)
                                                          {
-                                                             tcs.SetException(new DropboxRestException(response, HttpStatusCode.OK));
+                                                             tcs.SetException(new DropboxException(response));
                                                          }
                                                          else
                                                          {
