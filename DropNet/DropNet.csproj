@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Client\Client.cs" />
     <Compile Include="Client\Files.Task.cs" />
+    <Compile Include="Client\IClient.cs" />
     <Compile Include="Client\User.Async.cs" />
     <Compile Include="Client\Files.Async.cs" />
     <Compile Include="Client\Files.Sync.cs" />
