@@ -1,5 +1,6 @@
 ﻿using System;
 using DropNet.Authenticators;
+using DropNet.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DropNet.Tests
@@ -117,6 +118,16 @@ namespace DropNet.Tests
             var actual = _client.BuildAuthorizeUrl(oAuth2AuthorizationFlow, "http://example.com", state);
             Assert.IsNotNull(actual);
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DropboxException))]
+        public void Timeout_Exception_Raised_On_Super_Short_Timeout()
+        {
+            var client = new DropNetClient("", "");
+            client.TimeoutMS = 100;
+            
+            client.GetToken();
         }
     }
 }
