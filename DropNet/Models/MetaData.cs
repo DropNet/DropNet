@@ -9,6 +9,7 @@ namespace DropNet.Models
         public bool Thumb_Exists { get; set; }
         public long Bytes { get; set; }
         public string Modified { get; set; }
+        public string Client_Mtime { get; set; }
         public string Path { get; set; }
         public bool Is_Dir { get; set; }
         public bool Is_Deleted { get; set; }
@@ -45,7 +46,31 @@ namespace DropNet.Models
             }
         }
 
-		
+        public DateTime Client_MtimeDate
+        {
+            get
+            {
+                //cast to datetime and return
+                return Client_Mtime == null ? DateTime.MinValue : DateTime.Parse(Client_Mtime); //RFC1123 format date codes are returned by API
+            }
+        }
+
+        public DateTime UTCDateClient_Mtime
+        {
+            get
+            {
+                string str = Client_Mtime;
+                if (str == null)
+                    return DateTime.MinValue;
+                if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
+                if (!str.EndsWith(" UTC")) str += " UTC";
+                return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            set
+            {
+                Client_Mtime = value.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
+            }
+        }
 		
         public string Name
         {
