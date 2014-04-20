@@ -24,8 +24,7 @@ namespace DropNet.Models
         {
             get
             {
-                //cast to datetime and return
-                return Modified == null ? DateTime.MinValue : DateTime.Parse(Modified); //RFC1123 format date codes are returned by API
+                return GetDateTimeFromString(Modified);
             }
         }
 
@@ -33,16 +32,11 @@ namespace DropNet.Models
         {
             get
             {
-                string str = Modified;
-                if (str == null)
-                    return DateTime.MinValue;
-                if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
-                if (!str.EndsWith(" UTC")) str += " UTC";
-                return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+                return GetUTCDateTimeFromString(Modified);
             }
             set
             {
-                Modified = value.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
+                Modified = GetStringFromDateTime(value);
             }
         }
 
@@ -50,8 +44,7 @@ namespace DropNet.Models
         {
             get
             {
-                //cast to datetime and return
-                return Client_Mtime == null ? DateTime.MinValue : DateTime.Parse(Client_Mtime); //RFC1123 format date codes are returned by API
+                return GetDateTimeFromString(Client_Mtime);
             }
         }
 
@@ -59,19 +52,14 @@ namespace DropNet.Models
         {
             get
             {
-                string str = Client_Mtime;
-                if (str == null)
-                    return DateTime.MinValue;
-                if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
-                if (!str.EndsWith(" UTC")) str += " UTC";
-                return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+                return GetUTCDateTimeFromString(Client_Mtime);
             }
             set
             {
-                Client_Mtime = value.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
+                Client_Mtime = GetStringFromDateTime(value);
             }
         }
-		
+
         public string Name
         {
             get
@@ -106,6 +94,27 @@ namespace DropNet.Models
 
                 return Is_Dir ? string.Empty : Path.Substring(Path.LastIndexOf("."));
             }
+        }
+
+        private static DateTime GetDateTimeFromString(string dateTimeStr)
+        {
+            //cast to datetime and return
+            return dateTimeStr == null ? DateTime.MinValue : DateTime.Parse(dateTimeStr); //RFC1123 format date codes are returned by API
+        }
+
+        private static DateTime GetUTCDateTimeFromString(string dateTimeStr)
+        {
+            string str = dateTimeStr;
+            if (str == null)
+                return DateTime.MinValue;
+            if (str.EndsWith(" +0000")) str = str.Substring(0, str.Length - 6);
+            if (!str.EndsWith(" UTC")) str += " UTC";
+            return DateTime.ParseExact(str, "ddd, d MMM yyyy HH:mm:ss UTC", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private static string GetStringFromDateTime(DateTime dateTime)
+        {
+            return dateTime.ToString("ddd, d MMM yyyy HH:mm:ss UTC");
         }
     }
 
