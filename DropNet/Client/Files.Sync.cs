@@ -61,6 +61,19 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Restores a file path to a previous revision.
+        /// </summary>
+        /// <param name="rev">The revision of the file to restore.</param>
+        /// <param name="path">The path to the file.</param>
+        /// <returns>The metadata of the restored file.</returns>
+        public MetaData Restore(string rev, string path)
+        {
+            var request = _requestHelper.CreateRestoreRequest(rev, path, Root);
+
+            return Execute<MetaData>(ApiType.Base, request);
+        }
+
+        /// <summary>
         /// Gets list of metadata for search string
         /// </summary>
         /// <param name="searchString">The search string </param>
@@ -436,6 +449,20 @@ namespace DropNet
             var request = _requestHelper.CreateCopyRefRequest(path, Root);
 
             return Execute<CopyRefResponse>(ApiType.Base, request);
+        }
+
+        /// <summary>
+        /// A long-poll endpoint to wait for changes on an account. In conjunction with /delta, this call gives you a low-latency way to monitor an account for file changes.
+        /// </summary>
+        /// <param name="cursor">The value returned from the prior call to GetDelta.</param>
+        /// <param name="timeout">An optional integer indicating a timeout, in seconds.
+        ///  The default value is 30 seconds, which is also the minimum allowed value. The maximum is 480 seconds.</param>
+        /// <returns></returns>
+        public LongpollDeltaResult GetLongpollDelta(string cursor, int timeout = 30)
+        {
+            var request = _requestHelper.CreateLongpollDeltaRequest(cursor, timeout);
+
+            return Execute<LongpollDeltaResult>(ApiType.Notify, request);
         }
 
         /// <summary>

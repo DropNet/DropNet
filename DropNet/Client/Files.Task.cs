@@ -34,6 +34,13 @@ namespace DropNet
             return ExecuteTask<MetaData>(ApiType.Base, request);
         }
 
+        public Task<MetaData> RestoreTask(string rev, string path)
+        {
+            var request = _requestHelper.CreateRestoreRequest(rev, path, Root);
+
+            return ExecuteTask<MetaData>(ApiType.Base, request);
+        }
+
         public Task<List<MetaData>> SearchTask(string searchString)
         {
             return SearchTask(searchString, string.Empty);

@@ -62,4 +62,17 @@ namespace DropNet.Models
         public MetaData MetaData { get; set; }
     }
 
+    public class LongpollDeltaResult
+    {
+        /// <summary>
+        /// The value of the changes field indicates whether new changes are available. 
+        /// If this value is true, you should call /delta to retrieve the changes. If this value is false, it means the call to /longpoll_delta timed out.
+        /// </summary>
+        public bool Changes { get; set; }
+
+        /// <summary>
+        /// If present, the value of the backoff field indicates how many seconds your code should wait before calling /longpoll_delta again.
+        /// </summary>
+        public int Backoff { get; set; }
+    }
 }

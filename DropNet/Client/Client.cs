@@ -16,6 +16,7 @@ namespace DropNet
     {
         private const string ApiBaseUrl = "https://api.dropbox.com";
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
+        private const string ApiNotifyUrl = "https://api-notify.dropbox.com";
         private const string Version = "1";
 
         private UserLogin _userLogin;
@@ -59,10 +60,11 @@ namespace DropNet
 
         private RestClient _restClient;
         private RestClient _restClientContent;
+        private RestClient _restClientNotify;
         private RequestHelper _requestHelper;
 
 #if !WINDOWS_PHONE && !WINRT
-        public IWebProxy Proxy { get; set; }
+        private IWebProxy _proxy;
 #endif
 
         /// <summary>
@@ -78,10 +80,11 @@ namespace DropNet
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
-        /// <param name="authenticationMethod">The authentication method to use.</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
+        /// <param name="authenticationMethod">The authentication method to use.</param>
+        public DropNetClient(string apiKey, string appSecret, IWebProxy proxy = null, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
         {
+            _proxy = proxy;
             LoadClient();
             _apiKey = apiKey;
             _appsecret = appSecret;
@@ -96,8 +99,8 @@ namespace DropNet
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="accessToken">The OAuth2 access token</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string accessToken)
-            : this(apiKey, appSecret, AuthenticationMethod.OAuth2)
+        public DropNetClient(string apiKey, string appSecret, string accessToken, IWebProxy proxy)
+            : this(apiKey, appSecret, proxy, AuthenticationMethod.OAuth2)
         {
             UserLogin = new UserLogin { Token = accessToken };
         }
@@ -110,10 +113,10 @@ namespace DropNet
         /// <param name="userToken">The OAuth1 User authentication token</param>
         /// <param name="userSecret">The OAuth1 Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
-            :this(apiKey, appSecret)
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy)
+            : this(apiKey, appSecret, proxy)
         {
-            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
+            UserLogin = new UserLogin {Token = userToken, Secret = userSecret};
         }
 
         private void LoadClient()
@@ -121,15 +124,29 @@ namespace DropNet
             _restClient = new RestClient(ApiBaseUrl);
 
 #if !WINDOWS_PHONE && !WINRT
-            _restClient.Proxy = Proxy;
+            _restClient.Proxy = _proxy;
 #endif
 
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
             _restClientContent = new RestClient(ApiContentBaseUrl);
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClientContent.Proxy = _proxy;
+#endif
+
             _restClientContent.ClearHandlers();
             _restClientContent.AddHandler("*", new JsonDeserializer());
+
+            _restClientNotify = new RestClient(ApiNotifyUrl);
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClientNotify.Proxy = _proxy;
+#endif
+
+            _restClientNotify.ClearHandlers();
+            _restClientNotify.AddHandler("*", new JsonDeserializer());
 
             _requestHelper = new RequestHelper(Version);
 
@@ -193,11 +210,20 @@ namespace DropNet
                     throw new DropboxException(response);
                 }
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 response = _restClientContent.Execute<T>(request);
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientNotify.Execute<T>(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new DropboxException(response);
                 }
@@ -218,11 +244,20 @@ namespace DropNet
                     throw new DropboxException(response);
                 }
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 response = _restClientContent.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientNotify.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new DropboxException(response);
                 }
@@ -260,11 +295,25 @@ namespace DropNet
                     }
                 });
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response);
+                    }
+                });
+            }
+            else
+            {
+                _restClientNotify.ExecuteAsync(request, (response, asynchandle) =>
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
                         failure(new DropboxException(response));
                     }
@@ -304,11 +353,25 @@ namespace DropNet
                     }
                 });
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response.Data);
+                    }
+                });
+            }
+            else
+            {
+                _restClientNotify.ExecuteAsync<T>(request, (response, asynchandle) =>
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
                         failure(new DropboxException(response));
                     }
@@ -388,7 +451,8 @@ namespace DropNet
         enum ApiType
         {
             Base,
-            Content
+            Content,
+            Notify
         }
 
         /// <summary>
