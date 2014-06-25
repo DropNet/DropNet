@@ -16,6 +16,7 @@ namespace DropNet
     {
         private const string ApiBaseUrl = "https://api.dropbox.com";
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
+        private const string ApiNotifyUrl = "https://api-notify.dropbox.com";
         private const string Version = "1";
 
         private UserLogin _userLogin;
@@ -59,6 +60,7 @@ namespace DropNet
 
         private RestClient _restClient;
         private RestClient _restClientContent;
+        private RestClient _restClientNotify;
         private RequestHelper _requestHelper;
 
 #if !WINDOWS_PHONE && !WINRT
@@ -137,6 +139,15 @@ namespace DropNet
             _restClientContent.ClearHandlers();
             _restClientContent.AddHandler("*", new JsonDeserializer());
 
+            _restClientNotify = new RestClient(ApiNotifyUrl);
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClientNotify.Proxy = _proxy;
+#endif
+
+            _restClientNotify.ClearHandlers();
+            _restClientNotify.AddHandler("*", new JsonDeserializer());
+
             _requestHelper = new RequestHelper(Version);
 
             //Default to full access
@@ -199,11 +210,20 @@ namespace DropNet
                     throw new DropboxException(response);
                 }
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 response = _restClientContent.Execute<T>(request);
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientNotify.Execute<T>(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new DropboxException(response);
                 }
@@ -224,11 +244,20 @@ namespace DropNet
                     throw new DropboxException(response);
                 }
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 response = _restClientContent.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                {
+                    throw new DropboxException(response);
+                }
+            }
+            else
+            {
+                response = _restClientNotify.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new DropboxException(response);
                 }
@@ -394,7 +423,8 @@ namespace DropNet
         enum ApiType
         {
             Base,
-            Content
+            Content,
+            Notify
         }
 
         /// <summary>

@@ -407,6 +407,18 @@ namespace DropNet.Helpers
             return request;
         }
 
+        internal RestRequest CreateLongpollDeltaRequest(string cursor, int timeout)
+        {
+            var request = new RestRequest(Method.GET);
+            request.Resource = "{version}/longpoll_delta";
+            
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            request.AddParameter("cursor", cursor);
+            request.AddParameter("timeout", timeout);
+
+            return request;
+        }
+
         internal RestRequest CreateDeltaRequest(string cursor)
         {
             var request = new RestRequest(Method.POST);

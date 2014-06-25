@@ -439,6 +439,25 @@ namespace DropNet
         }
 
         /// <summary>
+        /// A long-poll endpoint to wait for changes on an account. In conjunction with /delta, this call gives you a low-latency way to monitor an account for file changes.
+        /// </summary>
+        /// <param name="cursor">The value returned from the prior call to GetDelta.</param>
+        /// <param name="timeout">An optional integer indicating a timeout, in seconds.
+        ///  The default value is 30 seconds, which is also the minimum allowed value. The maximum is 480 seconds.</param>
+        /// <returns></returns>
+        public LongpollDeltaResult GetLongpollDelta(string cursor, int timeout = 30)
+        {
+            if (timeout < 30)
+                timeout = 30;
+            if (timeout > 480)
+                timeout = 480;
+
+            var request = _requestHelper.CreateLongpollDeltaRequest(cursor, timeout);
+
+            return Execute<LongpollDeltaResult>(ApiType.Notify, request);
+        }
+
+        /// <summary>
         /// Gets the deltas for a user's folders and files.
         /// </summary>
         /// <param name="cursor">The value returned from the prior call to GetDelta or an empty string</param>
