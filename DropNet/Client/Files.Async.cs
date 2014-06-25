@@ -384,7 +384,7 @@ namespace DropNet
         {
             var request = _requestHelper.CreateLongpollDeltaRequest(cursor, timeout);
 
-            ExecuteAsync<LongpollDeltaResult>(ApiType.Base, request, success, failure);
+            ExecuteAsync<LongpollDeltaResult>(ApiType.Notify, request, success, failure);
         }
 
         /// <summary>
