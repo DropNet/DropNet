@@ -61,6 +61,19 @@ namespace DropNet
         }
 
         /// <summary>
+        /// Restores a file path to a previous revision.
+        /// </summary>
+        /// <param name="rev">The revision of the file to restore.</param>
+        /// <param name="path">The path to the file.</param>
+        /// <returns>The metadata of the restored file.</returns>
+        public MetaData Restore(string rev, string path)
+        {
+            var request = _requestHelper.CreateRestoreRequest(rev, path, Root);
+
+            return Execute<MetaData>(ApiType.Base, request);
+        }
+
+        /// <summary>
         /// Gets list of metadata for search string
         /// </summary>
         /// <param name="searchString">The search string </param>
