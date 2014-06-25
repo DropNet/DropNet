@@ -460,11 +460,6 @@ namespace DropNet
         /// <returns></returns>
         public LongpollDeltaResult GetLongpollDelta(string cursor, int timeout = 30)
         {
-            if (timeout < 30)
-                timeout = 30;
-            if (timeout > 480)
-                timeout = 480;
-
             var request = _requestHelper.CreateLongpollDeltaRequest(cursor, timeout);
 
             return Execute<LongpollDeltaResult>(ApiType.Notify, request);

@@ -414,6 +414,11 @@ namespace DropNet.Helpers
             
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("cursor", cursor);
+
+            if (timeout < 30)
+                timeout = 30;
+            if (timeout > 480)
+                timeout = 480;
             request.AddParameter("timeout", timeout);
 
             return request;
