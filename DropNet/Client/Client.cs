@@ -62,7 +62,7 @@ namespace DropNet
         private RequestHelper _requestHelper;
 
 #if !WINDOWS_PHONE && !WINRT
-        public IWebProxy Proxy { get; set; }
+        private IWebProxy _proxy;
 #endif
 
         /// <summary>
@@ -78,10 +78,11 @@ namespace DropNet
         /// </summary>
         /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
-        /// <param name="authenticationMethod">The authentication method to use.</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
+        /// <param name="authenticationMethod">The authentication method to use.</param>
+        public DropNetClient(string apiKey, string appSecret, IWebProxy proxy = null, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
         {
+            _proxy = proxy;
             LoadClient();
             _apiKey = apiKey;
             _appsecret = appSecret;
@@ -96,8 +97,8 @@ namespace DropNet
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="accessToken">The OAuth2 access token</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string accessToken)
-            : this(apiKey, appSecret, AuthenticationMethod.OAuth2)
+        public DropNetClient(string apiKey, string appSecret, string accessToken, IWebProxy proxy)
+            : this(apiKey, appSecret, proxy, AuthenticationMethod.OAuth2)
         {
             UserLogin = new UserLogin { Token = accessToken };
         }
@@ -110,10 +111,10 @@ namespace DropNet
         /// <param name="userToken">The OAuth1 User authentication token</param>
         /// <param name="userSecret">The OAuth1 Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
-            :this(apiKey, appSecret)
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy)
+            : this(apiKey, appSecret, proxy)
         {
-            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
+            UserLogin = new UserLogin {Token = userToken, Secret = userSecret};
         }
 
         private void LoadClient()
@@ -121,13 +122,18 @@ namespace DropNet
             _restClient = new RestClient(ApiBaseUrl);
 
 #if !WINDOWS_PHONE && !WINRT
-            _restClient.Proxy = Proxy;
+            _restClient.Proxy = _proxy;
 #endif
 
             _restClient.ClearHandlers();
             _restClient.AddHandler("*", new JsonDeserializer());
 
             _restClientContent = new RestClient(ApiContentBaseUrl);
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClientContent.Proxy = _proxy;
+#endif
+
             _restClientContent.ClearHandlers();
             _restClientContent.AddHandler("*", new JsonDeserializer());
 
