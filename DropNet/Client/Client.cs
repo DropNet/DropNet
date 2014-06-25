@@ -295,11 +295,25 @@ namespace DropNet
                     }
                 });
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 _restClientContent.ExecuteAsync(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response);
+                    }
+                });
+            }
+            else
+            {
+                _restClientNotify.ExecuteAsync(request, (response, asynchandle) =>
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
                         failure(new DropboxException(response));
                     }
@@ -339,11 +353,25 @@ namespace DropNet
                     }
                 });
             }
-            else
+            else if (apiType == ApiType.Content)
             {
                 _restClientContent.ExecuteAsync<T>(request, (response, asynchandle) =>
                 {
                     if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.PartialContent)
+                    {
+                        failure(new DropboxException(response));
+                    }
+                    else
+                    {
+                        success(response.Data);
+                    }
+                });
+            }
+            else
+            {
+                _restClientNotify.ExecuteAsync<T>(request, (response, asynchandle) =>
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
                         failure(new DropboxException(response));
                     }
