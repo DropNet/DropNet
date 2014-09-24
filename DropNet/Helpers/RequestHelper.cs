@@ -481,7 +481,7 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateSearchRequest(string searchString, string path, string root)
+        public RestRequest CreateSearchRequest(string searchString, string path, string root, uint fileLimit)
         {
             var request = new RestRequest(Method.GET)
                               {
@@ -492,6 +492,7 @@ namespace DropNet.Helpers
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
             request.AddParameter("query", searchString);
+            request.AddParameter("file_limit", fileLimit);
 
             return request;
         }

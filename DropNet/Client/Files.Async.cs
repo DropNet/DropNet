@@ -67,7 +67,8 @@ namespace DropNet
         /// <param name="searchString">The search string </param>
         /// <param name="success">Success call back</param>
         /// <param name="failure">Failure call back </param>
-        public void SearchAsync(string searchString, Action<List<MetaData>> success, Action<DropboxException> failure)
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        public void SearchAsync(string searchString, Action<List<MetaData>> success, Action<DropboxException> failure, uint fileLimit = 1000)
         {
             SearchAsync(searchString, string.Empty, success, failure);
         }
@@ -79,9 +80,13 @@ namespace DropNet
         /// <param name="path">The path of the file or folder</param>
         /// <param name="success">Success call back</param>
         /// <param name="failure">Failure call back </param>
-        public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure)
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure, uint fileLimit = 1000)
         {
-            var request = _requestHelper.CreateSearchRequest(searchString, path, Root);
+            if (fileLimit > 1000)
+                fileLimit = 1000;
+
+            var request = _requestHelper.CreateSearchRequest(searchString, path, Root, fileLimit);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
