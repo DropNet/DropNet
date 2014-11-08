@@ -475,6 +475,8 @@ namespace DropNet
         /// <returns></returns>
         public DeltaPage GetDelta(string cursor, string pathPrefix, string locale, bool includeMediaInfo)
         {
+            if (!pathPrefix.StartsWith("/")) pathPrefix = "/" + pathPrefix;
+
             var request = _requestHelper.CreateDeltaRequest(cursor, pathPrefix, locale, includeMediaInfo);
 
             var deltaResponse =  Execute<DeltaPageInternal>(ApiType.Base, request);
