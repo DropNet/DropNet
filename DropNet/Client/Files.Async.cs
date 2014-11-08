@@ -391,16 +391,20 @@ namespace DropNet
         /// The beta delta function, gets updates for a given folder
         /// </summary>
         /// <param name="IKnowThisIsBetaOnly"></param>
-        /// <param name="path"></param>
+        /// <param name="cursor">The value returned from the prior call to GetDelta or an empty string</param>
+        /// <param name="pathPrefix">If present, this parameter filters the response to only include entries at or under the specified path</param>
+        /// <param name="locale">If present the metadata returned will have its size field translated based on the given locale</param>
+        /// <param name="includeMediaInfo">If true, each file will include a photo_info dictionary for photos and a video_info dictionary for videos with additional media info. When include_media_info is specified, files will only appear in delta responses when the media info is ready. If you use the include_media_info parameter, you must continue to pass the same value on subsequent calls using the returned cursor.</param>
         /// <param name="success"></param>
         /// <param name="failure"></param>
-        public void GetDeltaAsync(bool IKnowThisIsBetaOnly, string path, Action<DeltaPage> success, Action<DropboxException> failure)
+        public void GetDeltaAsync(bool IKnowThisIsBetaOnly, string cursor, string pathPrefix,
+            string locale, bool includeMediaInfo, Action<DeltaPage> success, Action<DropboxException> failure)
         {
             if (!IKnowThisIsBetaOnly) return;
 
-            if (!path.StartsWith("/")) path = "/" + path;
+            if (!pathPrefix.StartsWith("/")) pathPrefix = "/" + pathPrefix;
 
-            var request = _requestHelper.CreateDeltaRequest(path);
+            var request = _requestHelper.CreateDeltaRequest(cursor, pathPrefix, locale, includeMediaInfo);
 
             ExecuteAsync<DeltaPage>(ApiType.Base, request, success, failure);
         }
