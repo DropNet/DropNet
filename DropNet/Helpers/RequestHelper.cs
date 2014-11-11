@@ -424,13 +424,24 @@ namespace DropNet.Helpers
             return request;
         }
 
-        internal RestRequest CreateDeltaRequest(string cursor)
+        internal RestRequest CreateDeltaRequest(string cursor, string pathPrefix, string locale, bool includeMediaInfo)
         {
             var request = new RestRequest(Method.POST);
             request.Resource = "{version}/delta";
 
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("cursor", cursor);
+            request.AddParameter("include_media_info", includeMediaInfo);
+
+            if (!string.IsNullOrEmpty(pathPrefix))
+            {
+                request.AddParameter("path_prefix", pathPrefix);
+            }
+
+            if (!string.IsNullOrEmpty(locale))
+            {
+                request.AddParameter("locale", locale);
+            }
 
             return request;
         }

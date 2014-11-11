@@ -206,7 +206,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void SANDBOX_Can_Get_Delta()
         {
-            var deltaPage = _client.GetDelta("");
+            var deltaPage = _client.GetDelta("", "", "", false);
 
             Assert.IsNotNull(deltaPage);
 

@@ -472,7 +472,39 @@ namespace DropNet
         /// <returns></returns>
         public DeltaPage GetDelta(string cursor)
         {
-            var request = _requestHelper.CreateDeltaRequest(cursor);
+            var request = _requestHelper.CreateDeltaRequest(cursor, null, null, false);
+
+            var deltaResponse = Execute<DeltaPageInternal>(ApiType.Base, request);
+
+            var deltaPage = new DeltaPage
+            {
+                Cursor = deltaResponse.Cursor,
+                Has_More = deltaResponse.Has_More,
+                Reset = deltaResponse.Reset,
+                Entries = new List<DeltaEntry>()
+            };
+
+            foreach (var stringList in deltaResponse.Entries)
+            {
+                deltaPage.Entries.Add(StringListToDeltaEntry(stringList));
+            }
+
+            return deltaPage;
+        }
+
+        /// <summary>
+        /// Gets the deltas for a user's folders and files.
+        /// </summary>
+        /// <param name="cursor">The value returned from the prior call to GetDelta or an empty string</param>
+        /// <param name="pathPrefix">If present, this parameter filters the response to only include entries at or under the specified path</param>
+        /// <param name="locale">If present the metadata returned will have its size field translated based on the given locale</param>
+        /// <param name="includeMediaInfo">If true, each file will include a photo_info dictionary for photos and a video_info dictionary for videos with additional media info. When include_media_info is specified, files will only appear in delta responses when the media info is ready. If you use the include_media_info parameter, you must continue to pass the same value on subsequent calls using the returned cursor.</param>
+        /// <returns></returns>
+        public DeltaPage GetDelta(string cursor, string pathPrefix, string locale, bool includeMediaInfo)
+        {
+            if (!pathPrefix.StartsWith("/")) pathPrefix = "/" + pathPrefix;
+
+            var request = _requestHelper.CreateDeltaRequest(cursor, pathPrefix, locale, includeMediaInfo);
 
             var deltaResponse =  Execute<DeltaPageInternal>(ApiType.Base, request);
 
