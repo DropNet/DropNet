@@ -435,8 +435,8 @@ namespace DropNet
 
         private void SetAuthProviders()
         {
-            _restClientContent.Authenticator = GetAuthenticator(_restClientContent.BaseUrl);
-            _restClient.Authenticator = GetAuthenticator(_restClient.BaseUrl);
+            _restClientContent.Authenticator = GetAuthenticator(_restClientContent.BaseUrl.ToString());
+            _restClient.Authenticator = GetAuthenticator(_restClient.BaseUrl.ToString());
         }
 
         private IAuthenticator GetAuthenticator(string baseUrl)
