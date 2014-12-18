@@ -75,6 +75,50 @@ namespace DropNet
             get { return UseSandbox ? SandboxRoot : DropboxRoot; }
         }
 
+#if WINDOWS_PHONE
+        /// <summary>
+        /// Default Constructor for the DropboxClient
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="proxy">The proxy to use for web requests</param>
+        /// <param name="authenticationMethod">The authentication method to use.</param>
+        public DropNetClient(string apiKey, string appSecret, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
+        {
+            LoadClient();
+            _apiKey = apiKey;
+            _appsecret = appSecret;
+            _authenticationMethod = authenticationMethod;
+            UserLogin = null;
+        }
+
+        /// <summary>
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth2 Access Token
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="accessToken">The OAuth2 access token</param>
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, string accessToken)
+            : this(apiKey, appSecret, AuthenticationMethod.OAuth2)
+        {
+            UserLogin = new UserLogin { Token = accessToken };
+        }
+
+        /// <summary>
+        /// Creates an instance of the DropNetClient given an API Key/Secret and an OAuth1 User Token/Secret
+        /// </summary>
+        /// <param name="apiKey">The Api Key to use for the Dropbox Requests</param>
+        /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
+        /// <param name="userToken">The OAuth1 User authentication token</param>
+        /// <param name="userSecret">The OAuth1 Users matching secret</param>
+        /// <param name="proxy">The proxy to use for web requests</param>
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret)
+            : this(apiKey, appSecret)
+        {
+            UserLogin = new UserLogin { Token = userToken, Secret = userSecret };
+        }
+#else
         /// <summary>
         /// Default Constructor for the DropboxClient
         /// </summary>
@@ -118,6 +162,7 @@ namespace DropNet
         {
             UserLogin = new UserLogin {Token = userToken, Secret = userSecret};
         }
+#endif
 
         private void LoadClient()
         {
