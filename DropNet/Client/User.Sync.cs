@@ -67,6 +67,15 @@ namespace DropNet
             return Execute<AccountInfo>(ApiType.Base, request);
         }
 
+        /// <summary>
+        /// Disables the current access token.
+        /// </summary>
+        public IRestResponse DisableAccessToken()
+        {
+            var request = _requestHelper.CreateDisableAccessTokenRequest();
+            return Execute(ApiType.Base, request);
+        }
+
     }
 }
 #endif
