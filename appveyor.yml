@@ -1,6 +1,7 @@
 version: 1.9.{build}
 
 configuration: Release
+test: off
 build:
   project: DropNet.sln
   publish_nuget: true
