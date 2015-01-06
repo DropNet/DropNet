@@ -1,8 +1,18 @@
 version: 1.9.{build}
 
+configuration: Release
+build:
+  project: DropNet.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+
 assembly_info:
   patch: true
   file: AssemblyInfo.*
   assembly_version: "{version}"
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
+
+
+# scripts to run before build
+before_build: nuget restore
