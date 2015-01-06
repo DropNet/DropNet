@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>DropNet</id>
-    <version>1.9.6</version>
+    <version>$version$</version>
     <authors>Damian Karzon, Github Contributors</authors>
     <owners>Damian Karzon</owners>
     <description>.NET Client for the Dropbox API (.NET 4 and Windows Phone)</description>
     <language>en-AU</language>
-    <projectUrl>http://dkdevelopment.net/what-im-doing/dropnet/</projectUrl>
-    <licenseUrl>https://github.com/dkarzon/DropNet/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://dropnet.github.io/</projectUrl>
+    <licenseUrl>https://github.com/dropnet/DropNet/blob/master/LICENSE.txt</licenseUrl>
     <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
     <tags>DROPBOX API .NET WP7</tags>
     <dependencies>
@@ -16,8 +16,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="DropNet\bin\Release\DropNet.dll" target="lib\net40" />
-    <file src="DropNet.WindowsPhone\bin\Release\System.Threading.Tasks.WP71.dll" target="lib\sl4-wp71" />
-    <file src="DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
+    <file src="bin\Release\DropNet.dll" target="lib\net40" />
+    <file src="..\DropNet.WindowsPhone\bin\Release\System.Threading.Tasks.WP71.dll" target="lib\sl4-wp71" />
+    <file src="..\DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
   </files>
 </package>
