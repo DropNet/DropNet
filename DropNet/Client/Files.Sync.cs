@@ -35,9 +35,10 @@ namespace DropNet
 			return Execute<List<MetaData>>(ApiType.Base, request);
 		}
 
-        public List<MetaData> Search(string searchString)
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        public List<MetaData> Search(string searchString, uint fileLimit = 1000)
         {
-            return Search(searchString, string.Empty);
+            return Search(searchString, string.Empty, fileLimit);
         }
 
         /// <summary>
@@ -58,9 +59,13 @@ namespace DropNet
         /// </summary>
         /// <param name="searchString">The search string </param>
         /// <param name="path">The path of the file or folder</param>
-        public List<MetaData> Search(string searchString, string path)
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        public List<MetaData> Search(string searchString, string path, uint fileLimit = 1000)
         {
-            var request = _requestHelper.CreateSearchRequest(searchString, path, Root);
+            if (fileLimit > 1000)
+                fileLimit = 1000;
+
+            var request = _requestHelper.CreateSearchRequest(searchString, path, Root, fileLimit);
 
             return Execute<List<MetaData>>(ApiType.Base, request);
         }

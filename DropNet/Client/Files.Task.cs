@@ -41,14 +41,17 @@ namespace DropNet
             return ExecuteTask<MetaData>(ApiType.Base, request);
         }
 
-        public Task<List<MetaData>> SearchTask(string searchString)
+        public Task<List<MetaData>> SearchTask(string searchString, uint fileLimit = 1000)
         {
-            return SearchTask(searchString, string.Empty);
+            return SearchTask(searchString, string.Empty, fileLimit);
         }
 
-        public Task<List<MetaData>> SearchTask(string searchString, string path)
+        public Task<List<MetaData>> SearchTask(string searchString, string path, uint fileLimit = 1000)
         {
-            var request = _requestHelper.CreateSearchRequest(searchString, path, Root);
+            if (fileLimit > 1000)
+                fileLimit = 1000;
+
+            var request = _requestHelper.CreateSearchRequest(searchString, path, Root, fileLimit);
 
             return ExecuteTask<List<MetaData>>(ApiType.Base, request);
         }
