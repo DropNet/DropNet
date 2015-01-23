@@ -14,6 +14,7 @@ namespace DropNet
 {
     public partial class DropNetClient : IDropNetClient
     {
+        private const string MainServerBaseUrl = "https://www.dropbox.com";
         private const string ApiBaseUrl = "https://api.dropbox.com";
         private const string ApiContentBaseUrl = "https://api-content.dropbox.com";
         private const string ApiNotifyUrl = "https://api-notify.dropbox.com";
@@ -55,6 +56,7 @@ namespace DropNet
         private readonly string _appsecret;
         private readonly AuthenticationMethod _authenticationMethod;
 
+        private RestClient _restClientMainServer;
         private RestClient _restClient;
         private RestClient _restClientContent;
         private RestClient _restClientNotify;
@@ -148,6 +150,12 @@ namespace DropNet
 
         private void LoadClient()
         {
+            _restClientMainServer = new RestClient(MainServerBaseUrl);
+
+#if !WINDOWS_PHONE && !WINRT
+            _restClientMainServer.Proxy = _proxy;
+#endif
+
             _restClient = new RestClient(ApiBaseUrl);
 
 #if !WINDOWS_PHONE && !WINRT
@@ -203,7 +211,7 @@ namespace DropNet
                 throw new ArgumentNullException("redirectUri");
             }
             RestRequest request = _requestHelper.BuildOAuth2AuthorizeUrl(oAuth2AuthorizationFlow, _apiKey, redirectUri, state);
-            return _restClient.BuildUri(request).ToString();
+            return _restClientMainServer.BuildUri(request).ToString();
         }
 
 #if !WINDOWS_PHONE && !WINRT

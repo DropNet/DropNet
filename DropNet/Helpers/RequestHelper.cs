@@ -386,6 +386,13 @@ namespace DropNet.Helpers
             return request;
         }
 
+        public RestRequest CreateDisableAccessTokenRequest()
+        {
+            var request = new RestRequest("{version}/disable_access_token", Method.POST);
+            request.AddParameter("version", _version, ParameterType.UrlSegment);
+            return request;
+        }
+
         public RestRequest CreateAccountInfoRequest()
         {
             var request = new RestRequest(Method.GET);

@@ -48,6 +48,15 @@ namespace DropNet
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
 
+        /// <summary>
+        /// Disables the current access token.
+        /// </summary>
+        public void DisableAccessTokenAsync(Action success, Action<DropboxException> failure)
+        {
+            var request = _requestHelper.CreateDisableAccessTokenRequest();
+            ExecuteAsync(ApiType.Base, request, _ => success(), failure);
+        }
+
         [Obsolete("No longer supported by Dropbox")]
         public void CreateAccountAsync(string email, string firstName, string lastName, string password, Action<RestResponse> success, Action<DropboxException> failure)
         {
