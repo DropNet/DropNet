@@ -71,6 +71,9 @@
     <Compile Include="..\DropNet\Client\Files.Task.cs">
       <Link>Client\Files.Task.cs</Link>
     </Compile>
+    <Compile Include="..\DropNet\Client\IDropNetClient.cs">
+      <Link>Client\IDropNetClient.cs</Link>
+    </Compile>
     <Compile Include="..\dropnet\Client\User.Async.cs">
       <Link>Client\User.Async.cs</Link>
     </Compile>
@@ -86,9 +89,9 @@
     <Compile Include="..\DropNet\Models\ChunkedUpload.cs">
       <Link>Models\ChunkedUpload.cs</Link>
     </Compile>
-	<Compile Include="..\DropNet\Models\ChunkedUploadProgress.cs">
+    <Compile Include="..\DropNet\Models\ChunkedUploadProgress.cs">
       <Link>Models\ChunkedUploadProgress.cs</Link>
-    </Compile>	
+    </Compile>
     <Compile Include="..\DropNet\Models\CopyRefResponse.cs">
       <Link>Models\CopyRefResponse.cs</Link>
     </Compile>

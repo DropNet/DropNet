@@ -35,18 +35,6 @@ namespace DropNet
 			return Execute<List<MetaData>>(ApiType.Base, request);
 		}
 
-        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
-        public List<MetaData> Search(string searchString, uint fileLimit = 1000)
-        {
-            return Search(searchString, string.Empty, fileLimit);
-        }
-
-        /// <summary>
-        /// Restores a file path to a previous revision.
-        /// </summary>
-        /// <param name="rev">The revision of the file to restore.</param>
-        /// <param name="path">The path to the file.</param>
-        /// <returns>The metadata of the restored file.</returns>
         public MetaData Restore(string rev, string path)
         {
             var request = _requestHelper.CreateRestoreRequest(rev, path, Root);
@@ -54,13 +42,22 @@ namespace DropNet
             return Execute<MetaData>(ApiType.Base, request);
         }
 
-        /// <summary>
-        /// Gets list of metadata for search string
-        /// </summary>
-        /// <param name="searchString">The search string </param>
-        /// <param name="path">The path of the file or folder</param>
-        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
-        public List<MetaData> Search(string searchString, string path, uint fileLimit = 1000)
+        public List<MetaData> Search(string searchString)
+        {
+            return Search(searchString, string.Empty);
+        }
+
+        public List<MetaData> Search(string searchString, int fileLimit)
+        {
+            return Search(searchString, string.Empty, fileLimit);
+        }
+
+        public List<MetaData> Search(string searchString, string path)
+        {
+            return Search(searchString, path);
+        }
+
+        public List<MetaData> Search(string searchString, string path, int fileLimit = 1000)
         {
             if (fileLimit > 1000)
                 fileLimit = 1000;

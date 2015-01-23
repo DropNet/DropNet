@@ -27,15 +27,15 @@ namespace DropNet.Extensions
                     try
                     {
 #if WINDOWS_PHONE
-                                    //check for network connection
-                                    if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
-                                    {
-                                        tcs.SetException(new DropboxException
-                                        {
-                                            StatusCode = System.Net.HttpStatusCode.BadGateway
-                                        });
-                                        return;
-                                    }
+                        //check for network connection
+                        if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                        {
+                            tcs.SetException(new DropboxRestException
+                            {
+                                StatusCode = System.Net.HttpStatusCode.BadGateway
+                            });
+                            return;
+                        }
 #endif
                         client.ExecuteAsync<TResult>(request,
                                                      (response, asynchandle) =>
@@ -74,7 +74,7 @@ namespace DropNet.Extensions
                                     //check for network connection
                                     if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                                     {
-                                        tcs.SetException(new DropboxException
+                                        tcs.SetException(new DropboxRestException
                                         {
                                             StatusCode = System.Net.HttpStatusCode.BadGateway
                                         });

@@ -22,7 +22,7 @@ namespace DropNet.Exceptions
         /// <summary>
         /// Returned status code from the request
         /// </summary>
-        public HttpStatusCode StatusCode { get; private set; }
+        public HttpStatusCode StatusCode { get; set; }
 		
         /// <summary>
         /// Expected status codes to have seen instead of the one recieved. 
@@ -33,8 +33,13 @@ namespace DropNet.Exceptions
         /// The response of the error call (for Debugging use)
         /// </summary>
         public IRestResponse Response { get; private set; }
-        
-        public DropboxRestException(string message) : base(message)
+
+        public DropboxRestException()
+        {
+        }
+
+        public DropboxRestException(string message)
+            : base(message)
         {
         }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DropNet.Authenticators;
 using DropNet.Exceptions;
 using DropNet.Models;
-
 using RestSharp;
 
 namespace DropNet
@@ -23,7 +22,7 @@ namespace DropNet
         /// </summary>
         bool UseSandbox { get; set; }
 
-#if !WINDOWS_PHONE && !WINRT
+#if !WINDOWS_PHONE
         IWebProxy Proxy { get; set; }
 #endif
 
@@ -43,7 +42,7 @@ namespace DropNet
         string BuildAuthorizeUrl(UserLogin userLogin, string callback = null);
 
         /// <summary>
-        /// This starts the OAuth 2.0 authorization flow. This isn't an API call�it's the web page that lets the user sign in to Dropbox and authorize your app. The user must be redirected to the page over HTTPS and it should be presented to the user through their web browser. After the user decides whether or not to authorize your app, they will be redirected to the URL specified by the 'redirectUri'.
+        /// This starts the OAuth 2.0 authorization flow. This isn't an API call—it's the web page that lets the user sign in to Dropbox and authorize your app. The user must be redirected to the page over HTTPS and it should be presented to the user through their web browser. After the user decides whether or not to authorize your app, they will be redirected to the URL specified by the 'redirectUri'.
         /// </summary>
         /// <param name="oAuth2AuthorizationFlow">The type of authorization flow to use.  See the OAuth2AuthorizationFlow enum documentation for more information.</param>
         /// <param name="redirectUri">Where to redirect the user after authorization has completed. This must be the exact URI registered in the app console (https://www.dropbox.com/developers/apps), though localhost and 127.0.0.1 are always accepted. A redirect URI is required for a token flow, but optional for code. If the redirect URI is omitted, the code will be presented directly to the user and they will be invited to enter the information in your app.</param>
@@ -82,10 +81,29 @@ namespace DropNet
         /// Gets list of metadata for search string
         /// </summary>
         /// <param name="searchString">The search string </param>
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        /// <param name="success">Success call back</param>
+        /// <param name="failure">Failure call back </param>
+        void SearchAsync(string searchString, int fileLimit, Action<List<MetaData>> success, Action<DropboxException> failure);
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
         /// <param name="path">The path of the file or folder</param>
         /// <param name="success">Success call back</param>
         /// <param name="failure">Failure call back </param>
         void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure);
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        /// <param name="path">The path of the file or folder</param>
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        /// <param name="success">Success call back</param>
+        /// <param name="failure">Failure call back </param>
+        void SearchAsync(string searchString, string path, int fileLimit, Action<List<MetaData>> success, Action<DropboxException> failure);
 
         /// <summary>
         /// Downloads a File from dropbox given the path
@@ -106,7 +124,7 @@ namespace DropNet
         /// <param name="failure">Failure callback </param>
         void GetFileAsync(string path, long startByte, long endByte, string rev, Action<IRestResponse> success, Action<DropboxException> failure);
 
-#if !WINDOWS_PHONE && !MONOTOUCH && !WINRT
+#if !WINDOWS_PHONE && !MONOTOUCH
         /// <summary>
         /// Uploads a File to Dropbox from the local file system to the specified folder
         /// </summary>
@@ -311,7 +329,9 @@ namespace DropNet
         Task<MetaData> GetMetaDataTask(string path);
         Task<MetaData> GetMetaDataTask(string path, string hash);
         Task<List<MetaData>> SearchTask(string searchString);
+        Task<List<MetaData>> SearchTask(string searchString, int fileLimit);
         Task<List<MetaData>> SearchTask(string searchString, string path);
+        Task<List<MetaData>> SearchTask(string searchString, string path, int fileLimit);
         Task<IRestResponse> GetFileTask(string path);
         Task<MetaData> UploadFileTask(string path, string filename, byte[] fileData, bool overwrite = true, string parentRevision = null);
         Task<MetaData> UploadFileTask(string path, string filename, Stream fileStream, bool overwrite = true, string parentRevision = null);
@@ -360,8 +380,23 @@ namespace DropNet
         /// Gets list of metadata for search string
         /// </summary>
         /// <param name="searchString">The search string </param>
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        List<MetaData> Search(string searchString, int fileLimit);
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
         /// <param name="path">The path of the file or folder</param>
         List<MetaData> Search(string searchString, string path);
+
+        /// <summary>
+        /// Gets list of metadata for search string
+        /// </summary>
+        /// <param name="searchString">The search string </param>
+        /// <param name="path">The path of the file or folder</param>
+        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
+        List<MetaData> Search(string searchString, string path, int fileLimit);
 
         /// <summary>
         /// Downloads a File from dropbox given the path

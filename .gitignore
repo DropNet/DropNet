@@ -36,3 +36,4 @@ download/
 *.pidb
 *.userprefs
 /DropNet.Tests/TestVariables.cs
+/packages

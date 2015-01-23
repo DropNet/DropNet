@@ -62,8 +62,8 @@ namespace DropNet
         private RestClient _restClientNotify;
         private RequestHelper _requestHelper;
 
-#if !WINDOWS_PHONE && !WINRT
-        private IWebProxy _proxy;
+#if !WINDOWS_PHONE
+        public IWebProxy Proxy { get; set; }
 #endif
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace DropNet
         /// <param name="authenticationMethod">The authentication method to use.</param>
         public DropNetClient(string apiKey, string appSecret, IWebProxy proxy = null, AuthenticationMethod authenticationMethod = AuthenticationMethod.OAuth1)
         {
-            _proxy = proxy;
+            Proxy = proxy;
             LoadClient();
             _apiKey = apiKey;
             _appsecret = appSecret;
@@ -152,14 +152,14 @@ namespace DropNet
         {
             _restClientMainServer = new RestClient(MainServerBaseUrl);
 
-#if !WINDOWS_PHONE && !WINRT
-            _restClientMainServer.Proxy = _proxy;
+#if !WINDOWS_PHONE
+            _restClientMainServer.Proxy = Proxy;
 #endif
 
             _restClient = new RestClient(ApiBaseUrl);
 
-#if !WINDOWS_PHONE && !WINRT
-            _restClient.Proxy = _proxy;
+#if !WINDOWS_PHONE
+            _restClient.Proxy = Proxy;
 #endif
 
             _restClient.ClearHandlers();
@@ -167,8 +167,8 @@ namespace DropNet
 
             _restClientContent = new RestClient(ApiContentBaseUrl);
 
-#if !WINDOWS_PHONE && !WINRT
-            _restClientContent.Proxy = _proxy;
+#if !WINDOWS_PHONE
+            _restClientContent.Proxy = Proxy;
 #endif
 
             _restClientContent.ClearHandlers();
@@ -176,8 +176,8 @@ namespace DropNet
 
             _restClientNotify = new RestClient(ApiNotifyUrl);
 
-#if !WINDOWS_PHONE && !WINRT
-            _restClientNotify.Proxy = _proxy;
+#if !WINDOWS_PHONE
+            _restClientNotify.Proxy = Proxy;
 #endif
 
             _restClientNotify.ClearHandlers();
@@ -214,7 +214,7 @@ namespace DropNet
             return _restClientMainServer.BuildUri(request).ToString();
         }
 
-#if !WINDOWS_PHONE && !WINRT
+#if !WINDOWS_PHONE
         private T Execute<T>(ApiType apiType, IRestRequest request) where T : new()
         {
             IRestResponse<T> response;
@@ -242,7 +242,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new DropboxException(response);
+                    throw new DropboxRestException(response);
                 }
             }
 
@@ -276,7 +276,7 @@ namespace DropNet
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new DropboxException(response);
+                    throw new DropboxRestException(response);
                 }
             }
 
@@ -291,7 +291,7 @@ namespace DropNet
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
             {
                 //do nothing
-                failure(new DropboxException
+                failure(new DropboxRestException
                 {
                     StatusCode = System.Net.HttpStatusCode.BadGateway
                 });
@@ -332,7 +332,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        failure(new DropboxException(response));
+                        failure(new DropboxRestException(response));
                     }
                     else
                     {
@@ -349,7 +349,7 @@ namespace DropNet
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
             {
                 //do nothing
-                failure(new DropboxException
+                failure(new DropboxRestException
                 {
                     StatusCode = System.Net.HttpStatusCode.BadGateway
                 });
@@ -390,7 +390,7 @@ namespace DropNet
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        failure(new DropboxException(response));
+                        failure(new DropboxRestException(response));
                     }
                     else
                     {
@@ -399,8 +399,6 @@ namespace DropNet
                 });
             }
         }
-
-#if !WINRT
 
         private Task<T> ExecuteTask<T>(ApiType apiType, IRestRequest request) where T : new()
         {
@@ -425,8 +423,6 @@ namespace DropNet
                 return _restClientContent.ExecuteTask(request);
             }
         }
-
-#endif
 
         private UserLogin GetUserLoginFromParams(string urlParams)
         {

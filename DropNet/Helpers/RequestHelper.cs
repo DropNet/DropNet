@@ -499,7 +499,7 @@ namespace DropNet.Helpers
             return request;
         }
 
-        public RestRequest CreateSearchRequest(string searchString, string path, string root, uint fileLimit)
+        public RestRequest CreateSearchRequest(string searchString, string path, string root, int fileLimit)
         {
             var request = new RestRequest(Method.GET)
                               {

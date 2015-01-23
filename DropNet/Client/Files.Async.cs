@@ -46,20 +46,22 @@ namespace DropNet
             ExecuteAsync(ApiType.Base, request, success, failure);
         }
 
-        /// <summary>
-        /// Gets list of metadata for search string
-        /// </summary>
-        /// <param name="searchString">The search string </param>
-        /// <param name="success">Success call back</param>
-        /// <param name="failure">Failure call back </param>
-        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
-        public void SearchAsync(string searchString, Action<List<MetaData>> success, Action<DropboxException> failure, uint fileLimit = 1000)
+        public void SearchAsync(string searchString, Action<List<MetaData>> success, Action<DropboxException> failure)
         {
-            SearchAsync(searchString, string.Empty, success, failure);
+            SearchAsync(searchString, string.Empty, 1000, success, failure);
         }
 
-        /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
-        public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure, uint fileLimit = 1000)
+        public void SearchAsync(string searchString, int fileLimit, Action<List<MetaData>> success, Action<DropboxException> failure)
+        {
+            SearchAsync(searchString, string.Empty, fileLimit, success, failure);
+        }
+
+        public void SearchAsync(string searchString, string path, Action<List<MetaData>> success, Action<DropboxException> failure)
+        {
+            SearchAsync(searchString, path, 1000, success, failure);
+        }
+
+        public void SearchAsync(string searchString, string path, int fileLimit, Action<List<MetaData>> success, Action<DropboxException> failure)
         {
             if (fileLimit > 1000)
                 fileLimit = 1000;
@@ -87,7 +89,7 @@ namespace DropNet
 			ExecuteAsync(ApiType.Content, request, success, failure);
 		}
 
-#if !WINDOWS_PHONE && !MONOTOUCH && !WINRT
+#if !WINDOWS_PHONE && !MONOTOUCH
         public void UploadFileAsync(string path, FileInfo localFile, Action<MetaData> success, Action<DropboxException> failure, bool overwrite = true, string parentRevision = null)
         {
             //Get the file stream
