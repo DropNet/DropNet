@@ -19,6 +19,7 @@ namespace DropNet.Models
         public int Revision { get; set; }
 		public string Rev { get; set; }
         public List<MetaData> Contents { get; set; }
+        public String Mime_Type { get; set; }
 
         public DateTime ModifiedDate
         {
