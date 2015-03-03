@@ -9,25 +9,16 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        public void GetMetaDataAsync(string path, Action<MetaData> success, Action<DropboxException> failure)
+        public void GetMetaDataAsync(Action<MetaData> success, Action<DropboxException> failure, String hash = null, Boolean list = false, Boolean include_deleted = false)
         {
-            if (!string.IsNullOrEmpty(path) && !path.StartsWith("/"))
-            {
-                path = "/" + path;
-            }
-
-            var request = _requestHelper.CreateMetadataRequest(path, Root);
-
-            ExecuteAsync(ApiType.Base, request, success, failure);
+            GetMetaDataAsync(String.Empty, success, failure, hash, list, include_deleted);
         }
 
-        public void GetMetaDataAsync(string path, string hash, Action<MetaData> success, Action<DropboxException> failure)
+        public void GetMetaDataAsync(String path, Action<MetaData> success, Action<DropboxException> failure, String hash = null, Boolean list = false, Boolean include_deleted = false)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateMetadataRequest(path, Root);
-
-            request.AddParameter("hash", hash);
+            var request = _requestHelper.CreateMetadataRequest(path, Root, hash, list, include_deleted);
 
             ExecuteAsync(ApiType.Base, request, success, failure);
         }

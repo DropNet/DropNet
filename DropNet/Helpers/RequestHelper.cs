@@ -18,13 +18,20 @@ namespace DropNet.Helpers
             _version = version;
         }
 
-        public RestRequest CreateMetadataRequest(string path, string root)
+        public RestRequest CreateMetadataRequest(String path, String root, String hash, Boolean list, Boolean include_deleted)
         {
             var request = new RestRequest(Method.GET);
             request.Resource = "{version}/metadata/{root}{path}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("path", path, ParameterType.UrlSegment);
             request.AddParameter("root", root, ParameterType.UrlSegment);
+
+            if (list)
+            {
+                request.AddParameter("hash", hash);
+                request.AddParameter("list", list.ToString().ToLower());
+                request.AddParameter("include_deleted", include_deleted.ToString().ToLower());
+            }
 
             return request;
         }

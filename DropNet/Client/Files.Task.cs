@@ -11,25 +11,16 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        public Task<MetaData> GetMetaDataTask(string path)
+        public Task<MetaData> GetMetaDataTask(String hash, Boolean list, Boolean include_deleted)
         {
-            if (!string.IsNullOrEmpty(path) && !path.StartsWith("/"))
-            {
-                path = "/" + path;
-            }
-
-            var request = _requestHelper.CreateMetadataRequest(path, Root);
-
-            return ExecuteTask<MetaData>(ApiType.Base, request);
+            return GetMetaDataTask(String.Empty, hash, list, include_deleted);
         }
 
-        public Task<MetaData> GetMetaDataTask(string path, string hash)
+        public Task<MetaData> GetMetaDataTask(String path, String hash, Boolean list, Boolean include_deleted)
         {
             if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateMetadataRequest(path, Root);
-
-            request.AddParameter("hash", hash);
+            var request = _requestHelper.CreateMetadataRequest(path, Root, hash, list, include_deleted);
 
             return ExecuteTask<MetaData>(ApiType.Base, request);
         }
