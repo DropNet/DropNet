@@ -14,16 +14,16 @@ namespace DropNet
 {
     public partial class DropNetClient
     {
-        public MetaData GetMetaData()
+        public MetaData GetMetaData(String hash = null, Boolean list = false, Boolean include_deleted = false)
         {
-            return GetMetaData(string.Empty);
+            return GetMetaData(String.Empty, hash, list, include_deleted);
         }
 
-        public MetaData GetMetaData(string path)
+        public MetaData GetMetaData(String path, String hash = null, Boolean list = false, Boolean include_deleted = false)
         {
 			if (path != "" && !path.StartsWith("/")) path = "/" + path;
 
-            var request = _requestHelper.CreateMetadataRequest(path, Root);
+            var request = _requestHelper.CreateMetadataRequest(path, Root, hash, list, include_deleted);
 
             return Execute<MetaData>(ApiType.Base, request);
         }

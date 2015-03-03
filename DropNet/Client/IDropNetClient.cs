@@ -51,23 +51,21 @@ namespace DropNet
         string BuildAuthorizeUrl(OAuth2AuthorizationFlow oAuth2AuthorizationFlow, string redirectUri, string state = null);
 
         /// <summary>
-        /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
+        /// Gets MetaData for the root folder.
         /// </summary>
         /// <param name="path">The path of the file or folder</param>
         /// <param name="success">Success call back</param>
         /// <param name="failure">Failure call back </param>
-        void GetMetaDataAsync(string path, Action<MetaData> success, Action<DropboxException> failure);
+        void GetMetaDataAsync(Action<MetaData> success, Action<DropboxException> failure, String hash = null, Boolean list = false, Boolean include_deleted = false);
 
         /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
-        /// Optional 'hash' param returns HTTP code 304	(Directory contents have not changed) if contents have not changed since the
-        /// hash was retrieved on a previous call.
         /// </summary>
         /// <param name="path">The path of the file or folder</param>
         /// <param name="hash">hash - Optional. Listing return values include a hash representing the state of the directory's contents. If you provide this argument to the metadata call, you give the service an opportunity to respond with a "304 Not Modified" status code instead of a full (potentially very large) directory listing. This argument is ignored if the specified path is associated with a file or if list=false.</param>
         /// <param name="success">Success callback </param>
         /// <param name="failure">Failure callback </param>
-        void GetMetaDataAsync(string path, string hash, Action<MetaData> success, Action<DropboxException> failure);
+        void GetMetaDataAsync(String path, Action<MetaData> success, Action<DropboxException> failure, String hash = null, Boolean list = false, Boolean include_deleted = false);
 
         /// <summary>
         /// Gets list of metadata for search string
@@ -326,8 +324,8 @@ namespace DropNet
         /// <param name="failure">Failure callback </param>
         void GetCopyRefAsync(string path, Action<CopyRefResponse> success, Action<DropboxException> failure);
 
-        Task<MetaData> GetMetaDataTask(string path);
-        Task<MetaData> GetMetaDataTask(string path, string hash);
+        Task<MetaData> GetMetaDataTask(String hash = null, Boolean list = false, Boolean include_deleted = false);
+        Task<MetaData> GetMetaDataTask(String path, String hash = null, Boolean list = false, Boolean include_deleted = false);
         Task<List<MetaData>> SearchTask(string searchString);
         Task<List<MetaData>> SearchTask(string searchString, int fileLimit);
         Task<List<MetaData>> SearchTask(string searchString, string path);
@@ -352,15 +350,21 @@ namespace DropNet
         /// <summary>
         /// Gets MetaData for the root folder.
         /// </summary>
+        /// <param name="hash">hash - Optional. Listing return values include a hash representing the state of the directory's contents. If you provide this argument to the metadata call, you give the service an opportunity to respond with a "304 Not Modified" status code instead of a full (potentially very large) directory listing. This argument is ignored if the specified path is associated with a file or if list=false.</param>
+        /// <param name="list">If true, the folder's metadata will include a contents field with a list of metadata entries for the contents of the folder. If false, the contents field will be omitted.</param>
+        /// <param name="include_deleted">Only applicable when list is set. If this parameter is set to true, then contents will include the metadata of deleted children. Note that the target of the metadata call is always returned even when it has been deleted (with is_deleted set to true) regardless of this flag.</param>
         /// <returns></returns>
-        MetaData GetMetaData();
+        MetaData GetMetaData(String hash = null, Boolean list = false, Boolean include_deleted = false);
 
         /// <summary>
         /// Gets MetaData for a File or Folder. For a folder this includes its contents. For a file, this includes details such as file size.
         /// </summary>
         /// <param name="path">The path of the file or folder</param>
+        /// <param name="hash">hash - Optional. Listing return values include a hash representing the state of the directory's contents. If you provide this argument to the metadata call, you give the service an opportunity to respond with a "304 Not Modified" status code instead of a full (potentially very large) directory listing. This argument is ignored if the specified path is associated with a file or if list=false.</param>
+        /// <param name="list">If true, the folder's metadata will include a contents field with a list of metadata entries for the contents of the folder. If false, the contents field will be omitted.</param>
+        /// <param name="include_deleted">Only applicable when list is set. If this parameter is set to true, then contents will include the metadata of deleted children. Note that the target of the metadata call is always returned even when it has been deleted (with is_deleted set to true) regardless of this flag.</param>
         /// <returns></returns>
-        MetaData GetMetaData(string path);
+        MetaData GetMetaData(String path, String hash = null, Boolean list = false, Boolean include_deleted = false);
 
         /// <summary>
         /// Gets List of MetaData for a File versions. Each metadata item contains info about file in certain version on Dropbox.
