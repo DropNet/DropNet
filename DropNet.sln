@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet", "DropNet\DropNet.csproj", "{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.WindowsPhone", "DropNet.WindowsPhone\DropNet.WindowsPhone.csproj", "{C73D4D29-41E9-4BB1-B70D-38E36187CF51}"
@@ -10,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropNet.Tests", "DropNet.Tests\DropNet.Tests.csproj", "{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}"
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = DropNet.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -24,8 +25,10 @@ Global
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|ARM.Build.0 = Debug|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Debug|x86.Build.0 = Debug|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -34,8 +37,10 @@ Global
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|ARM.Build.0 = Debug|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Debug|x86.Build.0 = Debug|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C73D4D29-41E9-4BB1-B70D-38E36187CF51}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -44,8 +49,10 @@ Global
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|ARM.Build.0 = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Debug|x86.Build.0 = Debug|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06B6BC2F-94D5-456A-ABA7-F73FB28B4703}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -54,8 +61,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = DropNet.vsmdi
 	EndGlobalSection
 EndGlobal
