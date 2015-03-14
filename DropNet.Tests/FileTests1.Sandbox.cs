@@ -29,7 +29,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void SANDBOX_Can_Get_MetaData_With_Special_Char()
         {
-            var fileInfo = _client.GetMetaData("/test'.txt");
+            var fileInfo = _client.GetMetaData("/test'.txt", null);
             
             Assert.IsNotNull(fileInfo);
         }
@@ -163,7 +163,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void SANDBOX_Can_Get_MetaData()
         {
-            var metaData = _client.GetMetaData("/");
+            var metaData = _client.GetMetaData("/", null);
 
             Assert.IsNotNull(metaData);
             Assert.IsNotNull(metaData.Contents);

@@ -198,7 +198,7 @@ namespace DropNet.Tests
         public void CreateMetadataRequestTest()
         {
             string path = fixture.CreateAnonymous<string>();
-            RestRequest actual = _target.CreateMetadataRequest(path, "dropbox");
+            RestRequest actual = _target.CreateMetadataRequest(path, "dropbox", null, false, false);
 
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Method == Method.GET);

@@ -25,7 +25,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData_With_Special_Char()
         {
-            var fileInfo = _client.GetMetaData("/Test/Getting'Started.rtf");
+            var fileInfo = _client.GetMetaData("/Test/Getting'Started.rtf", null);
 
             Assert.IsNotNull(fileInfo);
         }
@@ -169,7 +169,7 @@ namespace DropNet.Tests
         [TestMethod]
         public void Can_Get_MetaData()
         {
-            var metaData = _client.GetMetaData("/Public");
+            var metaData = _client.GetMetaData("/Public", null);
 
             Assert.IsNotNull(metaData);
             Assert.IsNotNull(metaData.Contents);

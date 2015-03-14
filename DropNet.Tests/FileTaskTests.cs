@@ -25,7 +25,7 @@ namespace DropNet.Tests
         public void Task_Get_MetaData()
         {
             var path = "/Test";
-            var metaTask = _client.GetMetaDataTask(path);
+            var metaTask = _client.GetMetaDataTask(path, null);
 
             metaTask.Wait();
 
@@ -38,7 +38,7 @@ namespace DropNet.Tests
         public void Task_Get_MetaData_With_Special_Char()
         {
             var path = "/Test/Getting'Started.rtf";
-            var metaTask = _client.GetMetaDataTask(path);
+            var metaTask = _client.GetMetaDataTask(path, null);
 
             metaTask.Wait();
 
