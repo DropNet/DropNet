@@ -10,14 +10,13 @@
     <projectUrl>http://dropnet.github.io/</projectUrl>
     <licenseUrl>https://github.com/dropnet/DropNet/blob/master/LICENSE.txt</licenseUrl>
     <iconUrl>http://dkdevelopment.net/img/DropNetIcon.png</iconUrl>
-    <tags>DROPBOX API .NET WP7</tags>
+    <tags>DROPBOX API .NET WP8</tags>
     <dependencies>
       <dependency id="RestSharp" version="105.0.1" />
     </dependencies>
   </metadata>
   <files>
     <file src="bin\Release\DropNet.dll" target="lib\net40" />
-    <file src="..\DropNet.WindowsPhone\bin\Release\System.Threading.Tasks.WP71.dll" target="lib\sl4-wp71" />
-    <file src="..\DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\sl4-wp71" />
+    <file src="..\DropNet.WindowsPhone\bin\Release\DropNet.WindowsPhone.dll" target="lib\windowsphone8" />
   </files>
 </package>
