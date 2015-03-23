@@ -52,11 +52,6 @@ namespace DropNet
             return Search(searchString, string.Empty, fileLimit);
         }
 
-        public List<MetaData> Search(string searchString, string path)
-        {
-            return Search(searchString, path);
-        }
-
         public List<MetaData> Search(string searchString, string path, int fileLimit = 1000)
         {
             if (fileLimit > 1000)

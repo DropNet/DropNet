@@ -328,7 +328,6 @@ namespace DropNet
         Task<MetaData> GetMetaDataTask(String path, String hash = null, Boolean list = false, Boolean include_deleted = false);
         Task<List<MetaData>> SearchTask(string searchString);
         Task<List<MetaData>> SearchTask(string searchString, int fileLimit);
-        Task<List<MetaData>> SearchTask(string searchString, string path);
         Task<List<MetaData>> SearchTask(string searchString, string path, int fileLimit);
         Task<IRestResponse> GetFileTask(string path);
         Task<MetaData> UploadFileTask(string path, string filename, byte[] fileData, bool overwrite = true, string parentRevision = null);
@@ -386,13 +385,6 @@ namespace DropNet
         /// <param name="searchString">The search string </param>
         /// <param name="fileLimit">The maximum and default value is 1,000. No more than <code>fileLimit</code> search results will be returned.</param>
         List<MetaData> Search(string searchString, int fileLimit);
-
-        /// <summary>
-        /// Gets list of metadata for search string
-        /// </summary>
-        /// <param name="searchString">The search string </param>
-        /// <param name="path">The path of the file or folder</param>
-        List<MetaData> Search(string searchString, string path);
 
         /// <summary>
         /// Gets list of metadata for search string

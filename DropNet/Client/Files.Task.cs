@@ -42,11 +42,6 @@ namespace DropNet
             return SearchTask(searchString, string.Empty, fileLimit);
         }
 
-        public Task<List<MetaData>> SearchTask(string searchString, string path)
-        {
-            return SearchTask(searchString, path);
-        }
-
         public Task<List<MetaData>> SearchTask(string searchString, string path, int fileLimit = 1000)
         {
             if (fileLimit > 1000)
