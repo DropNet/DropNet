@@ -127,7 +127,7 @@ namespace DropNet
         /// <param name="appSecret">The Api Secret to use for the Dropbox Requests</param>
         /// <param name="accessToken">The OAuth2 access token</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string accessToken, IWebProxy proxy)
+        public DropNetClient(string apiKey, string appSecret, string accessToken, IWebProxy proxy = null)
             : this(apiKey, appSecret, proxy, AuthenticationMethod.OAuth2)
         {
             UserLogin = new UserLogin { Token = accessToken };
@@ -141,7 +141,7 @@ namespace DropNet
         /// <param name="userToken">The OAuth1 User authentication token</param>
         /// <param name="userSecret">The OAuth1 Users matching secret</param>
         /// <param name="proxy">The proxy to use for web requests</param>
-        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy)
+        public DropNetClient(string apiKey, string appSecret, string userToken, string userSecret, IWebProxy proxy = null)
             : this(apiKey, appSecret, proxy)
         {
             UserLogin = new UserLogin {Token = userToken, Secret = userSecret};
