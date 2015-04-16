@@ -1,6 +1,8 @@
 ## .NET Client library for the Dropbox API
 
-Full documentation here: http://dkdevelopment.net/what-im-doing/dropnet/
+[![Build status](https://ci.appveyor.com/api/projects/status/tl7fd72m8x0m0ykv/branch/master?svg=true)](https://ci.appveyor.com/project/dkarzon/dropnet/branch/master)
+
+Full documentation here: http://dropnet.github.io/dropnet.html
 
 ## How do I use it?
 
@@ -71,13 +73,5 @@ Open a browser with the url returned by BuildAuthorizeUrl - After we have the au
 
 ***
 
-Want to chat about DropNet? http://jabbr.net/#/rooms/DropNet
-
-
 Questions? http://stackoverflow.com/questions/tagged/dropnet
 
-***
-
- **Like DropNet?** Endorse me on Coderwall
- 
- [![endorse](http://api.coderwall.com/dkarzon/endorsecount.png)](http://coderwall.com/dkarzon)
