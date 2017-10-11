@@ -181,9 +181,7 @@ namespace DropNet.Helpers
         public RestRequest CreateChunkedUploadRequest(byte[] fileData)
         {
             var request = new RestRequest(Method.PUT);
-            request.Resource = "{version}/chunked_upload?oauth_consumer_key={oauth_consumer_key}&oauth_nonce={oauth_nonce}";
-            request.Resource += "&oauth_token={oauth_token}&oauth_timestamp={oauth_timestamp}";
-            request.Resource += "&oauth_signature={oauth_signature}&oauth_signature_method={oauth_signature_method}&oauth_version={oauth_version}";
+            request.Resource = "{version}/chunked_upload";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
 
             request.AddParameter("file", fileData, ParameterType.RequestBody);
@@ -194,9 +192,7 @@ namespace DropNet.Helpers
         public RestRequest CreateAppendChunkedUploadRequest(ChunkedUpload upload, byte[] fileData)
         {
             var request = new RestRequest(Method.PUT);
-            request.Resource = "{version}/chunked_upload?upload_id={upload_id}&offset={offset}&oauth_consumer_key={oauth_consumer_key}&oauth_nonce={oauth_nonce}";
-            request.Resource += "&oauth_token={oauth_token}&oauth_timestamp={oauth_timestamp}";
-            request.Resource += "&oauth_signature={oauth_signature}&oauth_signature_method={oauth_signature_method}&oauth_version={oauth_version}";
+            request.Resource = "{version}/chunked_upload?upload_id={upload_id}&offset={offset}";
             request.AddParameter("version", _version, ParameterType.UrlSegment);
             request.AddParameter("upload_id", upload.UploadId, ParameterType.UrlSegment);
             request.AddParameter("offset", upload.Offset, ParameterType.UrlSegment);
