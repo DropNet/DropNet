@@ -1,3 +1,12 @@
+### Note: Development of DropNet has stopped!
+DropNet is no longer under development and the current version of the library does not work with Dropbox API v2. I recommend moving to the official Dropbox .net SDK - https://github.com/dropbox/dropbox-sdk-dotnet
+
+
+
+---
+
+
+
 ## .NET Client library for the Dropbox API
 
 [![Build status](https://ci.appveyor.com/api/projects/status/tl7fd72m8x0m0ykv/branch/master?svg=true)](https://ci.appveyor.com/project/dkarzon/dropnet/branch/master)
